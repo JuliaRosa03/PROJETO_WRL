@@ -4,9 +4,8 @@ import colorama as color
 from tkinter import ttk, messagebox
 from customtkinter import *
 from PIL import Image, ImageTk
-# from APK2 import aba_camera
-import FUNCOES_APK as fun
 
+import FUNCOES_APK as fun
 from ABA_CADASTRO_CAMERA import aba_cadastro
 from ABA_CADASTRO_BICO import aba_cadastro_bico
 
@@ -48,7 +47,6 @@ class APK():
         self.titulo.place(relx=0.21, rely=0.2)
 
         # {=======================Botões de Cadastro=========================}
-        # inp_frame, inp_texto, inp_bg, inp_fg, inp_borda = NONE,inp_tamanho= NONE, inp_style = NONE, inp_cursor = NONE, inp_comando = NONE
         self.bt_cadastro_lanca = fun.CRIAR_BOTAO(self.frame_1,'Cadastrar Bico','#258D19', '#005200',3,'32','bold',"hand2",self.ABA_CADASTRO_BICO )
         self.bt_cadastro_lanca.place(relx=0.07, rely=0.46, relwidth=0.4, relheight=0.2)
 
@@ -71,7 +69,7 @@ class APK():
         bt_fechar_aba_menu.place(relx=0.96, rely=0.02, relwidth=0.03, relheight=0.04)
         
         # {=======================Imagem IFES=========================}
-        self.img1_pg1 = tk.PhotoImage(file = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\ifes.png')
+        self.img1_pg1 = tk.PhotoImage(file = './ifes.png')
         self.img1_pg1 = self.img1_pg1.subsample(5, 5)
 
         self.fotoimg1_pg1 = tk.Label(self.frame_1,

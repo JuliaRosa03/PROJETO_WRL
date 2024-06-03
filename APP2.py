@@ -119,7 +119,7 @@ def componentes_frame2(inp_frame, lista):
             borda.image = image
 
             if keyboard.is_pressed('ctrl') or keyboard.is_pressed('right control') or keyboard.is_pressed('q'):
-                lista_arq, caminhoBW, caminhoAPP, nome_arquivo_BW = f.tirar_foto(color_frame, infra_image, id_bico)
+                lista_arq, caminhoBW, caminhoAPP, nome_arquivo_APP = f.tirar_foto(color_frame, infra_image, id_bico)
                 stop = True
                 return
 
@@ -158,7 +158,7 @@ def aba_camera(inp_janela,dados):
     lista_dh = f.extrair_data_e_hora(lista_arq[0])
     lista_diametros, img_segmentada, mascaras, resultados, foto_original = f.analisar_imagem(model, cv2.imread(caminhoBW), nome_arquivo_BW, Depth_Frame, Abertura)
     caixas_detectadas, nomes_classes, propriedades = f.extrair_dados(resultados, mascaras, nome_arquivo_BW)
-    img_identificada = f.identificar_furos(caixas_detectadas, nomes_classes, foto_original, infra_image)
+    img_identificada = f.identificar_furos(caixas_detectadas, nomes_classes, foto_original, infra_image, lista_arq[0])
 
     for dado in lista_dh:
         lista_arq.append(dado)
@@ -167,9 +167,9 @@ def aba_camera(inp_janela,dados):
     f.salvar_registros(lista_completa, qtd_furos)
     # f.exibir_imagens(cv2.imread(caminhoAPP), img_segmentada, img_identificada)
     
+    print('nome_arquivo_BW=', lista_arq[0])
     
-    
-    janela_cadastro = aba_dados(inp_janela, dados[3], dados[4], nome_arquivo_BW )
+    janela_cadastro = aba_dados(inp_janela, dados[3], dados[4], lista_arq[0],inp_janela )
     janela_cadastro.deiconify()
     
     return janela_tres

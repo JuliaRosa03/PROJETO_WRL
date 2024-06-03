@@ -143,9 +143,9 @@ def analisar_imagem(model, imagem, nome, depth_frame, Abertura):
     for result in results:
         img_segmentada = results[0].plot(masks= True, boxes=False) #plotar a segmentação - *resultados_array_bgr
         
-        '''diretorio_destino_imgAPP = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\FOTOS_SEGMENTADA'
-        caminho_completo_fotografia_segmentada = os.path.join(diretorio_destino_imgAPP, nome)
-        cv2.imwrite(caminho_completo_fotografia_segmentada, img_segmentada)'''
+        #diretorio_destino_imgAPP = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\FOTOS_SEGMENTADA'
+        #caminho_completo_fotografia_segmentada = os.path.join(diretorio_destino_imgAPP, nome)
+        #cv2.imwrite(caminho_completo_fotografia_segmentada, img_segmentada)
         
         
         mascaras = result.masks.data # Máscaras extraídas - extracted_masks
@@ -248,7 +248,7 @@ def extrair_dados(resultado, mascaras, nome):
 
     return caixas_detectadas, nomes_classes, lista_proprs
 
-def identificar_furos(caixas_detectadas, nomes_classes, imagem, frame):
+def identificar_furos(caixas_detectadas, nomes_classes, imagem, frame, nome_arquivo_APP):
     # Extrair as coordenadas e centro das caixas delimitadoras
     coordenadas_caixas = []
     pontos = []
@@ -273,10 +273,8 @@ def identificar_furos(caixas_detectadas, nomes_classes, imagem, frame):
     for i in range(1, len(pontos)):
         imagem_final = cv2.putText(img, f'{i}', pontos[i], cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 1)
 
-    data = datetime.now()
     diretorio_guias = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\FOTOS_GUIA'
-    nome_arquivo = data.strftime('registro_%d-%m-%Y_%H.%M') + '.png'
-    caminho = os.path.join(diretorio_guias, nome_arquivo)
+    caminho = os.path.join(diretorio_guias, nome_arquivo_APP)
     
     cv2.imwrite(caminho, imagem_final)
 
@@ -336,7 +334,7 @@ def organizar_dados_app(lista):
 
 def salvar_registros(lista, x):
     # Conectando ao banco 
-    banco = sql.connect(r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\REGISTROS_WRL.db') #mudar dps
+    banco = sql.connect(r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\REGISTROS_WRL.db') 
     cursor = banco.cursor()
 
     if x == 6:

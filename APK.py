@@ -61,13 +61,19 @@ def imagens(registro_foto):  # {=========Informações para imagens(FRAME 2)====
     arquivoguia = endereco_pastaguias +'\\' +registro_foto
     return arquivofoto, arquivoguia
 
+def voltar_menu(aba_1, aba_2):
+    aba_1.deiconify()  # Exiba a janela da aba 1
+    aba_2.destroy()  # Destrua a janela da aba 2
+
 def tela(inp_janela): # {=======================Configuração de tela=========================}
     inp_janela.title("DADOS DA INSPECÇÃO")
     inp_janela.configure(background= '#9BCD9B')
-    inp_janela.geometry("1280x700")
-    inp_janela.resizable(True, True) #se quiser impedir que amplie ou diminua a tela, altere para False
-    # inp_janela.maxsize(width=1920, height=1080) #limite máximo da tela
-    inp_janela.minsize(width=700, height=450) #limite minimo da tela
+    inp_janela.attributes("-fullscreen", True)
+    # inp_janela.configure(background= '#9BCD9B')
+    # inp_janela.geometry("1280x700")
+    # inp_janela.resizable(True, True) #se quiser impedir que amplie ou diminua a tela, altere para False
+    # # inp_janela.maxsize(width=1920, height=1080) #limite máximo da tela
+    # inp_janela.minsize(width=700, height=450) #limite minimo da tela
 
 def frames_da_tela(inp_janela): 
     global frame_1, frame_2
@@ -87,7 +93,7 @@ def frames_da_tela(inp_janela):
     
     return frame_1, frame_2
 
-def componentes_frame1(inp_ID, inp_tipo, int_arquivo):
+def componentes_frame1(inp_ID, inp_tipo, int_arquivo,inp_menu, inp_janela):
     dados, lista_grupo = selecao(inp_ID,inp_tipo)
     grupo = lista_grupo[0]
     
@@ -166,6 +172,7 @@ def componentes_frame1(inp_ID, inp_tipo, int_arquivo):
     
     
     dados2 = tabela(int_arquivo)
+    print('dados2 = ',dados2)
     vida = dados2[1]
     data_foto = dados2[5]
     hora_foto = dados2[6]
@@ -234,23 +241,24 @@ def componentes_frame1(inp_ID, inp_tipo, int_arquivo):
     # scroolLista.place(relx=0.93, rely=0.15, relwidth=0.03, relheight=0.7)
     
     # {=======================Botão Repetir=========================}
-    btRepetir_pg1 = tk.Button(frame_1,
-                                    text='Repetir',
-                                    cursor = "exchange",
-                                    bd = 4,
-                                    bg = '#545454',
-                                    fg = 'white',
-                                    font= ("arial", 13,'bold'))
-    btRepetir_pg1.place(relx=0.35, rely=0.9, relwidth=0.12, relheight=0.08)
+    # btRepetir_pg1 = tk.Button(frame_1,
+    #                                 text='Repetir',
+    #                                 cursor = "exchange",
+    #                                 bd = 4,
+    #                                 bg = '#545454',
+    #                                 fg = 'white',
+    #                                 font= ("arial", 13,'bold'))
+    # btRepetir_pg1.place(relx=0.35, rely=0.9, relwidth=0.12, relheight=0.08)
 
     # {=======================Botão Continuar=========================}
     btContinuar_pg1 = tk.Button(frame_1,
-                                    text='Continuar',
+                                    text='MENU',
                                     cursor = "hand2",
                                     bd = 4,
                                     bg = '#545454',
                                     fg = 'white',
-                                    font= ("arial", 13,'bold'))
+                                    font= ("arial", 13,'bold'),
+                                    command= lambda: voltar_menu( inp_menu, inp_janela))
     btContinuar_pg1.place(relx=0.55, rely=0.9, relwidth=0.12, relheight=0.08)
 
 
@@ -264,7 +272,7 @@ def componentes_frame2(inp_janela): # {=========Componentes da direita=========}
     furos_pg1.place(relx=0.32, rely=0.03)
     
     arquivofoto, arquivoguia = imagens(registro_foto)
-    print('\nArquivo_foto=',arquivofoto,'\narquivo guia = ', arquivoguia)
+    print('\nArquivo_foto=',arquivofoto,'\narquivo guia =', arquivoguia)
     # {=======================Imagem 1=========================}
     img1_pg1 = tk.PhotoImage(file = arquivofoto)
     print(img1_pg1)
@@ -296,13 +304,13 @@ def componentes_frame2(inp_janela): # {=========Componentes da direita=========}
     
     inp_janela.mainloop()
 
-def aba_dados(inp_janela,inp_ID,inp_tipo, int_arquivo):
+def aba_dados(inp_janela,inp_ID,inp_tipo, int_arquivo,inp_menu):
     # janela = tk.Tk()
     janela = tk.Toplevel(inp_janela)
     
     tela(janela)
     frames_da_tela(janela)
-    componentes_frame1(inp_ID, inp_tipo, int_arquivo)
+    componentes_frame1(inp_ID, inp_tipo, int_arquivo,inp_menu,janela)
     componentes_frame2(janela)
     
     janela.transient(inp_janela) #TOPLEVEL
