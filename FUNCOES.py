@@ -143,9 +143,9 @@ def analisar_imagem(model, imagem, nome, depth_frame, Abertura):
     for result in results:
         img_segmentada = results[0].plot(masks= True, boxes=False) #plotar a segmentação - *resultados_array_bgr
         
-        diretorio_destino_imgAPP = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\FOTOS_GUIA'
+        '''diretorio_destino_imgAPP = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\FOTOS_SEGMENTADA'
         caminho_completo_fotografia_segmentada = os.path.join(diretorio_destino_imgAPP, nome)
-        cv2.imwrite(caminho_completo_fotografia_segmentada, img_segmentada)
+        cv2.imwrite(caminho_completo_fotografia_segmentada, img_segmentada)'''
         
         
         mascaras = result.masks.data # Máscaras extraídas - extracted_masks
@@ -182,7 +182,6 @@ def analisar_imagem(model, imagem, nome, depth_frame, Abertura):
                 depth_data_numpy_binaria[j][x][y] = ((math.tan(float(Abertura)*180/math.pi)*v*2)/640)
     
         lista_diametros = []
-        lista_furos= []
         # Exibir os diametros
         area_total = np.sum(depth_data_numpy_binaria)
         diametro_externo = 2*(math.sqrt(area_total/math.pi))
