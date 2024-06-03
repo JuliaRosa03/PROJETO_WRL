@@ -138,7 +138,7 @@ def analisar_imagem(model, imagem, nome, depth_frame, Abertura):
     imagem_bgr = cv2.cvtColor(imagem, cv2.COLOR_RGB2BGR)  # Converter imagem para BGR
 
     # Análise
-    results = model(imagem_bgr,device = 'cpu',retina_masks=True, save = True, save_crop = True,save_frames=True,overlap_mask=True, project =r"C:\Users\20221CECA0402\Documents\Projeto_WRL\Aplicativo_WRL\resultados",name = nome, save_txt = True, show_boxes=False)
+    results = model(imagem_bgr,device = 'cpu',retina_masks=True, save = True, save_crop = True,save_frames=True,overlap_mask=True, project =r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\resultados",name = nome, save_txt = True, show_boxes=False)
     
     for result in results:
         img_segmentada = results[0].plot(masks= True, boxes=False) #plotar a segmentação - *resultados_array_bgr
