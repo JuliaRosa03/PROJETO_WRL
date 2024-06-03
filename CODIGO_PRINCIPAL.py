@@ -22,7 +22,7 @@ pi_value = np.pi
 sqrt = np.sqrt
 
 # Dados fornecidos pelo código do APP
-#lista_wl = ['MINERADORA/BH/BRASIL', 'Bloco 1', '6', '5', '30/5', '230', 'JULIA']
+lista_wl = ['MINERADORA/BH/BRASIL', 'Bloco 1', '6', '5', '30/5', '230', 'JULIA']
 
 class DepthCamera:
 

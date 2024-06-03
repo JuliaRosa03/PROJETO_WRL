@@ -53,7 +53,7 @@ def tabela(int_arquivo): # {=========Informações da tabela(FRAME 2)=========}
 def imagens(registro_foto):  # {=========Informações para imagens(FRAME 2)=========}
     
     endereco_pastafotos = r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\FOTOS_ANALISE"
-    endereco_pastaguias = r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\FOTOS_GUIA"
+    endereco_pastaguias = r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\FOTOS_SEGMENTADA"
     # local_image = '\\'+ registro_foto
     #local_image = '\\'+ dados2[0][2] #+'.png'   (esta linha caso for usar '.fetchall' no 'def tabela' assim fazendo uma tupla e não uma lista)
         

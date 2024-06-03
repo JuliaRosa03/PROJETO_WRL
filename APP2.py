@@ -156,7 +156,7 @@ def aba_camera(inp_janela,dados):
 
     Depth_Frame = f.obter_depth_frame()
     lista_dh = f.extrair_data_e_hora(lista_arq[0])
-    lista_diametros, img_segmentada, mascaras, resultados, foto_original = f.analisar_imagem(model, cv2.imread(caminhoBW), nome_arquivo_BW, Depth_Frame, Abertura)
+    lista_diametros, img_segmentada, mascaras, resultados, foto_original = f.analisar_imagem(model, cv2.imread(caminhoBW), lista_arq[0], Depth_Frame, Abertura)
     caixas_detectadas, nomes_classes, propriedades = f.extrair_dados(resultados, mascaras, nome_arquivo_BW)
     img_identificada = f.identificar_furos(caixas_detectadas, nomes_classes, foto_original, infra_image)
 
@@ -169,7 +169,7 @@ def aba_camera(inp_janela,dados):
     
     
     
-    janela_cadastro = aba_dados(inp_janela, dados[3], dados[4], nome_arquivo_BW )
+    janela_cadastro = aba_dados(inp_janela, dados[3], dados[4], lista_arq[0])
     janela_cadastro.deiconify()
     
     return janela_tres
