@@ -126,7 +126,6 @@ while True:
 
 foto_analise = cv2.imread(caminho_completo_fotografia_BW)
 foto_app= cv2.imread(caminho_completo_fotografia_APP)
-print('Fotografia salva')
 
 lista_dh = f.extrair_data_e_hora(nome_arquivo_APP)
 lista_diametros, img_segmentada, mascaras, resultados, foto_original = f.analisar_imagem(model, foto_analise, nome_arquivo_BW, depth_frame, Abertura)

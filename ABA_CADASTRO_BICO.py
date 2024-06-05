@@ -137,7 +137,7 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
             
         except:  
             todos_tabela = tabela()
-            print('sccr', dados_obtidos)
+            print('dados obtidos: ', dados_obtidos)
             for tupla in todos_tabela:
                 ultimo_algarismo_tupla = str(tupla[-1])[-1]  # Obtém o último dígito da tupla
                 if dados_obtidos[-1] == ultimo_algarismo_tupla:

@@ -19,16 +19,16 @@ def USINAS():
     dados_filtrados = list(set(item[0] for item in dados_banco))
     return dados_filtrados
 
-def USINA_SITE(usina):
-    caminho = r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\REGISTROS_WRL.db"
-    conn, cursor = fun.CONECTA_BD(caminho)
-    comando = f"SELECT Site FROM DADOS_EMPRESAS WHERE Grupo = ?"
-    cursor.execute(comando, (usina,))
-    dados_banco = cursor.fetchall()
-    fun.DESCONECTA_BD(conn)
+# def USINA_SITE(usina):
+#     caminho = r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\REGISTROS_WRL.db"
+#     conn, cursor = fun.CONECTA_BD(caminho)
+#     comando = f"SELECT Site FROM DADOS_EMPRESAS WHERE Grupo = ?"
+#     cursor.execute(comando, (usina,))
+#     dados_banco = cursor.fetchall()
+#     fun.DESCONECTA_BD(conn)
     
-    dados_filtrados = list(set(item[0] for item in dados_banco))
-    return dados_filtrados
+#     dados_filtrados = list(set(item[0] for item in dados_banco))
+#     return dados_filtrados
 
 def SITE():
     caminho = r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\REGISTROS_WRL.db"
@@ -79,23 +79,17 @@ def ENTRY_INT(inp_text):
 def ENTRY_STRING(inp_text):
     return all(char.isalpha() or char.isspace() for char in inp_text) or inp_text == ""
 
-
 def validador(input):
     comando = (input.register(ENTRY_INT), "%P") 
     return comando
-
-# def ABA_CAMERA(janela_menu):
-#         return (aba_camera(janela_menu))
 
 def voltar(aba_1, aba_2):
     aba_1.deiconify()  # Exiba a proxima janela 
     aba_2.destroy()  # Destrua a janela atual
     
-def comandos_botao_continuar(inp_janela,inp_usina_grupo, inp_site, inp_furos_ID, inp_tipo, inp_vida, inp_nome):
+def comandos_botao_continuar(inp_janela,inp_usina_grupo, inp_site, inp_furos_ID, inp_tipo, inp_vida, inp_nome,inp_menu):
     dados = adquirir_dados(inp_usina_grupo, inp_site, inp_furos_ID, inp_tipo, inp_vida, inp_nome)
-    janela_cadastro = aba_camera(inp_janela, dados)
-    # janela_cadastro.deiconify()
-    
+    janela_cadastro = aba_camera(inp_janela, dados,inp_menu)
     
 def adquirir_dados(inp_usina_grupo, inp_site, inp_furos_ID, inp_tipo, inp_vida, inp_nome): #juliaaaaaa
     DADOS_INSERIDOS = []
@@ -140,11 +134,7 @@ def tela(inp_janela):
     inp_janela.title("INICIAR INSPECÇÃO")
     inp_janela.configure(background= '#9BCD9B')
     inp_janela.attributes("-fullscreen", True)
-    # inp_janela.geometry("1000x600")
-    # inp_janela.resizable(True, True) #se quiser impedir que amplie ou diminua a tela, altere para False
-    # # janela.maxsize(width=1920, height=1080) #limite máximo da tela
-    # inp_janela.minsize(width=700, height=450) #limite minimo da tela
-
+    
 def frames_da_tela(inp_janela): 
         global frame_1
         
@@ -156,7 +146,6 @@ def frames_da_tela(inp_janela):
         return frame_1
 
 def componentes_frame1(inp_frame,inp_janela, inp_menu):# #TOPLEVEL
-    
     # {=======================Título=========================}
     titulo = fun.CRIAR_LABEL(inp_frame, "Selecionar Bico", '#B4FF9A', "#005200", 'arial', '25', 'bold')
     titulo.place(relx=0.38, rely=0.04) 
@@ -191,14 +180,8 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):# #TOPLEVEL
     if Usina_selecionada != "":
         Menu_site = tk.OptionMenu(inp_frame, Var_site, "")
         Menu_site['menu'].delete(0, 'end')
-        for site in USINA_SITE(Usina_selecionada):
+        for site in SITE(Usina_selecionada):
             Menu_site['menu'].add_command(label=site, command=tk._setit(Var_site, site))
-    
-    # if Usina_selecionada == "":
-    #     Menu_site = tk.OptionMenu(inp_frame, Var_site, *SITE())
-    
-    # if Usina_selecionada != "":
-    #     Menu_site = tk.OptionMenu(inp_frame, Var_site, *USINA_SITE(Usina_selecionada))  
     
     Menu_site.config(font=("Arial", 25))
     Menu_site.place(relx=0.55, rely=0.27, relwidth=0.35, relheight=0.06)
@@ -208,14 +191,11 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):# #TOPLEVEL
     label_IDTipo.place(relx=0.05, rely=0.4)
 
     Var_IDTipo = tk.StringVar(inp_frame)
-    """Var_IDTipo.set(FUROS_ID()[0])"""
     
     Menu_IDTipo = tk.OptionMenu(inp_frame, Var_IDTipo, *FUROS_ID())
     Menu_IDTipo.config(font=("Arial", 25))
     Menu_IDTipo.place(relx=0.05, rely=0.47, relwidth=0.27, relheight=0.06)
     
-    if Menu_IDTipo == '6 - 1':
-        print("foi?")
     # {=======================TIPO=========================}
     label_tipo = fun.CRIAR_LABEL(inp_frame, "Tipo: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
     label_tipo.place(relx=0.35, rely=0.4)
@@ -249,11 +229,11 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):# #TOPLEVEL
     bt_voltar.place(relx=0.05, rely=0.88, relwidth=0.2, relheight=0.08)
     # inp_janela.withdraw()
 
-    bt_continuar = fun.CRIAR_BOTAO(inp_frame, "CONTINUAR",'#258D19', 'white',3,'20','',"hand2",lambda: comandos_botao_continuar(inp_janela,Var_Usina,Var_site,Var_IDTipo,Var_tipo,input_vida,input_usuario))
+    bt_continuar = fun.CRIAR_BOTAO(inp_frame, "CONTINUAR",'#258D19', 'white',3,'20','',"hand2",lambda: comandos_botao_continuar(inp_janela,Var_Usina,Var_site,Var_IDTipo,Var_tipo,input_vida,input_usuario,inp_menu))
     bt_continuar.place(relx=0.75, rely=0.88, relwidth=0.2, relheight=0.08)
     
     # {=======================FECHAR ABA=========================}
-    # bt_fechar_aba_menu = tk.Button(inp_frame, text="X", command=inp_janela.destroy, bg="red").place(relx=0.96, rely=0.02, relwidth=0.03, relheight=0.04) #AVISO ->tirar esta linha
+    # bt_fechar_aba_menu = tk.Button(inp_frame, text="X", command=inp_janela.destroy, bg="red").place(relx=0.96, rely=0.02, relwidth=0.03, relheight=0.04) #AVISO ->tirar esta linha pro tk.tk
 
         
 def aba_cadastro(inp_janela): 

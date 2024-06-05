@@ -106,55 +106,22 @@ import FUNCOES_APK as fun
 #     return janela_PG1
     
 # open()
+ID = '4'
 
-inp_janela = tk.Tk()
-
-inp_janela.title("testando")
-inp_janela.configure(background= '#9BCD9B')
-inp_janela.geometry("1280x700")
-inp_janela.resizable(True, True) #se quiser impedir que amplie ou diminua a tela, altere para False
-# inp_janela.maxsize(width=1920, height=1080) #limite máximo da tela
-inp_janela.minsize(width=700, height=450) #limite minimo da tela
+int_arquivo = 'registro_002_27-03-2024_13.19.png'
+def tabela(int_arquivo): # {=========Informações da tabela(FRAME 2)=========}
+    global registro_foto
     
-frame_2 = tk.Frame(inp_janela, bd=2,
-                    bg= '#B4EEB4',
-                    highlightbackground= '#668B8B', 
-                    highlightthickness=1)
-frame_2.place(relx=0.01, rely=0.02,relwidth=0.38, relheight=0.96)
-
-arquivofoto = r'C:\Users\20221CECA0402\Documents\Projeto_WRL\Aplicativo_WRL\fotos_BW\registro_001_03-06-2024_13.01.png'
-
-img1_pg1 = tk.PhotoImage(file = arquivofoto)
-img1_pg1 = img1_pg1.subsample(2, 2)
-
-fotoimg1_pg1 = tk.Label(frame_2,
-                                bg= '#B4EEB4',
-                                bd =0,
-                                image = img1_pg1)
-fotoimg1_pg1.place(relx=0.5, rely=0.25, anchor=CENTER)
+    conn, cursor = fun.CONECTA_BD(r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\REGISTROS_WRL.db")
+    comando = f"SELECT * FROM B{ID} WHERE ARQUIVO = '{int_arquivo}' "
+    cursor.execute(comando)
+    dados2 = cursor.fetchone()
+    fun.DESCONECTA_BD(conn)
     
-# arquivofoto= r'C:\Users\20221CECA0402\Documents\Projeto_WRL\Aplicativo_WRL\fotos_BW\registro_001_29-05-2024_18.58.png'
+    registro_foto = int_arquivo
+    return dados2
+    
 
-# img1_pg1 = tk.PhotoImage(file = arquivofoto)
-# img1_pg1 = img1_pg1.subsample(2, 2)
-
-# fotoimg1_pg1 = tk.Label(frame_2,
-#                                 bg= '#B4EEB4',
-#                                 bd =0,
-#                                 image = img1_pg1)
-# fotoimg1_pg1.place(relx=0.5, rely=0.25, anchor=CENTER)
-
-# arquivoguia =r'C:\Users\20221CECA0402\Documents\Projeto_WRL\Aplicativo_WRL\fotos_segmentada\registro_001_29-05-2024_18.57.png'
-# img2_pg1 = tk.PhotoImage(file = arquivoguia)
-# img2_pg1 = img2_pg1.subsample(2, 2)
-
-# fotoimg2_pg1 = tk.Label(frame_2,
-#                             bg= '#B4EEB4',
-#                             bd =0,
-#                             image = img2_pg1)
-# fotoimg2_pg1.place(relx=0.5, rely=0.7, anchor=CENTER)
-
-inp_janela.mainloop()
-
+print (tabela(int_arquivo))
 
 

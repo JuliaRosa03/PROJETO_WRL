@@ -6,15 +6,6 @@ import customtkinter
 from PIL import Image, ImageTk
 import FUNCOES_APK as fun
 
-"""Linha de raciocinio:
-Antes de tirar a foto o funcionaria já informou o ID, que nele já esta contido Furos,
-Grupo, SIte e BOF. Sendo assim, nesta aba, o Grupo, site e bof estão com seu ID, e os 
-Registros estarão vindo do banco de dados.
-"""
-
-pasta = r'C:\Users\labga\OneDrive\Documentos'
-# {=======================Comando para o Banco de Dados=========================}
-
 def selecao(inp_ID, inp_tipo): # {=========Leitura Grupo, SIte, BOF e ID(FRAME 1)=========}
     global ID
     
@@ -37,38 +28,37 @@ def selecao(inp_ID, inp_tipo): # {=========Leitura Grupo, SIte, BOF e ID(FRAME 1
     
 def tabela(int_arquivo): # {=========Informações da tabela(FRAME 2)=========}
     global registro_foto
-    print('\narquivo =',int_arquivo )
+    
     conn, cursor = fun.CONECTA_BD(r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\REGISTROS_WRL.db")
     comando = f"SELECT * FROM B6 WHERE ARQUIVO = '{int_arquivo}' "
     cursor.execute(comando)
     dados2 = cursor.fetchone()
     fun.DESCONECTA_BD(conn)
-    print('dados2 = ', dados2)
+    
     registro_foto = int_arquivo
-    
     return dados2
-    
-    # dados2_filtrados = [resultado[2:] for resultado in dados2]
+
 
 def imagens(registro_foto):  # {=========Informações para imagens(FRAME 2)=========}
     
     endereco_pastafotos = r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\FOTOS_ANALISE"
     endereco_pastaguias = r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\FOTOS_SEGMENTADA"
-    # local_image = '\\'+ registro_foto
-    #local_image = '\\'+ dados2[0][2] #+'.png'   (esta linha caso for usar '.fetchall' no 'def tabela' assim fazendo uma tupla e não uma lista)
         
     arquivofoto = endereco_pastafotos +'\\' +registro_foto
     arquivoguia = endereco_pastaguias +'\\' +registro_foto
+    
     return arquivofoto, arquivoguia
+
+def voltar_menu(aba_1, aba_2,aba_3):
+    aba_1.deiconify()  # Exiba a janela da aba 1
+    aba_2.destroy()  # Destrua a janela da aba 2
+    aba_3.destroy()  # Destrua a janela cadastro
 
 def tela(inp_janela): # {=======================Configuração de tela=========================}
     inp_janela.title("DADOS DA INSPECÇÃO")
-    inp_janela.configure(background= '#9BCD9B')
-    inp_janela.geometry("1280x700")
-    inp_janela.resizable(True, True) #se quiser impedir que amplie ou diminua a tela, altere para False
-    # inp_janela.maxsize(width=1920, height=1080) #limite máximo da tela
-    inp_janela.minsize(width=700, height=450) #limite minimo da tela
-
+    inp_janela.configure(background='#9BCD9B')
+    inp_janela.attributes("-fullscreen", True)
+    
 def frames_da_tela(inp_janela): 
     global frame_1, frame_2
     # {=======================Frame da Direita=========================}
@@ -87,7 +77,7 @@ def frames_da_tela(inp_janela):
     
     return frame_1, frame_2
 
-def componentes_frame1(inp_ID, inp_tipo, int_arquivo):
+def componentes_frame1(inp_ID, inp_tipo, int_arquivo,inp_menu, inp_janela,janela_cadastro):
     dados, lista_grupo = selecao(inp_ID,inp_tipo)
     grupo = lista_grupo[0]
     
@@ -98,40 +88,40 @@ def componentes_frame1(inp_ID, inp_tipo, int_arquivo):
     
     # {=======================Título=========================}
     titulo1_pg1 = tk.Label(frame_1,
-                                text="Dados do Bico",
-                                font=('arial', '25', 'bold'),
-                                bg= '#B4EEB4',
-                                fg="#2F4F4F")
+                            text="Dados do Bico",
+                            font=('arial', '25', 'bold'),
+                            bg= '#B4EEB4',
+                            fg="#2F4F4F")
     titulo1_pg1.place(relx=0.32, rely=0.03)
     
     # {=======================Grupo=========================}
     grupo_pg1 = tk.Label(frame_1,
-                                text="Grupo:",
-                                font=('verdana', '20','bold'),
-                                bg= '#B4EEB4',
-                                fg="#1C1C1C")
+                            text="Grupo:",
+                            font=('verdana', '20','bold'),
+                            bg= '#B4EEB4',
+                            fg="#1C1C1C")
     grupo_pg1.place(relx=0.05, rely=0.15)
 
     grupo_pg1 = tk.Label(frame_1,
-                                text = grupo,
-                                font=('verdana', '20'),
-                                bg= '#B4EEB4',
-                                fg="#1C1C1C")
+                            text = grupo,
+                            font=('verdana', '20'),
+                            bg= '#B4EEB4',
+                            fg="#1C1C1C")
     grupo_pg1.place(relx=0.2, rely=0.15)
 
     # {=======================Site=========================}
     site_pg1 = tk.Label(frame_1,
-                                text="Site:",
-                                font=('verdana', '20','bold'),
-                                bg= '#B4EEB4',
-                                fg="#1C1C1C")
+                            text="Site:",
+                            font=('verdana', '20','bold'),
+                            bg= '#B4EEB4',
+                            fg="#1C1C1C")
     site_pg1.place(relx=0.05, rely=0.25)
 
     site_pg1 = tk.Label(frame_1,
-                                text=site,
-                                font=('verdana', '20'),
-                                bg= '#B4EEB4',
-                                fg="#1C1C1C")
+                            text=site,
+                            font=('verdana', '20'),
+                            bg= '#B4EEB4',
+                            fg="#1C1C1C")
     site_pg1.place(relx=0.15, rely=0.25)
 
     # {=======================BOF=========================}
@@ -201,6 +191,17 @@ def componentes_frame1(inp_ID, inp_tipo, int_arquivo):
                                 fg="#1C1C1C")
     ID_informado_pg1.place(relx=0.17, rely=0.65)
     
+    # {=======================Botão Continuar=========================}
+    btContinuar_pg1 = tk.Button(frame_1,
+                                    text='MENU',
+                                    cursor = "hand2",
+                                    bd = 4,
+                                    bg = '#545454',
+                                    fg = 'white',
+                                    font= ("arial", 13,'bold'),
+                                    command= lambda: voltar_menu( inp_menu, inp_janela,janela_cadastro))
+    btContinuar_pg1.place(relx=0.55, rely=0.9, relwidth=0.12, relheight=0.08)
+    
     # {=======================Registros=========================}
 
     tabela_pg1 = ttk.Treeview(frame_1, height=10,column=("col1", "col2"),style="mystyle.Treeview")
@@ -229,51 +230,19 @@ def componentes_frame1(inp_ID, inp_tipo, int_arquivo):
                 
     tabela_pg1.place(relx=0.45, rely=0.15, relwidth=0.5, relheight=0.7)
 
-    # scroolLista = tk.Scrollbar(frame_1, orient ='vertical')
-    # tabela_pg1.configure(yscroll = scroolLista.set)
-    # scroolLista.place(relx=0.93, rely=0.15, relwidth=0.03, relheight=0.7)
-    
-    # {=======================Botão Repetir=========================}
-    btRepetir_pg1 = tk.Button(frame_1,
-                                    text='Repetir',
-                                    cursor = "exchange",
-                                    bd = 4,
-                                    bg = '#545454',
-                                    fg = 'white',
-                                    font= ("arial", 13,'bold'))
-    btRepetir_pg1.place(relx=0.35, rely=0.9, relwidth=0.12, relheight=0.08)
-
-    # {=======================Botão Continuar=========================}
-    btContinuar_pg1 = tk.Button(frame_1,
-                                    text='Continuar',
-                                    cursor = "hand2",
-                                    bd = 4,
-                                    bg = '#545454',
-                                    fg = 'white',
-                                    font= ("arial", 13,'bold'))
-    btContinuar_pg1.place(relx=0.55, rely=0.9, relwidth=0.12, relheight=0.08)
-
 
 def componentes_frame2(inp_janela): # {=========Componentes da direita=========}
-     # {=======================Título=========================}
-    furos_pg1 = tk.Label(frame_2,
-                                text = 'funcionaa',
-                                font = ('verdana', '23'),
-                                bg = '#B4EEB4',
-                                fg = "#2F4F4F")
-    furos_pg1.place(relx=0.32, rely=0.03)
     
     arquivofoto, arquivoguia = imagens(registro_foto)
-    print('\nArquivo_foto=',arquivofoto,'\narquivo guia = ', arquivoguia)
+    print('\nArquivo_foto=',arquivofoto,'\nArquivo guia = ', arquivoguia)
     # {=======================Imagem 1=========================}
     img1_pg1 = tk.PhotoImage(file = arquivofoto)
-    print(img1_pg1)
     img1_pg1 = img1_pg1.subsample(2, 2)
-    print(img1_pg1)
+    
     fotoimg1_pg1 = tk.Label(frame_2,
-                                    bg= '#B4EEB4',
-                                    bd =0,
-                                    image = img1_pg1)
+                            bg= '#B4EEB4',
+                            bd =0,
+                            image = img1_pg1)
     fotoimg1_pg1.place(relx=0.5, rely=0.25, anchor=CENTER)
 
     # {=======================Imagem 2=========================}
@@ -281,28 +250,28 @@ def componentes_frame2(inp_janela): # {=========Componentes da direita=========}
     img2_pg1 = img2_pg1.subsample(2, 2)
 
     fotoimg2_pg1 = tk.Label(frame_2,
-                                    bg= '#B4EEB4',
-                                    bd =0,
-                                    image = img2_pg1)
+                            bg= '#B4EEB4',
+                            bd =0,
+                            image = img2_pg1)
     fotoimg2_pg1.place(relx=0.5, rely=0.7, anchor=CENTER)
 
     # {=======================WRL=========================}
     titulo2_pg1 = tk.Label(frame_2,
-                                text="foi",
-                                font=('italic', '18'),
-                                bg= '#B4EEB4',
-                                fg="#2F4F4F")
+                            text="Wear Register Lances (WRL)",
+                            font=('italic', '18'),
+                            bg= '#B4EEB4',
+                            fg="#2F4F4F")
     titulo2_pg1.place(relx=0.01, rely=0.94)
     
     inp_janela.mainloop()
 
-def aba_dados(inp_janela,inp_ID,inp_tipo, int_arquivo):
+def aba_dados(inp_janela,inp_ID,inp_tipo, int_arquivo,inp_menu):
     # janela = tk.Tk()
     janela = tk.Toplevel(inp_janela)
     
     tela(janela)
     frames_da_tela(janela)
-    componentes_frame1(inp_ID, inp_tipo, int_arquivo)
+    componentes_frame1(inp_ID, inp_tipo, int_arquivo,inp_menu,janela,inp_janela)
     componentes_frame2(janela)
     
     janela.transient(inp_janela) #TOPLEVEL
@@ -311,6 +280,5 @@ def aba_dados(inp_janela,inp_ID,inp_tipo, int_arquivo):
     
     return janela
     
-
 print("\n\n", color.Fore.GREEN + "Iniciando o código - Dados do bico" + color.Style.RESET_ALL)
 print(color.Fore.RED + "Finalizando o código - Dados do bico" + color.Style.RESET_ALL, "\n")

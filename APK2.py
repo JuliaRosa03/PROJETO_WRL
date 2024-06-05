@@ -139,7 +139,7 @@ def componentes_frame2(inp_frame):
         # Inicia o loop para exibir o vídeo
         exibir_video()
     except:
-        print('CAMERA DESCONECTADA') #não esta exibindo a imagem que eu queria, mas ao menos da pra testar outras funcionalidades que não estejam envolvidas diretamente com a camera
+        print('\nCAMERA DESCONECTADA') #não esta exibindo a imagem que eu queria, mas ao menos da pra testar outras funcionalidades que não estejam envolvidas diretamente com a camera
         img = Image.open(r'C:\Users\20221CECA0402\Documents\Projeto_WRL\Aplicativo_WRL\arquivos\molde.png')
         altura = borda.winfo_height() #atualiza altura e largura da borda para que a imagem da camera sempre preencha o espaço
         largura = borda.winfo_width()
@@ -242,5 +242,4 @@ def aba_camera(inp_janela):
     
 
 print("\n\n", color.Fore.GREEN + "Iniciando o código - Tela da câmera" + color.Style.RESET_ALL)
-
 print(color.Fore.RED + "Finalizando o código - Tela da câmera" + color.Style.RESET_ALL, "\n")

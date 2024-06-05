@@ -126,10 +126,7 @@ def tirar_foto(color_frame, infra_image, id_bico):
         cv2.imwrite(caminho_completo_fotografia_BW, infra_image)
         cv2.imwrite(caminho_completo_fotografia_APP, color_frame)
         
-    print('Imagem salva')
-    '''print(caminho_completo_fotografia_APP)
-    print(caminho_completo_fotografia_BW)
-    print(lista_arq)'''
+    print('\nImagem salva')
 
     return lista_arq, caminho_completo_fotografia_BW, caminho_completo_fotografia_APP, nome_arquivo_APP
 ret, depth_frame, color_frame, infra_image, Abertura = dc.get_frame() # Chamando as propriedades da câmera
@@ -362,6 +359,6 @@ def salvar_registros(lista, x):
     # Feche a conexão com o banco de dados
     cursor.close()
 
-    print('Dados inseridos no banco com sucesso!')
+    print('\nDados inseridos no banco com sucesso!')
 
     

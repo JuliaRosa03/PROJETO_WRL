@@ -77,7 +77,7 @@ def tela(inp_janela):
     inp_janela.title("Camêra WRL")
     inp_janela.configure(background='#9BCD9B')
     inp_janela.attributes("-fullscreen", True)
-    inp_janela.overrideredirect(True)
+    
 
 def frames_da_tela(inp_janela):
     global frame_um, frame_dois
@@ -91,10 +91,10 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
     # bt_fechar_aba_menu = tk.Button(inp_frame, text="X", command=inp_janela.destroy, bg="red")
     # bt_fechar_aba_menu.place(relx=0.90, relwidth=0.05, relheight=0.05)
     
-    bt_voltar = fun.CRIAR_BOTAO(inp_frame, "Voltar",'#258D19', 'white',3,'20','',"hand2", lambda: voltar( inp_menu, inp_janela))# #TOPLEVEL
+    bt_voltar = fun.CRIAR_BOTAO(inp_frame, "Voltar",'#258D19', 'white',3,'15','',"hand2", lambda: voltar( inp_menu, inp_janela))# #TOPLEVEL
     bt_voltar.place(relx=0.05, rely=0.88, relwidth=0.2, relheight=0.08)
     
-    btfoto_pg2 = tk.Button(inp_frame, text='Click', relief="ridge", cursor="circle", bd=4, bg='#545454', fg='white', font=("arial", 13))
+    btfoto_pg2 = tk.Button(inp_frame, text='CTRL', relief="ridge", cursor="circle", bd=4, bg='#545454', fg='white', font=("arial", 13))
     btfoto_pg2.place(relx=0.5, rely=0.93, anchor=CENTER)
 
 def componentes_frame2(inp_frame, lista):
@@ -128,9 +128,9 @@ def componentes_frame2(inp_frame, lista):
 
     exibir_video()
 
-def aba_camera(inp_janela,dados):
+def aba_camera(inp_janela,dados,inp_menu):
     global lista_arq, caminhoBW, caminhoAPP, nome_arquivo_BW, stop, lista_APP, qtd_furos, Abertura, infra_image
-    print('aaaaaaa',dados)
+    print('Dados: ',dados)
     lista_wl = dados
     # lista_wl = ['MINERADORA/BH/BRASIL', 'Bloco 2', '6', '5', '30/5', '81', 'JOICE']
     janela_tres = tk.Toplevel(inp_janela)
@@ -147,7 +147,6 @@ def aba_camera(inp_janela,dados):
             janela_tres.update_idletasks()
             janela_tres.update()
 
-        #print(lista_arq, caminhoBW, caminhoAPP, nome_arquivo_BW)
         janela_tres.destroy()
 
         return lista_arq, caminhoBW, caminhoAPP, nome_arquivo_BW, lista_APP, qtd_furos, Abertura, infra_image
@@ -169,7 +168,7 @@ def aba_camera(inp_janela,dados):
     
     
     
-    janela_cadastro = aba_dados(inp_janela, dados[3], dados[4], lista_arq[0])
+    janela_cadastro = aba_dados(inp_janela, dados[3], dados[4], lista_arq[0],inp_menu )
     janela_cadastro.deiconify()
     
     return janela_tres

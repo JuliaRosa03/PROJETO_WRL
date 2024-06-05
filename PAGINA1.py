@@ -4,9 +4,8 @@ import colorama as color
 from tkinter import ttk, messagebox
 from customtkinter import *
 from PIL import Image, ImageTk
-# from APK2 import aba_camera
-import FUNCOES_APK as fun
 
+import FUNCOES_APK as fun
 from ABA_CADASTRO_CAMERA import aba_cadastro
 from ABA_CADASTRO_BICO import aba_cadastro_bico
 
@@ -21,7 +20,7 @@ class APK():
         self.janela_menu.mainloop()
     
     def tela(self): # {=======================Configuração de tela=========================}
-        self.janela_menu.title("MENU - Where Register Lances (WRL)")
+        self.janela_menu.title("MENU - Wear Register Lances (WRL)")
         self.janela_menu.configure(background= '#9BCD9B')
         self.janela_menu.attributes("-fullscreen", True)
         self.janela_menu.overrideredirect(True)
