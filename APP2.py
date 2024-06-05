@@ -159,14 +159,15 @@ def aba_camera(inp_janela,dados,inp_menu):
     lista_diametros, img_segmentada, mascaras, resultados, foto_original = f.analisar_imagem(model, cv2.imread(caminhoBW), lista_arq[0], Depth_Frame, Abertura)
     caixas_detectadas, nomes_classes, propriedades = f.extrair_dados(resultados, mascaras, nome_arquivo_BW)
     #f.identificar_furos(caixas_detectadas, nomes_classes, foto_original, infra_image)
-    # Parte Nobel
+    
+    ############### Parte Nobel
     # Extrair coordenadas e centro das caixas delimitadoras
     lista_pontos = f.extrair_coordenadas_centro(caixas_detectadas, nomes_classes)
     # Filtrar o ponto central se detectado como furo
     lista_pontos = f.filtrar_ponto_central(lista_pontos, centro)
     f.enumerar_furos(lista_pontos, qtd_furos, cv2.imread(caminhoBW), lista_arq[0])
         
-    ######
+    ###################
     
     for dado in lista_dh:
         lista_arq.append(dado)
