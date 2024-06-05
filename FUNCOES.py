@@ -15,6 +15,7 @@ import os
 from datetime import datetime
 import sqlite3 as sql
 from tkinter import  messagebox
+import pandas as pd
 
 class DepthCamera:
 
@@ -111,12 +112,12 @@ def tirar_foto(color_frame, infra_image, id_bico):
     data = datetime.now()
     lista_arq = []
     # Formatar a data e hora como parte do nome do arquivo
-    diretorio_destino_imgBW = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\FOTOS_ANALISE'
+    diretorio_destino_imgBW =  r'C:\Users\20221CECA0402\Documents\PROJETO_WRL\FOTOS_ANALISE'
     nome_arquivo_BW = data.strftime(f'registro_{id_bico}_%d-%m-%Y_%H.%M') + '.png'
     caminho_completo_fotografia_BW = os.path.join(diretorio_destino_imgBW, nome_arquivo_BW)
     
     # Formatar a data e hora como parte do nome do arquivo
-    diretorio_destino_imgAPP = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\FOTOS_REGISTRO'
+    diretorio_destino_imgAPP =  r'C:\Users\20221CECA0402\Documents\PROJETO_WRL\FOTOS_REGISTRO'
     nome_arquivo_APP = data.strftime(f'registro_{id_bico}_%d-%m-%Y_%H.%M') + '.png'
     caminho_completo_fotografia_APP = os.path.join(diretorio_destino_imgAPP, nome_arquivo_APP)
     lista_arq.append(nome_arquivo_APP)
@@ -135,12 +136,12 @@ def analisar_imagem(model, imagem, nome, depth_frame, Abertura):
     imagem_bgr = cv2.cvtColor(imagem, cv2.COLOR_RGB2BGR)  # Converter imagem para BGR
 
     # Análise
-    results = model(imagem_bgr,device = 'cpu',retina_masks=True, save = True, save_crop = True,save_frames=True,overlap_mask=True, project =r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\resultados",name = nome, save_txt = True, show_boxes=False)
+    results = model(imagem_bgr,device = 'cpu',retina_masks=True, save = True, save_crop = True,save_frames=True,overlap_mask=True, project =r"C:\Users\20221CECA0402\Documents\PROJETO_WRL\resultados",name = nome, save_txt = True, show_boxes=False)
     
     for result in results:
         img_segmentada = results[0].plot(masks= True, boxes=False) #plotar a segmentação - *resultados_array_bgr
         
-        diretorio_destino_imgAPP = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\FOTOS_SEGMENTADA'
+        diretorio_destino_imgAPP =  r'C:\Users\20221CECA0402\Documents\PROJETO_WRL\FOTOS_SEGMENTADA'
         caminho_completo_fotografia_segmentada = os.path.join(diretorio_destino_imgAPP, nome)
         cv2.imwrite(caminho_completo_fotografia_segmentada, img_segmentada)
         
@@ -271,7 +272,7 @@ def identificar_furos(caixas_detectadas, nomes_classes, imagem, frame):
         imagem_final = cv2.putText(img, f'{i}', pontos[i], cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 1)
 
     data = datetime.now()
-    diretorio_guias = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\FOTOS_GUIA'
+    diretorio_guias =  r'C:\Users\20221CECA0402\Documents\PROJETO_WRL\FOTOS_GUIA'
     nome_arquivo = data.strftime('registro_%d-%m-%Y_%H.%M') + '.png'
     caminho = os.path.join(diretorio_guias, nome_arquivo)
     
@@ -281,31 +282,86 @@ def identificar_furos(caixas_detectadas, nomes_classes, imagem, frame):
 
     return imagem_id
 
-'''def calcular_angulo(ponto_central, ponto, frame):
+#### PARTE DO NOBEL
+# Função para ordenar os pontos em sentido horário
+def sort_points_clockwise(pts):
+    # Encontrar o centro dos pontos
+    center = np.mean(pts, axis=0)
+    # Calcular o ângulo de cada ponto em relação ao centro
+    angles = np.arctan2(pts[:, 1] - center[1], pts[:, 0] - center[0])
+    # Ordenar os pontos com base nos ângulos
+    sorted_pts = pts[np.argsort(angles)]
+    return sorted_pts
 
-    # Obter as dimensões do frame
-    altura, largura, _ = frame.shape
+# Função para filtrar o ponto central
+def filtrar_ponto_central(pontos, ponto_central, threshold=10):
+    return [p for p in pontos if not (abs(p[0] - ponto_central[0]) < threshold and abs(p[1] - ponto_central[1]) < threshold)]
 
+# Função para extrair as coordenadas e centro das caixas delimitadoras
+def extrair_coordenadas_centro(detected_boxes, classes_nomes):
+
+    coordenadas_caixas = []
+    pontos = []
+
+    for box in detected_boxes:
+        x1, y1, x2, y2, sla, classe = box.tolist()
+        centro_x = int((x1 + x2) / 2)
+        centro_y = int((y1 + y2) / 2)
+
+        ponto = (centro_x, centro_y)
+        pontos.append(ponto)
+        
+        coordenadas_caixas.append({
+            'Classe': classes_nomes[int(classe)],
+            'Centro': {
+                'x': centro_x,
+                'y': centro_y
+            }
+        })
+
+        
+    # Converter para DataFrame
+    coordenadas_df = pd.DataFrame(coordenadas_caixas)
+    
+    return pontos
+
+def enumerar_furos(lista_pontos, id, img, nome_arquivo):
+    if (id == 4 and len(lista_pontos) < 4) or (id == 6 and len(lista_pontos) < 6):
+        print("Não foram detectados pontos suficientes.")
+    else:
+        if id == 4:
+            furos = lista_pontos[:4]
+        elif id == 6:
+            furos = lista_pontos[:6]
+
+        if furos:
+            # Converter a lista de furos para um array numpy
+            furos_array = np.array(furos)
+
+            # Ordenar os furos pela posição mais alta e depois em sentido horário
+            # Primeiro, encontrar o furo mais alto (com menor coordenada y)
+            sorted_holes = furos_array[np.argsort(furos_array[:, 1])]
+            highest_hole = sorted_holes[0]
+
+            # Ordenar os furos em sentido horário em relação ao furo mais alto
+            sorted_holes = sort_points_clockwise(furos_array)
+
+            # Numerar os furos
+            for i, (x, y) in enumerate(sorted_holes, start=1):
+                cv2.putText(img, str(i), (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 1)
+                print(f"Furo {i}: Coordenadas ({x}, {y})")
+
+        diretorio_guias = r'C:\Users\20221CECA0402\Documents\PROJETO_WRL\FOTOS_GUIA'
+        caminho = os.path.join(diretorio_guias, nome_arquivo)
+        cv2.imwrite(caminho, img)
+
+def definir_centro(altura, largura):
     # Calcular as coordenadas do ponto no meio do frame
     mid_x, mid_y = largura // 2, altura // 2
     ponto = (mid_x, mid_y)
-
-    furos = [(x1, y1), (x2, y2), (x3, y3), (x4, y4), (x5, y5), (x6, y6)]
-
-    dx = ponto[0] - ponto_central[0]
-    dy = ponto[1] - ponto_central[1]
-    math.atan2(dy, dx)
-
-    angulos = []
-    for furo in furos:
-        angulo = calcular_angulo(ponto, furo)
-        angulos.append(angulo)
-
-    furos_enum = sorted(enumerate(angulos), key=lambda x: x[1])
-
-    for i, (idx, _) in enumerate(furos_enum):
-        print(f"Furo {i+1}: Coordenadas ({furos[idx][0]}, {furos[idx][1]})")'''
-
+    
+    return ponto
+###################################################
 
 def reunir_dados(dados_app, dados_arquivo, dados_diametros):
     lista_completa = []
@@ -333,7 +389,7 @@ def organizar_dados_app(lista):
 
 def salvar_registros(lista, x):
     # Conectando ao banco 
-    banco = sql.connect(r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\REGISTROS_WRL.db') #mudar dps
+    banco = sql.connect( r'C:\Users\20221CECA0402\Documents\PROJETO_WRL\REGISTROS_WRL.db') #mudar dps
     cursor = banco.cursor()
 
     if x == 6:

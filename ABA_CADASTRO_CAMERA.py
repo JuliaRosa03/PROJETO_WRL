@@ -9,7 +9,7 @@ import FUNCOES_APK as fun
 from APP2 import aba_camera
 
 def USINAS():
-    caminho = r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\REGISTROS_WRL.db"
+    caminho =  r"C:\Users\20221CECA0402\Documents\PROJETO_WRL\REGISTROS_WRL.db"
     conn, cursor = fun.CONECTA_BD(caminho)
     comando = f"SELECT Grupo FROM DADOS_EMPRESAS "
     cursor.execute(comando)
@@ -20,7 +20,7 @@ def USINAS():
     return dados_filtrados
 
 # def USINA_SITE(usina):
-#     caminho = r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\REGISTROS_WRL.db"
+#     caminho =  r"C:\Users\20221CECA0402\Documents\PROJETO_WRL\REGISTROS_WRL.db"
 #     conn, cursor = fun.CONECTA_BD(caminho)
 #     comando = f"SELECT Site FROM DADOS_EMPRESAS WHERE Grupo = ?"
 #     cursor.execute(comando, (usina,))
@@ -31,7 +31,7 @@ def USINAS():
 #     return dados_filtrados
 
 def SITE():
-    caminho = r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\REGISTROS_WRL.db"
+    caminho =  r"C:\Users\20221CECA0402\Documents\PROJETO_WRL\REGISTROS_WRL.db"
     conn, cursor = fun.CONECTA_BD(caminho)
     comando = f"SELECT Site FROM DADOS_EMPRESAS "
     cursor.execute(comando)
@@ -42,7 +42,7 @@ def SITE():
     return dados_filtrados
 
 def FUROS_ID():
-    caminho = r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\REGISTROS_WRL.db"
+    caminho =  r"C:\Users\20221CECA0402\Documents\PROJETO_WRL\REGISTROS_WRL.db"
     
     conn, cursor = fun.CONECTA_BD(caminho)
     ID = f"SELECT ID FROM DADOS_EMPRESAS "
@@ -58,7 +58,7 @@ def FUROS_ID():
     return dados_filtrados
 
 def TIPO():
-    caminho = r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\REGISTROS_WRL.db"
+    caminho =  r"C:\Users\20221CECA0402\Documents\PROJETO_WRL\REGISTROS_WRL.db"
     conn, cursor = fun.CONECTA_BD(caminho)
     comando = f"SELECT TIPO FROM DADOS_EMPRESAS "
     cursor.execute(comando)
@@ -119,7 +119,7 @@ def botao_continuar_foto(inp_furos_ID, inp_tipo, inp_vida, inp_nome):
     Furos = str_furos_ID[0]
     ID = str_furos_ID[1]
     
-    caminho = r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\REGISTROS_WRL.db"
+    caminho =  r"C:\Users\20221CECA0402\Documents\PROJETO_WRL\REGISTROS_WRL.db"
     conn, cursor = fun.CONECTA_BD(caminho)
     
     tabela = 'B' + Furos 

@@ -7,7 +7,7 @@ from customtkinter import *
 
 import FUNCOES_APK as fun
 
-caminho = r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\REGISTROS_WRL.db"
+caminho = r"C:\Users\20221CECA0402\Documents\PROJETO_WRL\REGISTROS_WRL.db"
 
 def USINAS():
     conn, cursor = fun.CONECTA_BD(caminho)

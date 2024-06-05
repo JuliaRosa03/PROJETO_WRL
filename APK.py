@@ -12,7 +12,7 @@ def selecao(inp_ID, inp_tipo): # {=========Leitura Grupo, SIte, BOF e ID(FRAME 1
     inp_ID = int(inp_ID)
     ID = inp_ID
     
-    conn, cursor = fun.CONECTA_BD(r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\REGISTROS_WRL.db")
+    conn, cursor = fun.CONECTA_BD( r"C:\Users\20221CECA0402\Documents\PROJETO_WRL\REGISTROS_WRL.db")
     comando = f"SELECT * FROM DADOS_EMPRESAS WHERE ID = {inp_ID} AND TIPO = '{inp_tipo}' "
     cursor.execute(comando)
     dados = cursor.fetchall()
@@ -29,7 +29,7 @@ def selecao(inp_ID, inp_tipo): # {=========Leitura Grupo, SIte, BOF e ID(FRAME 1
 def tabela(int_arquivo): # {=========Informações da tabela(FRAME 2)=========}
     global registro_foto
     
-    conn, cursor = fun.CONECTA_BD(r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\REGISTROS_WRL.db")
+    conn, cursor = fun.CONECTA_BD( r"C:\Users\20221CECA0402\Documents\PROJETO_WRL\REGISTROS_WRL.db")
     comando = f"SELECT * FROM B6 WHERE ARQUIVO = '{int_arquivo}' "
     cursor.execute(comando)
     dados2 = cursor.fetchone()
@@ -41,8 +41,8 @@ def tabela(int_arquivo): # {=========Informações da tabela(FRAME 2)=========}
 
 def imagens(registro_foto):  # {=========Informações para imagens(FRAME 2)=========}
     
-    endereco_pastafotos = r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\FOTOS_ANALISE"
-    endereco_pastaguias = r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\FOTOS_SEGMENTADA"
+    endereco_pastafotos =  r"C:\Users\20221CECA0402\Documents\PROJETO_WRL\FOTOS_ANALISE"
+    endereco_pastaguias =  r"C:\Users\20221CECA0402\Documents\PROJETO_WRL\FOTOS_SEGMENTADA"
         
     arquivofoto = endereco_pastafotos +'\\' +registro_foto
     arquivoguia = endereco_pastaguias +'\\' +registro_foto

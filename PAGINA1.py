@@ -70,7 +70,7 @@ class APK():
         bt_fechar_aba_menu.place(relx=0.96, rely=0.02, relwidth=0.03, relheight=0.04)
         
         # {=======================Imagem IFES=========================}
-        self.img1_pg1 = tk.PhotoImage(file = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\ifes.png')
+        self.img1_pg1 = tk.PhotoImage(file = r'C:\Users\20221CECA0402\Documents\PROJETO_WRL\ifes.png')
         self.img1_pg1 = self.img1_pg1.subsample(5, 5)
 
         self.fotoimg1_pg1 = tk.Label(self.frame_1,
