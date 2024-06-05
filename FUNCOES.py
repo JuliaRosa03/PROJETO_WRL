@@ -282,7 +282,7 @@ def identificar_furos(caixas_detectadas, nomes_classes, imagem, frame):
 
     return imagem_id
 
-#### PARTE DO NOBEL
+##################### PARTE DO NOBEL
 # Função para ordenar os pontos em sentido horário
 def sort_points_clockwise(pts):
     # Encontrar o centro dos pontos

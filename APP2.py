@@ -166,7 +166,6 @@ def aba_camera(inp_janela,dados,inp_menu):
     # Filtrar o ponto central se detectado como furo
     lista_pontos = f.filtrar_ponto_central(lista_pontos, centro)
     f.enumerar_furos(lista_pontos, qtd_furos, cv2.imread(caminhoBW), lista_arq[0])
-        
     ###################
     
     for dado in lista_dh:

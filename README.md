@@ -2,7 +2,7 @@ HISTÓRICO DE MODIFICAÇÕES REALIZADAS
 
 * Registros das últimas alterações realizadas no projeto. Favor preencher adequadamente as informações solicitadas. 
 
-Autor: [nome] | Data: [data da modificação]  |  Commit: [mensagem usada no commit] 
+Autor: Júlia | Data: 05/06/2024  |  Commit: "Enumeração dos furos"
 
-Descrição: [Descrição das alterações feitas]
+Descrição: Implementei a lógica do Nobel de enumerar os furos.
 
