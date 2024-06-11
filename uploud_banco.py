@@ -106,22 +106,30 @@ import FUNCOES_APK as fun
 #     return janela_PG1
     
 # open()
-ID = '4'
+# ID = '4'
 
-int_arquivo = 'registro_002_27-03-2024_13.19.png'
-def tabela(int_arquivo): # {=========Informações da tabela(FRAME 2)=========}
-    global registro_foto
+# int_arquivo = 'registro_002_27-03-2024_13.19.png'
+# def tabela(int_arquivo): # {=========Informações da tabela(FRAME 2)=========}
+#     global registro_foto
     
-    conn, cursor = fun.CONECTA_BD(r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\REGISTROS_WRL.db")
-    comando = f"SELECT * FROM B{ID} WHERE ARQUIVO = '{int_arquivo}' "
-    cursor.execute(comando)
-    dados2 = cursor.fetchone()
-    fun.DESCONECTA_BD(conn)
+#     conn, cursor = fun.CONECTA_BD(r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\REGISTROS_WRL.db")
+#     comando = f"SELECT * FROM B{ID} WHERE ARQUIVO = '{int_arquivo}' "
+#     cursor.execute(comando)
+#     dados2 = cursor.fetchone()
+#     fun.DESCONECTA_BD(conn)
     
-    registro_foto = int_arquivo
-    return dados2
+#     registro_foto = int_arquivo
+#     return dados2
     
 
-print (tabela(int_arquivo))
+# print (tabela(int_arquivo))
 
+num = 4
+for i in range(5):
+    if i == 3:
+        print('oi')
+        pass
 
+        print('tcau')
+
+print('msn')

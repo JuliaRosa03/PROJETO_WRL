@@ -7,7 +7,7 @@ from customtkinter import *
 
 import FUNCOES_APK as fun
 
-caminho = r"C:\Users\20221CECA0402\Documents\PROJETO_WRL\REGISTROS_WRL.db"
+caminho = r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\REGISTROS_WRL.db"
 
 def USINAS():
     conn, cursor = fun.CONECTA_BD(caminho)
@@ -56,7 +56,7 @@ def voltar(aba_1, aba_2):
 def tela(inp_janela):
     inp_janela.title("CADASTRAR BICO")
     inp_janela.configure(background= '#9BCD9B')
-    inp_janela.geometry("1280x800")
+    inp_janela.geometry("1200x600")
     inp_janela.resizable(False, False) #se quiser impedir que amplie ou diminua a tela, altere para False
     # janela.maxsize(width=1920, height=1080) #limite máximo da tela
     inp_janela.minsize(width=700, height=450) #limite minimo da tela
@@ -89,7 +89,7 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
     
     input_Usina = tk.OptionMenu(inp_frame, Var_Usina, *USINAS())
     input_Usina.config(font=("Arial", 18))
-    input_Usina.place(relx=0.2, rely=0.2, relwidth=0.75, relheight=0.05)
+    input_Usina.place(relx=0.2, rely=0.2, relwidth=0.75, relheight=0.07)
     
     # {=======================SITE=========================}
     label_site = fun.CRIAR_LABEL(inp_frame, "Site: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
@@ -99,62 +99,67 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
     input_site = tk.OptionMenu(inp_frame, Var_site, *SITE()) 
     
     input_site.config(font=("Arial", 18))
-    input_site.place(relx=0.15, rely=0.35, relwidth=0.8, relheight=0.05)
+    input_site.place(relx=0.15, rely=0.35, relwidth=0.8, relheight=0.07)
 
     # {=======================FUROS=========================}
     label_furos = fun.CRIAR_LABEL(inp_frame, "Furos: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold' )
     label_furos.place(relx=0.03, rely=0.5)
 
     input_furos = tk.Entry(inp_frame, validate= "key",font=("Arial", 18), validatecommand= validador(inp_frame))
-    input_furos.place(relx=0.18, rely=0.5, relwidth=0.27, relheight=0.05)
+    input_furos.place(relx=0.19, rely=0.5, relwidth=0.26, relheight=0.07)
     
     # {=======================TIPO=========================}
     label_tipo = fun.CRIAR_LABEL(inp_frame, "Tipo: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
     label_tipo.place(relx=0.47, rely=0.5)
 
     input_tipo = tk.Entry(inp_frame,font=("Arial", 18))
-    input_tipo.place(relx=0.6, rely=0.5, relwidth=0.35, relheight=0.05)
+    input_tipo.place(relx=0.6, rely=0.5, relwidth=0.35, relheight=0.07)
     
     # {=======================ID=========================}
     label_ID = fun.CRIAR_LABEL(inp_frame, "ID: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
     label_ID.place(relx=0.03, rely=0.65)
 
     input_ID = tk.Entry(inp_frame, validate= "key",font=("Arial", 18), validatecommand= validador(inp_frame))
-    input_ID.place(relx=0.11, rely=0.65, relwidth=0.85, relheight=0.05)
+    input_ID.place(relx=0.11, rely=0.65, relwidth=0.85, relheight=0.07)
     
     # {=======================Botão Voltar e Continuar=========================}
-    dados_obtidos = []
     
     def salvar(aba_1, aba_2):
-        try:
-            dados_obtidos.append(Var_Usina.get())
-            dados_obtidos.append(Var_site.get())
-            # furos_aux = input_furos.get()
-            dados_obtidos.append(input_furos.get())
-            dados_obtidos.append(input_tipo.get())
-            # ID_aux = input_ID.get()
-            dados_obtidos.append(input_ID.get())
-            
-        except:  
-            todos_tabela = tabela()
-            print('dados obtidos: ', dados_obtidos)
+        dados_obtidos = []
+        flag = True
+        
+        dados_obtidos.append(Var_Usina.get())
+        dados_obtidos.append(Var_site.get())
+        dados_obtidos.append(input_furos.get())
+        dados_obtidos.append(input_tipo.get())
+        dados_obtidos.append(input_ID.get())
+    
+        todos_tabela = tabela()
+        print('\nDados obtidos: ', dados_obtidos)
+        
+        param = 0
+        for dado in dados_obtidos:
+            if dado == '':
+                param += 1
+        
+        if param > 0:
+            messagebox.showwarning("AVISO","Preencha todos os espaços")
+
+        elif tuple(dados_obtidos) in todos_tabela:
+            messagebox.showwarning("AVISO","Já existe este registro")
+
+        else:
+            param = 0
             for tupla in todos_tabela:
+                # print('todos_tabela: ',todos_tabela)
+                print('Tupla: ',tupla)
                 ultimo_algarismo_tupla = str(tupla[-1])[-1]  # Obtém o último dígito da tupla
                 if dados_obtidos[-1] == ultimo_algarismo_tupla:
                     messagebox.showwarning("AVISO","Este ID já existe")
-            
-            if tuple(dados_obtidos) in todos_tabela:
-                messagebox.showwarning("AVISO","Já existe este registro")
-            
-            param = 0
-            for dado in dados_obtidos:
-                if dado == '':
                     param += 1
+                    break
             
-            if param > 0:
-                messagebox.showwarning("AVISO","Preencha todos os espaços")
-            
-            else:
+            if param == 0:
                 conn, cursor = fun.CONECTA_BD(caminho)
                 conn.commit()
                 comando = f"INSERT INTO DADOS_EMPRESAS VALUES (?, ?, ?, ?, ?) "
@@ -167,11 +172,11 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
                 aba_1.deiconify()  # Exiba a janela da aba 1
                 aba_2.destroy() 
     
-    bt_voltar = fun.CRIAR_BOTAO(inp_frame, "VOLTAR",'#258D19', 'white',3,'20','',"hand2",lambda: voltar( inp_menu, inp_janela))
+    bt_voltar = fun.CRIAR_BOTAO(inp_frame, "VOLTAR",'#258D19', 'white',3,'18','',"hand2",lambda: voltar( inp_menu, inp_janela))
     bt_voltar.place(relx=0.05, rely=0.89, relwidth=0.2, relheight=0.08)
 
-    bt_continuar = fun.CRIAR_BOTAO(inp_frame, "SALVAR",'#258D19', 'white',3,'20','',"hand2",lambda: salvar(inp_menu, inp_janela))
-    bt_continuar.place(relx=0.65, rely=0.89, relwidth=0.3, relheight=0.08)
+    bt_continuar = fun.CRIAR_BOTAO(inp_frame, "SALVAR",'#258D19', 'white',3,'18','',"hand2",lambda: salvar(inp_menu, inp_janela))
+    bt_continuar.place(relx=0.65, rely=0.89, relwidth=0.2, relheight=0.08)
 
 def componentes_frame2(inp_frame):
     # {=======================Título=========================}

@@ -12,7 +12,7 @@ def selecao(inp_ID, inp_tipo): # {=========Leitura Grupo, SIte, BOF e ID(FRAME 1
     inp_ID = int(inp_ID)
     ID = inp_ID
     
-    conn, cursor = fun.CONECTA_BD( r"C:\Users\20221CECA0402\Documents\PROJETO_WRL\REGISTROS_WRL.db")
+    conn, cursor = fun.CONECTA_BD( r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\REGISTROS_WRL.db")
     comando = f"SELECT * FROM DADOS_EMPRESAS WHERE ID = {inp_ID} AND TIPO = '{inp_tipo}' "
     cursor.execute(comando)
     dados = cursor.fetchall()
@@ -29,7 +29,7 @@ def selecao(inp_ID, inp_tipo): # {=========Leitura Grupo, SIte, BOF e ID(FRAME 1
 def tabela(int_arquivo): # {=========Informações da tabela(FRAME 2)=========}
     global registro_foto
     
-    conn, cursor = fun.CONECTA_BD( r"C:\Users\20221CECA0402\Documents\PROJETO_WRL\REGISTROS_WRL.db")
+    conn, cursor = fun.CONECTA_BD( r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\REGISTROS_WRL.db")
     comando = f"SELECT * FROM B6 WHERE ARQUIVO = '{int_arquivo}' "
     cursor.execute(comando)
     dados2 = cursor.fetchone()
@@ -41,8 +41,8 @@ def tabela(int_arquivo): # {=========Informações da tabela(FRAME 2)=========}
 
 def imagens(registro_foto):  # {=========Informações para imagens(FRAME 2)=========}
     
-    endereco_pastafotos =  r"C:\Users\20221CECA0402\Documents\PROJETO_WRL\FOTOS_ANALISE"
-    endereco_pastaguias =  r"C:\Users\20221CECA0402\Documents\PROJETO_WRL\FOTOS_SEGMENTADA"
+    endereco_pastafotos =  r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\FOTOS_ANALISE"
+    endereco_pastaguias =  r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\FOTOS_SEGMENTADA"
         
     arquivofoto = endereco_pastafotos +'\\' +registro_foto
     arquivoguia = endereco_pastaguias +'\\' +registro_foto
@@ -157,9 +157,9 @@ def componentes_frame1(inp_ID, inp_tipo, int_arquivo,inp_menu, inp_janela,janela
     
     dados2 = tabela(int_arquivo)
     vida = dados2[1]
-    data_foto = dados2[5]
-    hora_foto = dados2[6]
-    medidas_foto = dados2[7:]
+    data_foto = dados2[7] 
+    hora_foto = dados2[8] 
+    medidas_foto = dados2[9:] 
    
     # {=======================Data=========================}
     ID_pg1 = tk.Label(frame_1,
@@ -212,21 +212,19 @@ def componentes_frame1(inp_ID, inp_tipo, int_arquivo,inp_menu, inp_janela,janela
 
     tabela_pg1.heading("#0", text="")
     tabela_pg1.heading("#1", text="Classe")
-    tabela_pg1.heading("#2", text="Diametro(px)")
+    tabela_pg1.heading("#2", text="Diametro(mm²)")
     
     tabela_pg1.column("#0", width=1)
     tabela_pg1.column("#1", width=180)
     tabela_pg1.column("#2", width=200)
     
-    cont = int(BOF) + 1
-    cont2 = 1
-    
+    i = 1
     for dado in medidas_foto:
-        if cont2 == cont:
+        if i == 1:
             tabela_pg1.insert("", tk.END, values=('Bico', dado))
         else:
-            tabela_pg1.insert("", tk.END, values=(f'Furo {cont2}', dado))
-        cont2 += 1
+            tabela_pg1.insert("", tk.END, values=(f'Furo {i-1}', dado))
+        i += 1
                 
     tabela_pg1.place(relx=0.45, rely=0.15, relwidth=0.5, relheight=0.7)
 

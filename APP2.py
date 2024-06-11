@@ -22,12 +22,7 @@ import numpy as np
 
 from APK import aba_dados
 
-'''#### AVISOS IMPORTANTES ##
-1) Na linha 124 tem a lista simulada de informações que virão do login; Pode modificar os dados, caso queira;
-2) No arquivo FUNCOES.py tem diretórios declarados, como o caminho das imagens, fique atento em alterar esses trechos de acordo com a sua máquina;
-'''
-
-model = YOLO(r'C:\Users\20221CECA0402\Documents\PROJETO_WRL\pesos\best.pt')
+model = YOLO(r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\pesos\best.pt')
 
 # Define the DepthCamera class
 class DepthCamera:

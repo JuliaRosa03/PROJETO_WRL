@@ -112,12 +112,12 @@ def tirar_foto(color_frame, infra_image, id_bico):
     data = datetime.now()
     lista_arq = []
     # Formatar a data e hora como parte do nome do arquivo
-    diretorio_destino_imgBW =  r'C:\Users\20221CECA0402\Documents\PROJETO_WRL\FOTOS_ANALISE'
+    diretorio_destino_imgBW =  r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\FOTOS_ANALISE'
     nome_arquivo_BW = data.strftime(f'registro_{id_bico}_%d-%m-%Y_%H.%M') + '.png'
     caminho_completo_fotografia_BW = os.path.join(diretorio_destino_imgBW, nome_arquivo_BW)
     
     # Formatar a data e hora como parte do nome do arquivo
-    diretorio_destino_imgAPP =  r'C:\Users\20221CECA0402\Documents\PROJETO_WRL\FOTOS_REGISTRO'
+    diretorio_destino_imgAPP =  r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\FOTOS_REGISTRO'
     nome_arquivo_APP = data.strftime(f'registro_{id_bico}_%d-%m-%Y_%H.%M') + '.png'
     caminho_completo_fotografia_APP = os.path.join(diretorio_destino_imgAPP, nome_arquivo_APP)
     lista_arq.append(nome_arquivo_APP)
@@ -136,12 +136,11 @@ def analisar_imagem(model, imagem, nome, depth_frame, Abertura):
     imagem_bgr = cv2.cvtColor(imagem, cv2.COLOR_RGB2BGR)  # Converter imagem para BGR
 
     # Análise
-    results = model(imagem_bgr,device = 'cpu',retina_masks=True, save = True, save_crop = True,save_frames=True,overlap_mask=True, project =r"C:\Users\20221CECA0402\Documents\PROJETO_WRL\resultados",name = nome, save_txt = True, show_boxes=False)
-    
+    results = model(imagem_bgr,device ='cpu',retina_masks=True, save = True, save_crop = True,save_frames=True,overlap_mask=True, project =r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\resultados",name = nome, save_txt = True, show_boxes=False)
     for result in results:
         img_segmentada = results[0].plot(masks= True, boxes=False) #plotar a segmentação - *resultados_array_bgr
         
-        diretorio_destino_imgAPP =  r'C:\Users\20221CECA0402\Documents\PROJETO_WRL\FOTOS_SEGMENTADA'
+        diretorio_destino_imgAPP =  r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\FOTOS_SEGMENTADA'
         caminho_completo_fotografia_segmentada = os.path.join(diretorio_destino_imgAPP, nome)
         cv2.imwrite(caminho_completo_fotografia_segmentada, img_segmentada)
         
@@ -170,30 +169,42 @@ def analisar_imagem(model, imagem, nome, depth_frame, Abertura):
         # Calcular os coeficientes da regressão
         coefficients, _, _, _ = np.linalg.lstsq(X, filtered_z, rcond=None)
 
+        def predict_z(filtered_x, filtered_y):
+                return coefficients[0] + coefficients[1]*filtered_x + coefficients[2]*filtered_y + coefficients[3]*filtered_x**2 + coefficients[4]*filtered_y**2 + coefficients[5]*filtered_x*filtered_y
+
+        soma = float()
+        contador = int()
+        contador2 = int()
         for j in range (detections):
-            depth_data_numpy_coordenada=np.argwhere(depth_data_numpy_binaria[j] == 1)
+            depth_data_numpy_coordenada=np.argwhere(depth_data_numpy_binaria[0] == 1)
             
-            for i in range(len(depth_data_numpy_coordenada)): #para o bico de lança
-                x = depth_data_numpy_coordenada[i][0].astype(int) #coordenada x da mascara do bico de lança
-                y = depth_data_numpy_coordenada[i][1].astype(int) #coordenada y da mascara do bico de lança
-                v = (coefficients[0]) + (coefficients[1]*x) + (coefficients[2]*y) + (coefficients[3]*x**2) + (coefficients[4]*y**2) + (coefficients[5]*(x*y))
-                depth_data_numpy_binaria[j][x][y] = ((math.tan(float(Abertura)*180/math.pi)*v*2)/640)
-    
+            for i in range((depth_data_numpy_coordenada.shape[0])): #para o bico de lança
+                x = depth_data_numpy_coordenada[i,0].astype(int) #coordenada x da mascara do bico de lança
+                y = depth_data_numpy_coordenada[i,1].astype(int) #coordenada y da mascara do bico de lança
+                sum_mask = depth_data_numpy_binaria[0] + depth_data_numpy_binaria[1] + depth_data_numpy_binaria[2] + depth_data_numpy_binaria[3] + depth_data_numpy_binaria[4] + depth_data_numpy_binaria[5] + depth_data_numpy_binaria[6]
+                if sum_mask[x,y] == 2:
+                    contador2 = contador2 + 1
+                depth_data_numpy_binaria[j][x,y] = depth_data_numpy_binaria[j][x,y] * ((math.tan(float(Abertura)/2*math.pi/180)*float(predict_z(x,y))*2)/640)
+                if depth_data_numpy_binaria[j][x][y] == 0:
+                    contador = contador + 1
+                soma = soma + depth_data_numpy_binaria[j][x,y]
+
         lista_diametros = []
         # Exibir os diametros
-        area_total = np.sum(depth_data_numpy_binaria)
-        diametro_externo = 2*(math.sqrt(area_total/math.pi))
+        area_total = np.sum(depth_data_numpy_binaria) + (contador*np.mean(depth_data_numpy_binaria[j][x,y]))
+        diametro_externo = 2*(np.sqrt(area_total/math.pi))
         area_furos = np.sum(depth_data_numpy_binaria[1:7],axis=(1,2))
         diametro_furos = 2*(np.sqrt(area_furos/math.pi))
+        
+        
+        # Armazenando o diametro externo na lista
+        lista_diametros.append(round(diametro_externo, 2))
 
         # Armazenar todos os diâmetros dos furos em uma lista
         for elemento in diametro_furos:
             diametro_float = float(elemento)
-            lista_diametros.append(round(diametro_float, 2))
+            lista_diametros.append(round(diametro_float, 2)) # Lista com os valores de todos os diâmetros
         
-        # Armazenando o diametro externo na lista
-        lista_diametros.append(round(diametro_externo, 2)) # Lista com os valores de todos os diâmetros
-    
     return lista_diametros, img_segmentada, mascaras, results, imagem_bgr
 
 def extrair_data_e_hora(nome_arquivo):
@@ -272,7 +283,7 @@ def identificar_furos(caixas_detectadas, nomes_classes, imagem, frame):
         imagem_final = cv2.putText(img, f'{i}', pontos[i], cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 1)
 
     data = datetime.now()
-    diretorio_guias =  r'C:\Users\20221CECA0402\Documents\PROJETO_WRL\FOTOS_GUIA'
+    diretorio_guias =  r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\FOTOS_GUIA'
     nome_arquivo = data.strftime('registro_%d-%m-%Y_%H.%M') + '.png'
     caminho = os.path.join(diretorio_guias, nome_arquivo)
     
@@ -351,7 +362,7 @@ def enumerar_furos(lista_pontos, id, img, nome_arquivo):
                 cv2.putText(img, str(i), (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 1)
                 print(f"Furo {i}: Coordenadas ({x}, {y})")
 
-        diretorio_guias = r'C:\Users\20221CECA0402\Documents\PROJETO_WRL\FOTOS_GUIA'
+        diretorio_guias = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\FOTOS_GUIA'
         caminho = os.path.join(diretorio_guias, nome_arquivo)
         cv2.imwrite(caminho, img)
 
@@ -380,20 +391,30 @@ def reunir_dados(dados_app, dados_arquivo, dados_diametros):
 
 def organizar_dados_app(lista):
 
-    lista_APP = [lista[6], lista[5], lista[3], lista[4]]
-    x = int(lista[2])
+    lista_APP = [lista[0], lista[1], lista[6], lista[5], lista[3], lista[4]]
+    qtd_furos = int(lista[2])
     id = '00' + str(lista[3])
+    
+    return lista_APP, id, qtd_furos
 
-    return lista_APP, id, x
 
-
-def salvar_registros(lista, x):
+def salvar_registros(lista, num):
     # Conectando ao banco 
-    banco = sql.connect( r'C:\Users\20221CECA0402\Documents\PROJETO_WRL\REGISTROS_WRL.db') #mudar dps
+    banco = sql.connect( r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\REGISTROS_WRL.db') #mudar dps
     cursor = banco.cursor()
 
-    if x == 6:
-        comando = "INSERT INTO B6 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+    if num == 6:
+        comando = "INSERT INTO B6 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+
+        registro = (lista[0], lista[1], lista[2], lista[3], lista[4], lista[5], lista[6], lista[7], lista[8], lista[9], lista[10], lista[11], lista[12], lista[13], lista[14], lista[15])
+
+        cursor.execute(comando, registro)
+
+        # Grava a transação
+        banco.commit()
+
+    else:
+        comando = "INSERT INTO B4 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
         registro = (lista[0], lista[1], lista[2], lista[3], lista[4], lista[5], lista[6], lista[7], lista[8], lista[9], lista[10], lista[11], lista[12], lista[13])
 
@@ -402,19 +423,5 @@ def salvar_registros(lista, x):
         # Grava a transação
         banco.commit()
 
-    else:
-        comando = "INSERT INTO B4 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-
-        registro = (lista[0], lista[1], lista[2], lista[3], lista[4], lista[5], lista[6], lista[7], lista[8], lista[9], lista[10], lista[11])
-
-        cursor.execute(comando, registro)
-
-        # Grava a transação
-        banco.commit()
-
     # Feche a conexão com o banco de dados
     cursor.close()
-
-    print('\nDados inseridos no banco com sucesso!')
-
-    
