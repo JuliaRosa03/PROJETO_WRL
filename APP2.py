@@ -133,7 +133,7 @@ def aba_camera(inp_janela,dados,inp_menu):
     global lista_arq, caminhoBW, caminhoAPP, nome_arquivo_BW, stop, lista_APP, qtd_furos, Abertura, infra_image, centro
     print('Dados: ',dados)
     lista_wl = dados
-    # lista_wl = ['MINERADORA/BH/BRASIL', 'Bloco 2', '6', '5', '30/5', '81', 'JOICE']
+    # lista_wl = ['MINERADORA/BH/BRASIL', 'Bloco 2', '6', '5', '30/5', '81', 'JONAS']
     janela_tres = tk.Toplevel(inp_janela)
     # janela_tres = tk.Tk()
     

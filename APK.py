@@ -157,9 +157,9 @@ def componentes_frame1(inp_ID, inp_tipo, int_arquivo,inp_menu, inp_janela,janela
     
     dados2 = tabela(int_arquivo)
     vida = dados2[1]
-    data_foto = dados2[5]
-    hora_foto = dados2[6]
-    medidas_foto = dados2[7:]
+    data_foto = dados2[7] # data_foto = dados2[5]
+    hora_foto = dados2[8] # hora_foto = dados2[6]
+    medidas_foto = dados2[9:] # medidas_foto = dados2[7:]
    
     # {=======================Data=========================}
     ID_pg1 = tk.Label(frame_1,
@@ -212,21 +212,19 @@ def componentes_frame1(inp_ID, inp_tipo, int_arquivo,inp_menu, inp_janela,janela
 
     tabela_pg1.heading("#0", text="")
     tabela_pg1.heading("#1", text="Classe")
-    tabela_pg1.heading("#2", text="Diametro(px)")
+    tabela_pg1.heading("#2", text="Diametro(mm²)")
     
     tabela_pg1.column("#0", width=1)
     tabela_pg1.column("#1", width=180)
     tabela_pg1.column("#2", width=200)
     
-    cont = int(BOF) + 1
-    cont2 = 1
-    
+    i = 1
     for dado in medidas_foto:
-        if cont2 == cont:
+        if i == 1:
             tabela_pg1.insert("", tk.END, values=('Bico', dado))
         else:
-            tabela_pg1.insert("", tk.END, values=(f'Furo {cont2}', dado))
-        cont2 += 1
+            tabela_pg1.insert("", tk.END, values=(f'Furo {i-1}', dado))
+        i += 1
                 
     tabela_pg1.place(relx=0.45, rely=0.15, relwidth=0.5, relheight=0.7)
 
