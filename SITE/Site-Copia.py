@@ -10,6 +10,8 @@ import sqlite3 as sql
 
 warnings.filterwarnings("ignore")  # ->ignorar os erros que aparecem no site
 
+pasta = r'C:\Users\julia\OneDrive\Documentos\IFES\PROJETO_WRL'
+
 # {=======================Estilos da página=========================}
 
 st.set_page_config(page_title= "Registros de Bico", page_icon=":clipboard:", layout="wide")  #->Titulo da aba no navegador
@@ -32,10 +34,10 @@ st.markdown(page_bg_img, unsafe_allow_html=True)
 
 # {=======================Imagens=========================}
 
-image_4F = Image.open(r'C:\Users\20221CECA0402\Documents\PROJETO_WRL\SITE\4Furos.jpeg')
-image_5F = Image.open(r'C:\Users\20221CECA0402\Documents\PROJETO_WRL\SITE\5Furos.jpeg')
-image_6F = Image.open(r'C:\Users\20221CECA0402\Documents\PROJETO_WRL\SITE\6Furos.jpeg') 
-imagem_LOGOS = Image.open(r'C:\Users\20221CECA0402\Documents\PROJETO_WRL\SITE\LOGOS.png')
+image_4F = Image.open(fr'{pasta}\SITE\4Furos.jpeg')
+image_5F = Image.open(fr'{pasta}\SITE\5Furos.jpeg')
+image_6F = Image.open(fr'{pasta}\SITE\6Furos.jpeg') 
+imagem_LOGOS = Image.open(fr'{pasta}\SITE\LOGOS.png')
 
 # {=======================Título=========================}
 
@@ -44,9 +46,9 @@ st.markdown('<style>div.block-container{padding-top:1rem;}</> ',unsafe_allow_htm
 
 # {=======================Leitura de arquivo=========================}
 
-os.chdir(r"C:\Users\20221CECA0402\Documents\PROJETO_WRL")
+os.chdir(r"C:\Users\julia\OneDrive\Documentos\IFES\PROJETO_WRL")
 
-conn = sql.connect(r"C:\Users\20221CECA0402\Documents\PROJETO_WRL\REGISTROS_WRL.db")
+conn = sql.connect(fr'{pasta}\REGISTROS_WRL.db')
 cursor = conn.cursor()
 print("Conectado ao banco de dados")
 
@@ -64,6 +66,28 @@ print("Desconectado do banco de dados")
 # {=======================Barra de seleção=========================}
 
 st.sidebar.header("Seja bem-vindo ao Site WRL :bangbang:")
+
+# {=======================Seleção de Bico=========================}
+conn = sql.connect(fr'{pasta}\REGISTROS_WRL.db')
+cursor = conn.cursor()
+cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+tables = cursor.fetchall()
+
+table_names = []
+dfs = {}
+
+for table in tables:
+    table_name = table[0]
+    table_names.append(table_name)
+    cursor.execute(f"SELECT * FROM {table_name};")
+    rows = cursor.fetchall()
+    dfs[table_name] = pd.DataFrame(rows, columns=[i[0] for i in cursor.description])
+
+table_names = table_names[1:]
+
+conn.close()
+
+selected_tables = st.sidebar.multiselect("Furos na lança:", table_names)
 
 # Filtra o grupo
 grupo = st.sidebar.multiselect("Grupo:", df["GRUPO"].unique(), placeholder="")
@@ -92,46 +116,14 @@ if not id:
 else:
     df6 = df3[df3["ID"].isin(id)]   # Só tem dados do ID selecionado
     
-# Filtra o tipo
-tipo = st.sidebar.multiselect("Tipo:", df6["TIPO"].unique(), placeholder="")
-if not tipo:
-    df7 = df6.copy()  # tem todos os dados 
-else:
-    df7 = df6[df6["TIPO"].isin(tipo)]   # Só tem dados do tipo selecionado
-    
-# Filtra a vida
-vida = st.sidebar.multiselect("Vida:", df7["VIDA"].unique(), placeholder="")
-if not vida:
-    df8 = df7.copy()  # tem todos os dados 
-else:
-    df8 = df7[df7["VIDA"].isin(vida)]   # Só tem dados da vida selecionada
+# # Filtra o tipo
+# tipo = st.sidebar.multiselect("Tipo:", df6["TIPO"].unique(), placeholder="")
+# if not tipo:
+#     df7 = df6.copy()  # tem todos os dados 
+# else:
+#     df7 = df6[df6["TIPO"].isin(tipo)]   # Só tem dados do tipo selecionado
 
-filtered_df = df8  # DataFrame final filtrado
-
-# {=======================Seleção de Bico=========================}
-conn = sql.connect(r"C:\Users\20221CECA0402\Documents\PROJETO_WRL\REGISTROS_WRL.db")
-cursor = conn.cursor()
-cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
-tables = cursor.fetchall()
-
-table_names = []
-dfs = {}
-
-for table in tables:
-    table_name = table[0]
-    table_names.append(table_name)
-    cursor.execute(f"SELECT * FROM {table_name};")
-    rows = cursor.fetchall()
-    dfs[table_name] = pd.DataFrame(rows, columns=[i[0] for i in cursor.description])
-
-table_names = table_names[1:]
-
-#print('dfs B6: \n' , dfs['B6'])
-print('table_names: \n', table_names)
-
-conn.close()
-
-selected_tables = st.sidebar.multiselect("Furos na lança:", table_names) 
+# filtered_df = df7  # DataFrame final filtrado
 
 # {=======================Logos e fuso horário=========================}
 st.sidebar.image(imagem_LOGOS, width=270) 
@@ -170,43 +162,57 @@ st.divider()
 if site and id and selected_tables:
     # {=======================Gráfico principal=========================}
 
-    st.markdown(f"<H3 style='text-align: center; color: gray;'>Variação dos diâmetros: {', '.join(site)} </H3>", unsafe_allow_html=True)
+    #st.markdown(f"<H3 style='text-align: center; color: gray;'>Variação dos diâmetros: {', '.join(site)} </H3>", unsafe_allow_html=True)
+    st.markdown(f"# Gráfico da variação de todos os diâmetros\n # ID: {', '.join(id)}")
 
-    filtered_df = df3[df3["ID"].isin(id)]
-    teste = filtered_df.groupby(['TIPO','VIDA'])['EXTERNO'].sum().reset_index()
+    filtered_df = df3[df3["ID"].isin(id)] # Gráficos gerados a partir do id
+    # Selecionar as colunas desejadas
 
-    fig = px.line(teste,
-                x="VIDA",
-                y="EXTERNO",
-                template="seaborn",
-                markers=True,
-                color='TIPO')
+    if not filtered_df.empty:
+        # Transformar o DataFrame para o formato longo
+        long_df = pd.melt(filtered_df, id_vars=['ID','VIDA'], 
+                        value_vars=['EXTERNO', 'FURO_1', 'FURO_2', 'FURO_3', 'FURO_4','FURO_5','FURO_6'], 
+                        var_name='Região', value_name='DIÂMETRO [mm²]')
 
-    st.plotly_chart(fig, use_container_width=True, height=200, width="100%")
-    st.divider()
-    
-    st.markdown(f"# Grupo: {', '.join(grupo)} - Site: {', '.join(site)}")
-    
-    tipo = st.selectbox("TIPO", df3["TIPO"].unique())
-    if not tipo:
-        df5 = df3.copy()
+        # Criar o gráfico de linhas
+        fig = px.line(long_df, 
+                    x='VIDA', 
+                    y='DIÂMETRO [mm²]', 
+                    color='Região', 
+                    line_group='ID', 
+                    markers=True, 
+                    template='seaborn', 
+                    facet_col='ID', 
+                    title="Valores dos Diâmetros ao Longo da Vida")
+
+        # Exibir o gráfico no Streamlit
+        st.plotly_chart(fig, use_container_width=True)
+        st.divider()
     else:
-        df5 = df3[df3["TIPO"].isin([tipo])]
+        st.write("Selecione pelo menos um ID para visualizar os dados.")
+ 
+    st.markdown(f"# Gráfico da variação de diâmetros específicos\n # ID: {', '.join(id)}")
+    
+    # Selecionar a coluna desejada para plotar
+    selected_column = st.selectbox("Selecione a região desejada:", df3.columns[9:])
 
-    # {=======================Gráfico secundário=========================}
+    if not filtered_df.empty:
+       # Renomear a coluna selecionada para "Diâmetro (mm²)"
+        filtered_df = filtered_df.rename(columns={selected_column: "DIÂMETRO [mm²]"})
 
-    filtered_df = df5[df5["SITE"].isin(site) & df5["TIPO"].isin([tipo])]
-    fig = px.line(filtered_df,
-                  x="VIDA",
-                  y="EXTERNO",
-                  template="seaborn",
-                  markers=True,
-                  title=' Registros dos bicos')
-    fig.update_traces(textposition="top center")
-    st.plotly_chart(fig, use_container_width=True, height=200, width="100%")
-
-else:
-    st.markdown("<H3 style='color:red'>Selecione o Site e a Lança </H3>", unsafe_allow_html=True)
+        # Criar o gráfico de linhas
+        fig = px.line(filtered_df, 
+                    x='VIDA', 
+                    y="DIÂMETRO [mm²]", 
+                    template='seaborn', 
+                    markers=True, 
+                    title=f"Valores dos Diâmetros ao Longo da Vida para {selected_column}")
+        
+        # Exibir o gráfico no Streamlit
+        st.plotly_chart(fig, use_container_width=True)
+        st.divider()
+    else:
+        st.write("Nenhum dado disponível para a região selecionada.")
 
 # {=======================Seleção de datas=========================}
 
