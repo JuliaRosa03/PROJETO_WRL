@@ -65,7 +65,7 @@ print("Desconectado do banco de dados")
 
 # {=======================Barra de seleção=========================}
 
-st.sidebar.header("Seja bem-vindo ao Site WRL :bangbang:")
+st.sidebar.header("SEJA BEM-VINDO!")
 
 # {=======================Seleção de Bico=========================}
 conn = sql.connect(fr'{pasta}\REGISTROS_WRL.db')
@@ -87,10 +87,10 @@ table_names = table_names[1:]
 
 conn.close()
 
-selected_tables = st.sidebar.multiselect("Furos na lança:", table_names)
+selected_tables = st.sidebar.multiselect("LANÇA:", table_names, placeholder="Selecione uma opção")
 
 # Filtra o grupo
-grupo = st.sidebar.multiselect("Grupo:", df["GRUPO"].unique(), placeholder="")
+grupo = st.sidebar.multiselect("GRUPO:", df["GRUPO"].unique(), placeholder="Selecione uma opção")
 if not grupo:
     df2 = df.copy()  # tem todos os dados 
 else:
@@ -98,7 +98,7 @@ else:
     
 # Filtra o site
 limite = 1
-site = st.sidebar.multiselect("Site:".format(limite), df2["SITE"].unique(), placeholder="Selecione apenas um site")
+site = st.sidebar.multiselect("SITE:".format(limite), df2["SITE"].unique(), placeholder="Selecione uma opção")
 if not site:
     df3 = df2.copy()
 else:
@@ -110,7 +110,7 @@ else:
         st.sidebar.warning("Selecione no máximo uma opção de site")
 
 # Filtra o ID com base no site selecionado
-id = st.sidebar.multiselect("ID:", df3["ID"].unique(), placeholder="")
+id = st.sidebar.multiselect("ID:", df3["ID"].unique(), placeholder="Selecione uma opção")
 if not id:
     df6 = df3.copy()  # tem todos os dados 
 else:
