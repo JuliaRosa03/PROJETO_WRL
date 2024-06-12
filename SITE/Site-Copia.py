@@ -163,7 +163,7 @@ if site and id and selected_tables:
     # {=======================Gráfico principal=========================}
 
     #st.markdown(f"<H3 style='text-align: center; color: gray;'>Variação dos diâmetros: {', '.join(site)} </H3>", unsafe_allow_html=True)
-    st.markdown(f"# Gráfico da variação de todos os diâmetros\n # ID: {', '.join(id)}")
+    st.markdown(f"# Gráfico de desgaste - Análise com todos os diâmetros\n # ID: {', '.join(id)}")
 
     filtered_df = df3[df3["ID"].isin(id)] # Gráficos gerados a partir do id
     # Selecionar as colunas desejadas
@@ -191,7 +191,7 @@ if site and id and selected_tables:
     else:
         st.write("Selecione pelo menos um ID para visualizar os dados.")
  
-    st.markdown(f"# Gráfico da variação de diâmetros específicos\n # ID: {', '.join(id)}")
+    st.markdown(f"# Gráfico de desgaste - Diâmetros específicos\n # ID: {', '.join(id)}")
     
     # Selecionar a coluna desejada para plotar
     selected_column = st.selectbox("Selecione a região desejada:", df3.columns[9:])
