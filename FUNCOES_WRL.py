@@ -7,11 +7,11 @@ from PIL import Image, ImageTk
 
 def CONECTA_BD(inp_caminho):
     conn = sql.connect(inp_caminho)
-    cursor = conn.cursor(); print("Conectando ao banco de dados")
+    cursor = conn.cursor(); print("\nConectando ao banco de dados")
     return conn, cursor
     
 def DESCONECTA_BD(conn):
-    conn.close(); print("Desconectando do banco de dados")
+    conn.close(); print("Desconectando do banco de dados\n")
 
 def CRIAR_FRAME(inp_frame, inp_bg, inp_light = NONE):
     frame = tk.Frame(inp_frame,

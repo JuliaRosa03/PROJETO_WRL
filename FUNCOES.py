@@ -17,8 +17,8 @@ import sqlite3 as sql
 from tkinter import  messagebox
 import pandas as pd
 
-pasta = r'C:\Users\20221CECA0402\Documents\PROJETO_WRL'
-#pasta = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL'
+# pasta = r'C:\Users\20221CECA0402\Documents\PROJETO_WRL'
+pasta = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL'
 
 class DepthCamera:
 
@@ -374,7 +374,7 @@ def enumerar_furos(lista_pontos, id, img, nome_arquivo):
             # Numerar os furos
             for i, (x, y) in enumerate(sorted_holes, start=1):
                 cv2.putText(img, str(i), (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 1)
-                print(f"Furo {i}: Coordenadas ({x, y})")
+                
 
         diretorio_guias = fr'{pasta}\FOTOS_GUIA'
         caminho = os.path.join(diretorio_guias, nome_arquivo)

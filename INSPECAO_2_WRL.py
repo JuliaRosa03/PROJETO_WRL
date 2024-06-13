@@ -22,8 +22,8 @@ import numpy as np
 
 from INSPECAO_3_WRL import aba_dados
 
-pasta = r'C:\Users\20221CECA0402\Documents\PROJETO_WRL'
-#pasta = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL'
+# pasta = r'C:\Users\20221CECA0402\Documents\PROJETO_WRL'
+pasta = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL'
 
 model = YOLO(fr'{pasta}\pesos\best.pt')
 

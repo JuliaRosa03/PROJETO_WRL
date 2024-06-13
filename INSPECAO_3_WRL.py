@@ -7,12 +7,9 @@ from PIL import Image, ImageTk
 
 import FUNCOES_WRL as fun
 
-<<<<<<< Updated upstream
-pasta = r'C:\Users\20221CECA0402\Documents\PROJETO_WRL'
-#pasta = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL'
+# pasta = r'C:\Users\20221CECA0402\Documents\PROJETO_WRL'
+pasta = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL'
 
-=======
->>>>>>> Stashed changes
 
 def selecao(inp_ID, inp_tipo): # {=========Leitura Grupo, SIte, BOF e ID(FRAME 1)=========}
     global ID
@@ -26,7 +23,6 @@ def selecao(inp_ID, inp_tipo): # {=========Leitura Grupo, SIte, BOF e ID(FRAME 1
     dados = cursor.fetchall()
     fun.DESCONECTA_BD(conn)
     
-    print("Dados APK:", dados, "\nDados[0]:", dados[0])
     grupo_completo = list(dados[0])
     dados = [item for sublist in dados for item in sublist]
     grupo_completo = grupo_completo[0]

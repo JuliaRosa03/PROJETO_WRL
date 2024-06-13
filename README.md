@@ -16,10 +16,8 @@ Descrição 2: Mudei os nomes do arquivo
         APK -> INSPECAO_3_WRL
         ABA_CADASTRO_BICO -> CADASTRO_BICO_WRL
         FUNCOES_APK -> FUNCOES_WRL
-<<<<<<< Updated upstream
-=======
 
-Descrição 3: 
+Descrição 3: compactei INSPECAO_3_WRL
 
 
 Autor: Júlia | Data: 11/06/2024  |  Commit: "Banco de dados alterado"
@@ -29,4 +27,3 @@ Descrição: Adicionei as colunas "GRUPO" e "SITE" nas tabelas "B6" e "B4", para
 Autor: Júlia | Data: 12/06/2024  |  Commit: "Mudanças no Site"
 
 Descrição: Atualizei a barra de seleção, deixando apenas os filtros mais relevantes para plotar os gráficos de variação dos diâmetros ao longo das vidas. Há dois gráficos: um gráfico com todas as variações de diâmetros (externo e furos) e outro que permite a visualização única de cada variação, podendo o usuário selecionar qual variação ele deseja ver, se é do externo, do furo 1, do furo 3, etc.
->>>>>>> Stashed changes
