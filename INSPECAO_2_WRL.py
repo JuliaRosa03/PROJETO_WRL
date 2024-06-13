@@ -114,7 +114,7 @@ def componentes_frame2(inp_frame, lista):
             borda.configure(image=image)
             borda.image = image
             centro = f.definir_centro(altura, largura)
-            results = model(frame,device ='cpu',retina_masks=True, save = True, save_crop = True,save_frames=True,overlap_mask=True)
+            #results = model(frame,device ='cpu',retina_masks=True, save = True, save_crop = True,save_frames=True,overlap_mask=True)
             
 
             if keyboard.is_pressed('ctrl') or keyboard.is_pressed('right control') or keyboard.is_pressed('q'):

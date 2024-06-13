@@ -129,7 +129,7 @@ def analisar_imagem(model, imagem, nome, depth_frame, Abertura):
 
     # Análise
 
-    results = model(imagem_bgr,device = 0,retina_masks=True, save = True, save_crop = True,save_frames=True,overlap_mask=True, project =r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\resultados",name = nome, save_txt = True, show_boxes=False)
+    results = model(imagem_bgr,device = 'cpu',retina_masks=True, save = True, save_crop = True,save_frames=True,overlap_mask=True, project =r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\resultados",name = nome, save_txt = True, show_boxes=False, conf=0.80)
     #results = model(imagem_bgr,device ='cpu',retina_masks=True, save = True, save_crop = True,save_frames=True,overlap_mask=True, project =r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\resultados",name = nome, save_txt = True, show_boxes=False)>>>>>>> 1ad0f8a03974b2a28b7b80d74e82e85afef6bb17
     for result in results:
         img_segmentada = results[0].plot(masks= True, boxes=False) #plotar a segmentação - *resultados_array_bgr
@@ -163,9 +163,10 @@ def analisar_imagem(model, imagem, nome, depth_frame, Abertura):
         # Calcular os coeficientes da regressão
         coefficients, _, _, _ = np.linalg.lstsq(X, filtered_z, rcond=None)
 
+
         def predict_z(filtered_x, filtered_y):
                 return coefficients[0] + coefficients[1]*filtered_x + coefficients[2]*filtered_y + coefficients[3]*filtered_x**2 + coefficients[4]*filtered_y**2 + coefficients[5]*filtered_x*filtered_y
-
+        
         for j in range (detections):
             depth_data_numpy_coordenada=np.argwhere(depth_data_numpy_binaria[:] == 1)
             for i in range(len(depth_data_numpy_coordenada)): #para o bico de lança
@@ -182,6 +183,13 @@ def analisar_imagem(model, imagem, nome, depth_frame, Abertura):
             furo_6 = (depth_data_numpy_binaria[1]-depth_data_numpy_binaria[2])
             bico_completo = (depth_data_numpy_binaria[0])
 
+# ------------
+        
+        # pcd2 = o3d.geometry.PointCloud()
+        # points2 = np.column_stack((filtered_x,filtered_y,depth_frame[filtered_x,filtered_y]))
+        # pcd2.points = o3d.utility.Vector3dVector(points2)
+        # o3d.visualization.draw_geometries([pcd2])
+# ------------
         lista_diametros = []
     
         area_total = np.sum(depth_data_numpy_binaria)

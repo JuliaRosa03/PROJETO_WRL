@@ -37,7 +37,7 @@ st.markdown(page_bg_img, unsafe_allow_html=True)
 image_4F = Image.open(fr'{pasta}\SITE\4Furos.jpeg')
 image_5F = Image.open(fr'{pasta}\SITE\5Furos.jpeg')
 image_6F = Image.open(fr'{pasta}\SITE\6Furos.jpeg') 
-imagem_LOGOS = Image.open(fr'{pasta}\SITE\LOGOS.png')
+imagem_LOGOS = Image.open(fr'{pasta}\SITE\ifes.png')
 
 # {=======================Título=========================}
 
