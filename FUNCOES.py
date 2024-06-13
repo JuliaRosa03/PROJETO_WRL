@@ -17,6 +17,9 @@ import sqlite3 as sql
 from tkinter import  messagebox
 import pandas as pd
 
+pasta = r'C:\Users\20221CECA0402\Documents\PROJETO_WRL'
+#pasta = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL'
+
 class DepthCamera:
 
     def __init__(self):
@@ -104,12 +107,12 @@ def tirar_foto(color_frame, infra_image, id_bico):
     data = datetime.now()
     lista_arq = []
     # Formatar a data e hora como parte do nome do arquivo
-    diretorio_destino_imgBW =  r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\FOTOS_ANALISE'
+    diretorio_destino_imgBW =  fr'{pasta}\FOTOS_ANALISE'
     nome_arquivo_BW = data.strftime(f'registro_{id_bico}_%d-%m-%Y_%H.%M') + '.png'
     caminho_completo_fotografia_BW = os.path.join(diretorio_destino_imgBW, nome_arquivo_BW)
     
     # Formatar a data e hora como parte do nome do arquivo
-    diretorio_destino_imgAPP =  r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\FOTOS_REGISTRO'
+    diretorio_destino_imgAPP =  fr'{pasta}\FOTOS_REGISTRO'
     nome_arquivo_APP = data.strftime(f'registro_{id_bico}_%d-%m-%Y_%H.%M') + '.png'
     caminho_completo_fotografia_APP = os.path.join(diretorio_destino_imgAPP, nome_arquivo_APP)
     lista_arq.append(nome_arquivo_APP)
@@ -129,12 +132,12 @@ def analisar_imagem(model, imagem, nome, depth_frame, Abertura):
 
     # Análise
 
-    results = model(imagem_bgr,device = 'cpu',retina_masks=True, save = True, save_crop = True,save_frames=True,overlap_mask=True, project =r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\resultados",name = nome, save_txt = True, show_boxes=False, conf=0.80)
-    #results = model(imagem_bgr,device ='cpu',retina_masks=True, save = True, save_crop = True,save_frames=True,overlap_mask=True, project =r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\resultados",name = nome, save_txt = True, show_boxes=False)>>>>>>> 1ad0f8a03974b2a28b7b80d74e82e85afef6bb17
+    results = model(imagem_bgr,device = 'cpu',retina_masks=True, save = True, save_crop = True,save_frames=True,overlap_mask=True, project =fr"{pasta}\resultados",name = nome, save_txt = True, show_boxes=False, conf=0.80)
+    
     for result in results:
         img_segmentada = results[0].plot(masks= True, boxes=False) #plotar a segmentação - *resultados_array_bgr
         
-        diretorio_destino_imgAPP =  r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\FOTOS_SEGMENTADA'
+        diretorio_destino_imgAPP =  fr'{pasta}\FOTOS_SEGMENTADA'
         caminho_completo_fotografia_segmentada = os.path.join(diretorio_destino_imgAPP, nome)
         cv2.imwrite(caminho_completo_fotografia_segmentada, img_segmentada)
         
@@ -274,50 +277,47 @@ def extrair_dados(resultado, mascaras, nome):
 
     return caixas_detectadas, nomes_classes, lista_proprs
 
-def identificar_furos(caixas_detectadas, nomes_classes, imagem, frame):
-    # Extrair as coordenadas e centro das caixas delimitadoras
-    coordenadas_caixas = []
-    pontos = []
-    for box in caixas_detectadas:
-        x1, y1, x2, y2, sla, classe = box.tolist()
-        centro_x = int((x1 + x2) / 2)
-        centro_y = int((y1 + y2) / 2)
+# def identificar_furos(caixas_detectadas, nomes_classes, imagem, frame):
+#     # Extrair as coordenadas e centro das caixas delimitadoras
+#     coordenadas_caixas = []
+#     pontos = []
+#     for box in caixas_detectadas:
+#         x1, y1, x2, y2, sla, classe = box.tolist()
+#         centro_x = int((x1 + x2) / 2)
+#         centro_y = int((y1 + y2) / 2)
 
-        ponto = (centro_x, centro_y)
-        pontos.append(ponto)
+#         ponto = (centro_x, centro_y)
+#         pontos.append(ponto)
         
-        coordenadas_caixas.append({
-            'Classe': nomes_classes[int(classe)],
-            'Centro': {
-                'x': centro_x,
-                'y': centro_y
-            }
-        })
+#         coordenadas_caixas.append({
+#             'Classe': nomes_classes[int(classe)],
+#             'Centro': {
+#                 'x': centro_x,
+#                 'y': centro_y
+#             }
+#         })
 
-    img = imagem.copy()
-    # Adicionar texto para identificar cada objeto detectado (id)
-    for i in range(1, len(pontos)):
-        imagem_final = cv2.putText(img, f'{i}', pontos[i], cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 1)
+#     img = imagem.copy()
+#     # Adicionar texto para identificar cada objeto detectado (id)
+#     for i in range(1, len(pontos)):
+#         imagem_final = cv2.putText(img, f'{i}', pontos[i], cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 1)
 
-    data = datetime.now()
-    diretorio_guias =  r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\FOTOS_GUIA'
-    nome_arquivo = data.strftime('registro_%d-%m-%Y_%H.%M') + '.png'
-    caminho = os.path.join(diretorio_guias, nome_arquivo)
+#     data = datetime.now()
+#     diretorio_guias =  fr'{pasta}\FOTOS_GUIA'
+#     nome_arquivo = data.strftime('registro_%d-%m-%Y_%H.%M') + '.png'
+#     caminho = os.path.join(diretorio_guias, nome_arquivo)
     
-    cv2.imwrite(caminho, imagem_final)
+#     cv2.imwrite(caminho, imagem_final)
 
-    imagem_id = cv2.imread(caminho)
+#     imagem_id = cv2.imread(caminho)
 
-    return imagem_id
+#     return imagem_id
 
 ##################### PARTE DO NOBEL
 # Função para ordenar os pontos em sentido horário
 def sort_points_clockwise(pts):
-    # Encontrar o centro dos pontos
     center = np.mean(pts, axis=0)
-    # Calcular o ângulo de cada ponto em relação ao centro
     angles = np.arctan2(pts[:, 1] - center[1], pts[:, 0] - center[0])
-    # Ordenar os pontos com base nos ângulos
     sorted_pts = pts[np.argsort(angles)]
     return sorted_pts
 
@@ -327,7 +327,6 @@ def filtrar_ponto_central(pontos, ponto_central, threshold=10):
 
 # Função para extrair as coordenadas e centro das caixas delimitadoras
 def extrair_coordenadas_centro(detected_boxes, classes_nomes):
-
     coordenadas_caixas = []
     pontos = []
 
@@ -335,10 +334,8 @@ def extrair_coordenadas_centro(detected_boxes, classes_nomes):
         x1, y1, x2, y2, sla, classe = box.tolist()
         centro_x = int((x1 + x2) / 2)
         centro_y = int((y1 + y2) / 2)
-
         ponto = (centro_x, centro_y)
         pontos.append(ponto)
-        
         coordenadas_caixas.append({
             'Classe': classes_nomes[int(classe)],
             'Centro': {
@@ -347,47 +344,45 @@ def extrair_coordenadas_centro(detected_boxes, classes_nomes):
             }
         })
 
-        
     # Converter para DataFrame
     coordenadas_df = pd.DataFrame(coordenadas_caixas)
-    
     return pontos
 
 def enumerar_furos(lista_pontos, id, img, nome_arquivo):
-    if (id == 4 and len(lista_pontos) < 4) or (id == 6 and len(lista_pontos) < 6):
+    # Definir o ponto central (suposição: centro da imagem)
+    altura, largura = img.shape[:2]
+    ponto_central = definir_centro(altura, largura)
+
+    # Filtrar o ponto central
+    lista_pontos = filtrar_ponto_central(lista_pontos, ponto_central, threshold=10)
+
+    if (id == 4 and len(lista_pontos) < 4) or (id == 5 and len(lista_pontos) < 5) or (id == 6 and len(lista_pontos) < 6):
         print("Não foram detectados pontos suficientes.")
     else:
         if id == 4:
             furos = lista_pontos[:4]
+        elif id == 5:
+            furos = lista_pontos[:5]
         elif id == 6:
             furos = lista_pontos[:6]
 
         if furos:
-            # Converter a lista de furos para um array numpy
             furos_array = np.array(furos)
-
             # Ordenar os furos pela posição mais alta e depois em sentido horário
-            # Primeiro, encontrar o furo mais alto (com menor coordenada y)
-            sorted_holes = furos_array[np.argsort(furos_array[:, 1])]
-            highest_hole = sorted_holes[0]
-
-            # Ordenar os furos em sentido horário em relação ao furo mais alto
             sorted_holes = sort_points_clockwise(furos_array)
 
             # Numerar os furos
             for i, (x, y) in enumerate(sorted_holes, start=1):
                 cv2.putText(img, str(i), (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 1)
-                print(f"Furo {i}: Coordenadas ({x}, {y})")
+                print(f"Furo {i}: Coordenadas ({x, y})")
 
-        diretorio_guias = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\FOTOS_GUIA'
+        diretorio_guias = fr'{pasta}\FOTOS_GUIA'
         caminho = os.path.join(diretorio_guias, nome_arquivo)
         cv2.imwrite(caminho, img)
 
 def definir_centro(altura, largura):
-    # Calcular as coordenadas do ponto no meio do frame
     mid_x, mid_y = largura // 2, altura // 2
     ponto = (mid_x, mid_y)
-    
     return ponto
 ###################################################
 
@@ -417,7 +412,7 @@ def organizar_dados_app(lista):
 
 def salvar_registros(lista, num):
     # Conectando ao banco 
-    banco = sql.connect( r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\REGISTROS_WRL.db') #mudar dps
+    banco = sql.connect(fr'{pasta}\REGISTROS_WRL.db') #mudar dps
     cursor = banco.cursor()
 
     if num == 6:

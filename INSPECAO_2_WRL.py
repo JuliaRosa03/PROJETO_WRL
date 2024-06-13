@@ -16,13 +16,16 @@ from datetime import datetime
 from ultralytics import YOLO
 from skimage.measure import regionprops
 import keyboard
-import FUNCOES2 as f
+import FUNCOES as f
 import FUNCOES_WRL as fun
 import numpy as np
 
 from INSPECAO_3_WRL import aba_dados
 
-model = YOLO(r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\pesos\best.pt')
+pasta = r'C:\Users\20221CECA0402\Documents\PROJETO_WRL'
+#pasta = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL'
+
+model = YOLO(fr'{pasta}\pesos\best.pt')
 
 
 # Define the DepthCamera class
@@ -156,8 +159,7 @@ def aba_camera(inp_janela,dados,inp_menu):
     lista_dh = f.extrair_data_e_hora(lista_arq[0])
     lista_diametros, img_segmentada, mascaras, resultados, foto_original = f.analisar_imagem(model, cv2.imread(caminhoBW), lista_arq[0], Depth_Frame, Abertura)
     caixas_detectadas, nomes_classes, propriedades = f.extrair_dados(resultados, mascaras, nome_arquivo_BW)
-    #f.identificar_furos(caixas_detectadas, nomes_classes, foto_original, infra_image)
-    
+ 
     ############### Parte Nobel
     # Extrair coordenadas e centro das caixas delimitadoras
     lista_pontos = f.extrair_coordenadas_centro(caixas_detectadas, nomes_classes)

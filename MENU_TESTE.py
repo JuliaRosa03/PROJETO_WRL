@@ -9,7 +9,8 @@ import FUNCOES_WRL as fun
 from INSPECAO_1_WRL import aba_cadastro #AQUI
 from CADASTRO_BICO_WRL import aba_cadastro_bico
 
-
+pasta = r'C:\Users\20221CECA0402\Documents\PROJETO_WRL'
+#pasta = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL'
 
 def menu_WRL():
     Janela_menu = tk.Tk()
@@ -48,7 +49,7 @@ def componentes_frame1(inp_menu):
     titulo.place(relx=0.2, rely=0.2)
 
     # {=======================Imagem IFES=========================}
-    img1_pg1 = tk.PhotoImage(file = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\ifes.png')
+    img1_pg1 = tk.PhotoImage(file = fr'{pasta}\ifes.png')
     img1_pg1 = img1_pg1.subsample(5, 5)
 
     fotoimg1_pg1 = tk.Label(frame_1,

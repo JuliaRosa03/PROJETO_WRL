@@ -8,7 +8,8 @@ import sqlite3 as sql
 import FUNCOES_WRL as fun
 from INSPECAO_2_WRL import aba_camera
 
-caminho = r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\REGISTROS_WRL.db"
+#caminho = r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\REGISTROS_WRL.db"
+caminho = r"C:\Users\20221CECA0402\Documents\PROJETO_WRL\REGISTROS_WRL.db"
 
 def USINAS():
     conn, cursor = fun.CONECTA_BD(caminho)
@@ -145,7 +146,8 @@ def botao_continuar_foto(inp_furos_ID, inp_tipo, inp_vida, inp_nome):
     Furos = str_furos_ID[0]
     ID = str_furos_ID[1]
     
-    caminho =  r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\REGISTROS_WRL.db"
+    caminho = r'C:\Users\20221CECA0402\Documents\PROJETO_WRL\REGISTROS_WRL.db'
+    #caminho =  r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\REGISTROS_WRL.db"
     conn, cursor = fun.CONECTA_BD(caminho)
     
     tabela = 'B' + Furos 

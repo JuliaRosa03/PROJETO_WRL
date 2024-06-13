@@ -9,6 +9,9 @@ import FUNCOES_WRL as fun
 from INSPECAO_1_WRL import aba_cadastro #AQUI
 from CADASTRO_BICO_WRL import aba_cadastro_bico
 
+pasta = r'C:\Users\20221CECA0402\Documents\PROJETO_WRL'
+#pasta = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL'
+
 class APK():
     
     def __init__(self):
@@ -47,7 +50,7 @@ class APK():
         self.titulo.place(relx=0.2, rely=0.2)
 
         # {=======================Imagem IFES=========================}
-        self.img1_pg1 = tk.PhotoImage(file = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\ifes.png')
+        self.img1_pg1 = tk.PhotoImage(file = fr'{pasta}\ifes.png')
         self.img1_pg1 = self.img1_pg1.subsample(5, 5)
 
         self.fotoimg1_pg1 = tk.Label(self.frame_1,
