@@ -16,7 +16,7 @@ from datetime import datetime
 from ultralytics import YOLO
 from skimage.measure import regionprops
 import keyboard
-import FUNCOES as f
+import FUNCOES2 as f
 import FUNCOES_WRL as fun
 import numpy as np
 

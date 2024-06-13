@@ -10,7 +10,11 @@ import sqlite3 as sql
 
 warnings.filterwarnings("ignore")  # ->ignorar os erros que aparecem no site
 
+<<<<<<< Updated upstream
 pasta = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL'
+=======
+pasta = r'C:\Users\20221CECA0402\Documents\PROJETO_WRL'
+>>>>>>> Stashed changes
 
 # {=======================Estilos da página=========================}
 
@@ -73,7 +77,11 @@ selected_tables = st.sidebar.multiselect("LANÇA:", table_names, placeholder="Se
 # {=======================Leitura de arquivo=========================}
 
 if selected_tables:
+<<<<<<< Updated upstream
     os.chdir(fr"{pasta}")
+=======
+    os.chdir(r"C:\Users\20221CECA0402\Documents\PROJETO_WRL")
+>>>>>>> Stashed changes
 
     conn = sql.connect(fr'{pasta}\REGISTROS_WRL.db')
     cursor = conn.cursor()
@@ -122,7 +130,7 @@ if selected_tables:
         if len(aviso_id) > limite:
             st.sidebar.warning("Selecione no máximo uma opção de ID")
     
-        print('df6: ', df6)
+        #print('df6: ', df6)
 # {=======================Logos e fuso horário=========================}
 st.sidebar.image(imagem_LOGOS, width=270) 
 
@@ -163,7 +171,7 @@ if id and selected_tables:
     st.markdown(f"# Gráfico de desgaste - Análise com todos os diâmetros\n # ID: {', '.join(id)}")
 
     filtered_df = df3[df3["ID"].isin(id)] # Gráficos gerados a partir do id
-    print('filtered: ', filtered_df)
+    #print('filtered: ', filtered_df)
     # Selecionar as colunas desejadas
 
     if not filtered_df.empty:
@@ -224,19 +232,25 @@ if id and selected_tables:
     st.markdown(f"# Gráfico de desgaste - Diâmetros específicos\n # ID: {', '.join(id)}")
     
     # Selecionar a coluna desejada para plotar
-    selected_column = st.selectbox("Selecione a região desejada:", df3.columns[9:])
+    selected_column = st.multiselect("Selecione a região desejada:", df3.columns[9:])
 
     if not filtered_df.empty:
-       # Renomear a coluna selecionada para "Diâmetro (mm²)"
-        filtered_df = filtered_df.rename(columns={selected_column: "DIÂMETRO [mm²]"})
-
+        
+        # Renomear a coluna selecionada para "Diâmetro (mm²)"
+        long_df = pd.melt(filtered_df, id_vars=['ID','VIDA'], 
+                        value_vars=selected_column, 
+                        var_name='Região', value_name='DIÂMETRO [mm²]')
+        
         # Criar o gráfico de linhas
-        fig = px.line(filtered_df, 
+        fig = px.line(long_df, 
                     x='VIDA', 
-                    y="DIÂMETRO [mm²]", 
-                    template='seaborn', 
+                    y='DIÂMETRO [mm²]', 
+                    color='Região', 
+                    line_group='ID', 
                     markers=True, 
-                    title=f"Valores dos Diâmetros ao Longo da Vida para {selected_column}")
+                    template='seaborn', 
+                    facet_col='ID', 
+                    title=f"Valores dos Diâmetros ao Longo da Vida")
         
         # Exibir o gráfico no Streamlit
         st.plotly_chart(fig, use_container_width=True)
