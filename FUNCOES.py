@@ -53,7 +53,7 @@ class DepthCamera:
         color_frame = frames.get_color_frame()
         infrared = frames.get_infrared_frame()
         depth_intrin = depth_frame.profile.as_video_stream_profile().intrinsics
-        Abertura = format(math.degrees(2*math.atan(depth_intrin.width/(2*depth_intrin.fx))))
+        Abertura = float(format(math.degrees(2*math.atan(depth_intrin.width/(2*depth_intrin.fx)))))
         #print(depth_intrin)
         #print("FOV real da realsense configurado:")
         #print("FoV: {:.2f} x {:.2f}".format(math.degrees(2*math.atan(depth_intrin.width/(2*depth_intrin.fx))), math.degrees(2*math.atan(depth_intrin.height/(2*depth_intrin.fy)))))
@@ -136,7 +136,11 @@ def analisar_imagem(model, imagem, nome, depth_frame, Abertura):
     imagem_bgr = cv2.cvtColor(imagem, cv2.COLOR_RGB2BGR)  # Converter imagem para BGR
 
     # Análise
+<<<<<<< HEAD
     results = model(imagem_bgr,device ='cpu',retina_masks=True, save = True, save_crop = True,save_frames=True,overlap_mask=True, project =r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\resultados",name = nome, save_txt = True, show_boxes=False)
+=======
+    results = model(imagem_bgr,device ='cpu',retina_masks=True, save = True, save_crop = True,save_frames=True,overlap_mask=True, project =r"C:\Users\20221CECA0402\Documents\PROJETO_WRL\resultados",name = nome, save_txt = True, show_boxes=False)
+>>>>>>> 1ad0f8a03974b2a28b7b80d74e82e85afef6bb17
     for result in results:
         img_segmentada = results[0].plot(masks= True, boxes=False) #plotar a segmentação - *resultados_array_bgr
         
@@ -196,6 +200,10 @@ def analisar_imagem(model, imagem, nome, depth_frame, Abertura):
         area_furos = np.sum(depth_data_numpy_binaria[1:7],axis=(1,2))
         diametro_furos = 2*(np.sqrt(area_furos/math.pi))
         
+<<<<<<< HEAD
+=======
+        
+>>>>>>> 1ad0f8a03974b2a28b7b80d74e82e85afef6bb17
         # Armazenando o diametro externo na lista
         lista_diametros.append(round(diametro_externo, 2))
 
@@ -204,6 +212,10 @@ def analisar_imagem(model, imagem, nome, depth_frame, Abertura):
             diametro_float = float(elemento)
             lista_diametros.append(round(diametro_float, 2)) # Lista com os valores de todos os diâmetros
         
+<<<<<<< HEAD
+=======
+         
+>>>>>>> 1ad0f8a03974b2a28b7b80d74e82e85afef6bb17
     return lista_diametros, img_segmentada, mascaras, results, imagem_bgr
 
 def extrair_data_e_hora(nome_arquivo):
@@ -404,6 +416,7 @@ def salvar_registros(lista, num):
 
     if num == 6:
         comando = "INSERT INTO B6 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+<<<<<<< HEAD
 
         registro = (lista[0], lista[1], lista[2], lista[3], lista[4], lista[5], lista[6], lista[7], lista[8], lista[9], lista[10], lista[11], lista[12], lista[13], lista[14], lista[15])
 
@@ -414,6 +427,20 @@ def salvar_registros(lista, num):
 
     else:
         comando = "INSERT INTO B4 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+=======
+>>>>>>> 1ad0f8a03974b2a28b7b80d74e82e85afef6bb17
+
+        registro = (lista[0], lista[1], lista[2], lista[3], lista[4], lista[5], lista[6], lista[7], lista[8], lista[9], lista[10], lista[11], lista[12], lista[13], lista[14], lista[15])
+
+        cursor.execute(comando, registro)
+
+        # Grava a transação
+        banco.commit()
+
+<<<<<<< HEAD
+=======
+    else:
+        comando = "INSERT INTO B4 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
         registro = (lista[0], lista[1], lista[2], lista[3], lista[4], lista[5], lista[6], lista[7], lista[8], lista[9], lista[10], lista[11], lista[12], lista[13])
 
@@ -422,5 +449,6 @@ def salvar_registros(lista, num):
         # Grava a transação
         banco.commit()
 
+>>>>>>> 1ad0f8a03974b2a28b7b80d74e82e85afef6bb17
     # Feche a conexão com o banco de dados
     cursor.close()

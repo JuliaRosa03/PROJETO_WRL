@@ -160,9 +160,15 @@ def componentes_frame1(inp_ID, inp_tipo, int_arquivo,inp_menu, inp_janela,janela
     
     dados2 = tabela(int_arquivo)
     vida = dados2[1]
+<<<<<<< HEAD:INSPECAO_3_WRL.py
     data_foto = dados2[7] 
     hora_foto = dados2[8] 
     medidas_foto = dados2[9:] 
+=======
+    data_foto = dados2[7] # data_foto = dados2[5]
+    hora_foto = dados2[8] # hora_foto = dados2[6]
+    medidas_foto = dados2[9:] # medidas_foto = dados2[7:]
+>>>>>>> 1ad0f8a03974b2a28b7b80d74e82e85afef6bb17:APK.py
    
     # {=======================Data=========================}
     ID_pg1 = tk.Label(frame_1,
