@@ -196,7 +196,6 @@ def analisar_imagem(model, imagem, nome, depth_frame, Abertura):
         area_furos = np.sum(depth_data_numpy_binaria[1:7],axis=(1,2))
         diametro_furos = 2*(np.sqrt(area_furos/math.pi))
         
-        
         # Armazenando o diametro externo na lista
         lista_diametros.append(round(diametro_externo, 2))
 

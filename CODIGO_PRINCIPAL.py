@@ -14,7 +14,7 @@ import keyboard
 import os
 from datetime import datetime
 import FUNCOES as f
-import APP2 as a
+import INSPECAO_2_WRL as a
 
 # Carregando modelo da YOLOv8
 model = YOLO(r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\best.pt')

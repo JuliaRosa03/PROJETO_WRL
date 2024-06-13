@@ -4,7 +4,7 @@ import sqlite3 as sql
 import colorama as color
 import customtkinter
 from PIL import Image, ImageTk
-import FUNCOES_APK as fun
+import FUNCOES_WRL as fun
 
 
 
@@ -124,12 +124,7 @@ import FUNCOES_APK as fun
 
 # print (tabela(int_arquivo))
 
-num = 4
-for i in range(5):
-    if i == 3:
-        print('oi')
-        pass
+pov = '6-1'
 
-        print('tcau')
-
-print('msn')
+pov = pov.split('-')
+print(pov)
