@@ -116,7 +116,8 @@ def voltar(aba_1, aba_2):
     
 def comandos_botao_continuar(inp_janela,inp_usina_grupo, inp_site, inp_furos_ID, inp_tipo, inp_vida, inp_nome,inp_menu):
     dados = adquirir_dados(inp_usina_grupo, inp_site, inp_furos_ID, inp_tipo, inp_vida, inp_nome)
-    janela_cadastro = aba_camera(inp_janela, dados,inp_menu)
+    janela_cadastro = aba_camera(inp_janela, dados, inp_menu)
+    janela_cadastro.deiconify()
     
 def adquirir_dados(inp_usina_grupo, inp_site, inp_furos_ID, inp_tipo, inp_vida, inp_nome): #juliaaaaaa
     DADOS_INSERIDOS = []
@@ -177,9 +178,6 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):# #TOPLEVEL
     # {=======================Título=========================}
     titulo = fun.CRIAR_LABEL(inp_frame, "Selecionar Bico", '#B4FF9A', "#005200", 'arial', '25', 'bold')
     titulo.place(relx=0.38, rely=0.04) 
-
-    # {=======================Dados à inserir=========================
-    # Filtrar os dados
     
     # {=======================USINA=========================}
     label_usina = fun.CRIAR_LABEL(inp_frame, "Usina/Grupo: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')

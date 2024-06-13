@@ -175,7 +175,7 @@ def aba_camera(inp_janela,dados,inp_menu):
     f.salvar_registros(lista_completa, qtd_furos)
     # f.exibir_imagens(cv2.imread(caminhoAPP), img_segmentada, img_identificada)
     
-    janela_cadastro = aba_dados(inp_janela, dados[3], dados[4], lista_arq[0],inp_menu )
+    janela_cadastro = aba_dados(inp_janela, dados[3], dados[4], lista_arq[0],inp_menu,inp_janela )
     janela_cadastro.deiconify()
     
     return janela_tres

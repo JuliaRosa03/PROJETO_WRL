@@ -45,7 +45,7 @@ class DepthCamera:
             messagebox.showwarning("AVISO","CONECTA A CAMÊRA")
 
     def get_frame(self):      
-        frames = self.pipeline.wait_for_frames(timeout_ms=2000)
+        frames = self.pipeline.wait_for_frames(timeout_ms=2000) #timeout_ms=2000
         colorizer = rs.colorizer()
         colorized = colorizer.process(frames)
         ply = rs.save_to_ply("1.ply")

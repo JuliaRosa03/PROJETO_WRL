@@ -5,12 +5,14 @@ import colorama as color
 import customtkinter
 from PIL import Image, ImageTk
 
-# from MENU_WRL import APK
 import FUNCOES_WRL as fun
 
+<<<<<<< Updated upstream
 pasta = r'C:\Users\20221CECA0402\Documents\PROJETO_WRL'
 #pasta = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL'
 
+=======
+>>>>>>> Stashed changes
 
 def selecao(inp_ID, inp_tipo): # {=========Leitura Grupo, SIte, BOF e ID(FRAME 1)=========}
     global ID
@@ -56,10 +58,11 @@ def imagens(registro_foto):  # {=========Informações para imagens(FRAME 2)====
     
     return arquivofoto, arquivoguia
 
-def voltar_menu(aba_1, aba_2,aba_3):
-    aba_1.deiconify()  # Exiba a janela da aba 1
-    aba_2.destroy()  # Destrua a janela da aba 2
-    aba_3.destroy()  # Destrua a janela cadastro
+def voltar_menu(aba_menu, insp_1,insp_2, insp_3):
+    aba_menu.deiconify()  # Exiba a janela da aba 1
+    insp_3.destroy()  # Destrua a janela da aba 2
+    insp_2.destroy()  # Destrua a janela cadastro
+    insp_1.destroy()
 
 def tela(inp_janela): # {=======================Configuração de tela=========================}
     inp_janela.title("DADOS DA INSPECÇÃO")
@@ -84,7 +87,7 @@ def frames_da_tela(inp_janela):
     
     return frame_1, frame_2
 
-def componentes_frame1(inp_ID, inp_tipo, int_arquivo,inp_menu, inp_janela,janela_cadastro):
+def componentes_frame1(inp_ID, inp_tipo, int_arquivo,inp_menu, janela_cadastro1,janela_cadastro2,inp_janela):
     dados, lista_grupo = selecao(inp_ID,inp_tipo)
     grupo = lista_grupo[0]
     
@@ -94,19 +97,11 @@ def componentes_frame1(inp_ID, inp_tipo, int_arquivo,inp_menu, inp_janela,janela
     ID = dados[4]
     
     # {=======================Título=========================}
-    titulo1_pg1 = tk.Label(frame_1,
-                            text="Dados do Bico",
-                            font=('arial', '25', 'bold'),
-                            bg= '#B4EEB4',
-                            fg="#2F4F4F")
+    titulo1_pg1 = fun.CRIAR_LABEL(frame_1, "Dados do Bico",'#B4EEB4',"#2F4F4F",'arial', '25', 'bold')
     titulo1_pg1.place(relx=0.32, rely=0.03)
     
     # {=======================Grupo=========================}
-    grupo_pg1 = tk.Label(frame_1,
-                            text="Grupo:",
-                            font=('verdana', '20','bold'),
-                            bg= '#B4EEB4',
-                            fg="#1C1C1C")
+    grupo_pg1 = fun.CRIAR_LABEL(frame_1,"Grupo:",'#B4EEB4',"#1C1C1C",'verdana', '20','bold')
     grupo_pg1.place(relx=0.05, rely=0.15)
 
     grupo_pg1 = tk.Label(frame_1,
@@ -117,11 +112,7 @@ def componentes_frame1(inp_ID, inp_tipo, int_arquivo,inp_menu, inp_janela,janela
     grupo_pg1.place(relx=0.2, rely=0.15)
 
     # {=======================Site=========================}
-    site_pg1 = tk.Label(frame_1,
-                            text="Site:",
-                            font=('verdana', '20','bold'),
-                            bg= '#B4EEB4',
-                            fg="#1C1C1C")
+    site_pg1 = fun.CRIAR_LABEL(frame_1,"Site:",'#B4EEB4',"#1C1C1C",'verdana', '20','bold')
     site_pg1.place(relx=0.05, rely=0.25)
 
     site_pg1 = tk.Label(frame_1,
@@ -132,11 +123,7 @@ def componentes_frame1(inp_ID, inp_tipo, int_arquivo,inp_menu, inp_janela,janela
     site_pg1.place(relx=0.15, rely=0.25)
 
     # {=======================BOF=========================}
-    BOF_pg1 = tk.Label(frame_1,
-                        text="BOF:",
-                        font=('verdana', '20','bold'),
-                        bg= '#B4EEB4',
-                        fg="#1C1C1C")
+    BOF_pg1 = fun.CRIAR_LABEL(frame_1,"BOF:",'#B4EEB4',"#1C1C1C",'verdana', '20','bold')
     BOF_pg1.place(relx=0.05, rely=0.35)
 
     site_pg1 = tk.Label(frame_1,
@@ -147,11 +134,7 @@ def componentes_frame1(inp_ID, inp_tipo, int_arquivo,inp_menu, inp_janela,janela
     site_pg1.place(relx=0.15, rely=0.35)
     
     # {=======================ID=========================}
-    ID_pg1 = tk.Label(frame_1,
-                        text="ID:",
-                        font=('verdana', '20','bold'),
-                        bg= '#B4EEB4',
-                        fg="#1C1C1C")
+    ID_pg1 = fun.CRIAR_LABEL(frame_1,"ID:",'#B4EEB4',"#1C1C1C",'verdana', '20','bold')
     ID_pg1.place(relx=0.05, rely=0.45)
 
     ID_informado_pg1 = tk.Label(frame_1,
@@ -174,11 +157,7 @@ def componentes_frame1(inp_ID, inp_tipo, int_arquivo,inp_menu, inp_janela,janela
     medidas_foto = dados2[9:] # medidas_foto = dados2[7:]
 
     # {=======================Data=========================}
-    ID_pg1 = tk.Label(frame_1,
-                        text="Data:",
-                        font=('verdana', '20','bold'),
-                        bg= '#B4EEB4',
-                        fg="#1C1C1C")
+    ID_pg1 = fun.CRIAR_LABEL(frame_1,"Data:",'#B4EEB4',"#1C1C1C",'verdana', '20','bold')
     ID_pg1.place(relx=0.05, rely=0.55)
 
     ID_informado_pg1 = tk.Label(frame_1,
@@ -189,11 +168,7 @@ def componentes_frame1(inp_ID, inp_tipo, int_arquivo,inp_menu, inp_janela,janela
     ID_informado_pg1.place(relx=0.17, rely=0.55)
     
     # {=======================Hora=========================}
-    ID_pg1 = tk.Label(frame_1,
-                                text="Hora:",
-                                font=('verdana', '20','bold'),
-                                bg= '#B4EEB4',
-                                fg="#1C1C1C")
+    ID_pg1 = fun.CRIAR_LABEL(frame_1,"Hora:",'#B4EEB4',"#1C1C1C",'verdana', '20','bold')
     ID_pg1.place(relx=0.05, rely=0.65)
 
     ID_informado_pg1 = tk.Label(frame_1,
@@ -211,7 +186,7 @@ def componentes_frame1(inp_ID, inp_tipo, int_arquivo,inp_menu, inp_janela,janela
                                     bg = '#545454',
                                     fg = 'white',
                                     font= ("arial", 13,'bold'),
-                                    command= lambda: voltar_menu( inp_menu, inp_janela,janela_cadastro))
+                                    command= lambda: voltar_menu( inp_menu,janela_cadastro1,janela_cadastro2, inp_janela))
     btContinuar_pg1.place(relx=0.55, rely=0.9, relwidth=0.12, relheight=0.08)
     
     # {=======================Registros=========================}
@@ -275,13 +250,13 @@ def componentes_frame2(inp_janela): # {=========Componentes da direita=========}
     
     inp_janela.mainloop()
 
-def aba_dados(inp_janela,inp_ID,inp_tipo, int_arquivo,inp_menu):
+def aba_dados(inp_janela,inp_ID,inp_tipo, int_arquivo,inp_menu,janela_cadastro1):
     # janela = tk.Tk()
     janela = tk.Toplevel(inp_janela)
     
     tela(janela)
     frames_da_tela(janela)
-    componentes_frame1(inp_ID, inp_tipo, int_arquivo,inp_menu,janela,inp_janela)
+    componentes_frame1(inp_ID, inp_tipo, int_arquivo,inp_menu,janela_cadastro1,inp_janela,janela)
     componentes_frame2(janela)
     
     janela.transient(inp_janela) #TOPLEVEL
