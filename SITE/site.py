@@ -10,11 +10,7 @@ import sqlite3 as sql
 
 warnings.filterwarnings("ignore")  # ->ignorar os erros que aparecem no site
 
-<<<<<<< Updated upstream
-pasta = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL'
-=======
 pasta = r'C:\Users\20221CECA0402\Documents\PROJETO_WRL'
->>>>>>> Stashed changes
 
 # {=======================Estilos da página=========================}
 
@@ -77,12 +73,9 @@ selected_tables = st.sidebar.multiselect("LANÇA:", table_names, placeholder="Se
 # {=======================Leitura de arquivo=========================}
 
 if selected_tables:
-<<<<<<< Updated upstream
-    os.chdir(fr"{pasta}")
-=======
-    os.chdir(r"C:\Users\20221CECA0402\Documents\PROJETO_WRL")
->>>>>>> Stashed changes
 
+    os.chdir(fr"{pasta}")
+    
     conn = sql.connect(fr'{pasta}\REGISTROS_WRL.db')
     cursor = conn.cursor()
     print("Conectado ao banco de dados")
@@ -232,7 +225,7 @@ if id and selected_tables:
     st.markdown(f"# Gráfico de desgaste - Diâmetros específicos\n # ID: {', '.join(id)}")
     
     # Selecionar a coluna desejada para plotar
-    selected_column = st.multiselect("Selecione a região desejada:", df3.columns[9:])
+    selected_column = st.multiselect("Selecione a região desejada:", df3.columns[9:], placeholder="Selecione uma opção")
 
     if not filtered_df.empty:
         
