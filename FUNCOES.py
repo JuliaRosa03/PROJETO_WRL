@@ -28,7 +28,7 @@ class DepthCamera:
             pipeline_wrapper = rs.pipeline_wrapper(self.pipeline)
             pipeline_profile = config.resolve(pipeline_wrapper)
             device = pipeline_profile.get_device()
-            device.query_sensors()[0].set_option(rs.option.laser_power, 15)
+            device.query_sensors()[0].set_option(rs.option.laser_power, 12)
             device_product_line = str(device.get_info(rs.camera_info.product_line))
 
             config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)
@@ -53,35 +53,27 @@ class DepthCamera:
         color_frame = frames.get_color_frame()
         infrared = frames.get_infrared_frame()
         depth_intrin = depth_frame.profile.as_video_stream_profile().intrinsics
-        Abertura = float(format(math.degrees(2*math.atan(depth_intrin.width/(2*depth_intrin.fx)))))
-        #print(depth_intrin)
-        #print("FOV real da realsense configurado:")
-        #print("FoV: {:.2f} x {:.2f}".format(math.degrees(2*math.atan(depth_intrin.width/(2*depth_intrin.fx))), math.degrees(2*math.atan(depth_intrin.height/(2*depth_intrin.fy)))))
+        Abertura = math.degrees(2*math.atan(depth_intrin.width/(2*depth_intrin.fx)))
         infra_image = np.asanyarray(infrared.get_data())
         depth_image = np.asanyarray(depth_frame.get_data())
         color_image = np.asanyarray(color_frame.get_data())
-        
         if not depth_frame or not color_frame:
             return False, None, None
-        
         return True, depth_image, color_image, infra_image, Abertura
 
     def depth(self):
-            frames = self.pipeline.wait_for_frames(timeout_ms=2000)
-            depth_frame = frames.get_depth_frame()
-            color_frame = frames.get_color_frame()
+        frames = self.pipeline.wait_for_frames(timeout_ms=2000)
+        depth_frame = frames.get_depth_frame()
+        color_frame = frames.get_color_frame()
 
-            depth_image = np.asanyarray(depth_frame.get_data())
-            color_image = np.asanyarray(color_frame.get_data())
-            if not depth_frame or not color_frame:
-                return False, None, None
-            
-            return depth_image
+        depth_image = np.asanyarray(depth_frame.get_data())
+        color_image = np.asanyarray(color_frame.get_data())
+        if not depth_frame or not color_frame:
+            return False, None, None
     
     def get_depth_scale(self):
         self.depth_sensor = self.pipeline.get_active_profile().get_device().first_depth_sensor()
         self.depth_scale = self.depth_sensor.get_depth_scale()
-        
         return self.depth_scale,self.depth_sensor
     
     def release(self):
@@ -136,11 +128,9 @@ def analisar_imagem(model, imagem, nome, depth_frame, Abertura):
     imagem_bgr = cv2.cvtColor(imagem, cv2.COLOR_RGB2BGR)  # Converter imagem para BGR
 
     # Análise
-<<<<<<< HEAD
-    results = model(imagem_bgr,device ='cpu',retina_masks=True, save = True, save_crop = True,save_frames=True,overlap_mask=True, project =r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\resultados",name = nome, save_txt = True, show_boxes=False)
-=======
-    results = model(imagem_bgr,device ='cpu',retina_masks=True, save = True, save_crop = True,save_frames=True,overlap_mask=True, project =r"C:\Users\20221CECA0402\Documents\PROJETO_WRL\resultados",name = nome, save_txt = True, show_boxes=False)
->>>>>>> 1ad0f8a03974b2a28b7b80d74e82e85afef6bb17
+
+    results = model(imagem_bgr,device = 0,retina_masks=True, save = True, save_crop = True,save_frames=True,overlap_mask=True, project =r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\resultados",name = nome, save_txt = True, show_boxes=False)
+    #results = model(imagem_bgr,device ='cpu',retina_masks=True, save = True, save_crop = True,save_frames=True,overlap_mask=True, project =r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\resultados",name = nome, save_txt = True, show_boxes=False)>>>>>>> 1ad0f8a03974b2a28b7b80d74e82e85afef6bb17
     for result in results:
         img_segmentada = results[0].plot(masks= True, boxes=False) #plotar a segmentação - *resultados_array_bgr
         
@@ -176,46 +166,54 @@ def analisar_imagem(model, imagem, nome, depth_frame, Abertura):
         def predict_z(filtered_x, filtered_y):
                 return coefficients[0] + coefficients[1]*filtered_x + coefficients[2]*filtered_y + coefficients[3]*filtered_x**2 + coefficients[4]*filtered_y**2 + coefficients[5]*filtered_x*filtered_y
 
-        soma = float()
-        contador = int()
-        contador2 = int()
         for j in range (detections):
-            depth_data_numpy_coordenada=np.argwhere(depth_data_numpy_binaria[0] == 1)
-            
-            for i in range((depth_data_numpy_coordenada.shape[0])): #para o bico de lança
-                x = depth_data_numpy_coordenada[i,0].astype(int) #coordenada x da mascara do bico de lança
-                y = depth_data_numpy_coordenada[i,1].astype(int) #coordenada y da mascara do bico de lança
-                sum_mask = depth_data_numpy_binaria[0] + depth_data_numpy_binaria[1] + depth_data_numpy_binaria[2] + depth_data_numpy_binaria[3] + depth_data_numpy_binaria[4] + depth_data_numpy_binaria[5] + depth_data_numpy_binaria[6]
-                if sum_mask[x,y] == 2:
-                    contador2 = contador2 + 1
-                depth_data_numpy_binaria[j][x,y] = depth_data_numpy_binaria[j][x,y] * ((math.tan(float(Abertura)/2*math.pi/180)*float(predict_z(x,y))*2)/640)
-                if depth_data_numpy_binaria[j][x][y] == 0:
-                    contador = contador + 1
-                soma = soma + depth_data_numpy_binaria[j][x,y]
+            depth_data_numpy_coordenada=np.argwhere(depth_data_numpy_binaria[:] == 1)
+            for i in range(len(depth_data_numpy_coordenada)): #para o bico de lança
+                x = depth_data_numpy_coordenada[i,1].astype(int) #coordenada x da mascara do bico de lança
+                y = depth_data_numpy_coordenada[i,2].astype(int) #coordenada y da mascara do bico de lança
+                depth_data_numpy_binaria[j][x,y] = ((math.tan(float(Abertura)/2*math.pi/180)*predict_z(x,y)*2)/640)
+                
+            #separar as mascaras
+            furo_1 = depth_data_numpy_binaria[6]        
+            furo_2 = (depth_data_numpy_binaria[5]-depth_data_numpy_binaria[6])
+            furo_3 = (depth_data_numpy_binaria[4]-depth_data_numpy_binaria[5])
+            furo_4 = (depth_data_numpy_binaria[3]-depth_data_numpy_binaria[4])
+            furo_5 = (depth_data_numpy_binaria[2]-depth_data_numpy_binaria[3])
+            furo_6 = (depth_data_numpy_binaria[1]-depth_data_numpy_binaria[2])
+            bico_completo = (depth_data_numpy_binaria[0])
 
         lista_diametros = []
-        # Exibir os diametros
-        area_total = np.sum(depth_data_numpy_binaria) + (contador*np.mean(depth_data_numpy_binaria[j][x,y]))
+    
+        area_total = np.sum(depth_data_numpy_binaria)
         diametro_externo = 2*(np.sqrt(area_total/math.pi))
-        area_furos = np.sum(depth_data_numpy_binaria[1:7],axis=(1,2))
-        diametro_furos = 2*(np.sqrt(area_furos/math.pi))
         
-<<<<<<< HEAD
-=======
-        
->>>>>>> 1ad0f8a03974b2a28b7b80d74e82e85afef6bb17
         # Armazenando o diametro externo na lista
         lista_diametros.append(round(diametro_externo, 2))
 
-        # Armazenar todos os diâmetros dos furos em uma lista
-        for elemento in diametro_furos:
-            diametro_float = float(elemento)
-            lista_diametros.append(round(diametro_float, 2)) # Lista com os valores de todos os diâmetros
+        area_furo_1 = np.sum(furo_1)
+        diametro_furo_1_mm = 2*(np.sqrt(area_furo_1/math.pi))
+        lista_diametros.append(round(diametro_furo_1_mm,2))
+
+        area_furo_2 = np.sum(furo_2)
+        diametro_furo_2_mm = 2*(np.sqrt(area_furo_2/math.pi))
+        lista_diametros.append(round(diametro_furo_2_mm, 2))
+
+        area_furo_3 = np.sum(furo_3)
+        diametro_furo_3_mm = 2*(np.sqrt(area_furo_3/math.pi))
+        lista_diametros.append(round(diametro_furo_3_mm, 2))
+
+        area_furo_4 = np.sum(furo_4)
+        diametro_furo_4_mm = 2*(np.sqrt(area_furo_4/math.pi))
+        lista_diametros.append(round(diametro_furo_4_mm,2))
         
-<<<<<<< HEAD
-=======
-         
->>>>>>> 1ad0f8a03974b2a28b7b80d74e82e85afef6bb17
+        area_furo_5 = np.sum(furo_5)
+        diametro_furo_5_mm = 2*(np.sqrt(area_furo_5/math.pi))
+        lista_diametros.append(round(diametro_furo_5_mm,2))
+    
+        area_furo_6 = np.sum(furo_6)
+        diametro_furo_6_mm = 2*(np.sqrt(area_furo_6/math.pi))
+        lista_diametros.append(round(diametro_furo_6_mm,2))
+        
     return lista_diametros, img_segmentada, mascaras, results, imagem_bgr
 
 def extrair_data_e_hora(nome_arquivo):
@@ -416,7 +414,6 @@ def salvar_registros(lista, num):
 
     if num == 6:
         comando = "INSERT INTO B6 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-<<<<<<< HEAD
 
         registro = (lista[0], lista[1], lista[2], lista[3], lista[4], lista[5], lista[6], lista[7], lista[8], lista[9], lista[10], lista[11], lista[12], lista[13], lista[14], lista[15])
 
@@ -427,8 +424,6 @@ def salvar_registros(lista, num):
 
     else:
         comando = "INSERT INTO B4 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-=======
->>>>>>> 1ad0f8a03974b2a28b7b80d74e82e85afef6bb17
 
         registro = (lista[0], lista[1], lista[2], lista[3], lista[4], lista[5], lista[6], lista[7], lista[8], lista[9], lista[10], lista[11], lista[12], lista[13], lista[14], lista[15])
 
@@ -437,18 +432,5 @@ def salvar_registros(lista, num):
         # Grava a transação
         banco.commit()
 
-<<<<<<< HEAD
-=======
-    else:
-        comando = "INSERT INTO B4 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-
-        registro = (lista[0], lista[1], lista[2], lista[3], lista[4], lista[5], lista[6], lista[7], lista[8], lista[9], lista[10], lista[11], lista[12], lista[13])
-
-        cursor.execute(comando, registro)
-
-        # Grava a transação
-        banco.commit()
-
->>>>>>> 1ad0f8a03974b2a28b7b80d74e82e85afef6bb17
     # Feche a conexão com o banco de dados
     cursor.close()

@@ -10,7 +10,7 @@ import sqlite3 as sql
 
 warnings.filterwarnings("ignore")  # ->ignorar os erros que aparecem no site
 
-pasta = r'C:\Users\julia\OneDrive\Documentos\IFES\PROJETO_WRL'
+pasta = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL'
 
 # {=======================Estilos da página=========================}
 
@@ -73,7 +73,7 @@ selected_tables = st.sidebar.multiselect("LANÇA:", table_names, placeholder="Se
 # {=======================Leitura de arquivo=========================}
 
 if selected_tables:
-    os.chdir(r"C:\Users\julia\OneDrive\Documentos\IFES\PROJETO_WRL")
+    os.chdir(fr"{pasta}")
 
     conn = sql.connect(fr'{pasta}\REGISTROS_WRL.db')
     cursor = conn.cursor()
@@ -147,11 +147,11 @@ st.markdown('''<div style="text-align: justify;">
 
 col1, col2, col3 = st.columns([4, 4, 4])
 with col1:
-    st.image(image_4F, caption='Lança de Quatro Furos', width=280, output_format='auto')
+    st.image(image_4F, caption='Lança de Quatro Furos', width=250, output_format='auto')
 with col2:
-    st.image(image_5F, caption='Lança de Cinco Furos', width=280, output_format='auto')
+    st.image(image_5F, caption='Lança de Cinco Furos', width=250, output_format='auto')
 with col3:
-    st.image(image_6F, caption='Lança de Seis Furos', width=280, output_format='auto')
+    st.image(image_6F, caption='Lança de Seis Furos', width=250, output_format='auto')
 
 st.divider()
 
