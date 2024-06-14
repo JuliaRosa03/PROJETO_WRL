@@ -61,23 +61,23 @@ import FUNCOES_WRL as fun
 
 # """ primeira parte"""
 
-# # def INICIAR_INSPECAO(inp_janela):
-# #     janela_cadastro = aba_cadastro(inp_janela) #Segunda janela = função na janela dois(janela atual)
+# # def INICIAR_INSPECAO(janela):
+# #     janela_cadastro = aba_cadastro(janela) #Segunda janela = função na janela dois(janela atual)
 # #     janela_cadastro.deiconify()  # Exibe a janela de cadastro
-# #     # inp_janela.destroy()  # Destrói a janela atual
+# #     # janela.destroy()  # Destrói a janela atual
     
     
-# def tela(inp_janela): # {=======================Configuração de tela=========================}
-#     inp_janela.title("Where Register Lances (WRL)")
-#     inp_janela.configure(background= '#9BCD9B')
-#     inp_janela.geometry("1280x800")
-#     inp_janela.resizable(False, False) #se quiser impedir que amplie ou diminua a tela, altere para False
+# def tela(janela): # {=======================Configuração de tela=========================}
+#     janela.title("Where Register Lances (WRL)")
+#     janela.configure(background= '#9BCD9B')
+#     janela.geometry("1280x800")
+#     janela.resizable(False, False) #se quiser impedir que amplie ou diminua a tela, altere para False
 #     # janela.maxsize(width=1920, height=1080) #limite máximo da tela
-#     inp_janela.minsize(width=700, height=450)
+#     janela.minsize(width=700, height=450)
     
-# def frames_da_tela(inp_janela): 
+# def frames_da_tela(janela): 
 #     global frame_1
-#     frame_1 = fun.CRIAR_FRAME(inp_janela, '#B4FF9A', '#668B8B')
+#     frame_1 = fun.CRIAR_FRAME(janela, '#B4FF9A', '#668B8B')
 #     frame_1.place(relx=0.01, rely=0.02,relwidth=0.98, relheight=0.96)
 #     return frame_1
 
@@ -124,134 +124,42 @@ import FUNCOES_WRL as fun
 
 # print (tabela(int_arquivo))
 
-pov = '6-1'
+import tkinter as tk
+janela = tk.Tk()
 
-pov = pov.split('-')
-print(pov)
+janela.title("DADOS DA INSPECÇÃO")
+janela.configure(background='#9BCD9B')
+janela.attributes("-fullscreen", True)
 
-def componentes_frame1(inp_ID, inp_tipo, int_arquivo,inp_menu, inp_janela,janela_cadastro):
-    dados, lista_grupo = selecao(inp_ID,inp_tipo)
-    grupo = lista_grupo[0]
-    
-    site = dados[1]
-    BOF = dados[2]
-    tipo = dados[3]
-    ID = dados[4]
-    
-    # {=======================Título=========================}
-    titulo1_pg1 = fun.CRIAR_LABEL(frame_1, "Dados do Bico",'#B4EEB4',"#2F4F4F",'arial', '25', 'bold')
-    titulo1_pg1.place(relx=0.32, rely=0.03)
-    
-    # {=======================Grupo=========================}
-    grupo_pg1 = fun.CRIAR_LABEL(frame_1,"Grupo:",'#B4EEB4',"#1C1C1C",'verdana', '20','bold')
-    grupo_pg1.place(relx=0.05, rely=0.15)
-
-    grupo_pg1 = fun.CRIAR_LABEL(frame_1,grupo,'#B4EEB4',"#1C1C1C",'verdana', '20')
-    grupo_pg1.place(relx=0.2, rely=0.15)
-
-    # {=======================Site=========================}
-    site_pg1 = fun.CRIAR_LABEL(frame_1,"Site:",'#B4EEB4',"#1C1C1C",'verdana', '20','bold')
-    site_pg1.place(relx=0.05, rely=0.25)
-
-    site_pg1 = fun.CRIAR_LABEL(frame_1,site,'#B4EEB4',"#1C1C1C",'verdana', '20')
-    site_pg1.place(relx=0.15, rely=0.25)
-
-    # {=======================BOF=========================}
-    BOF_pg1 = fun.CRIAR_LABEL(frame_1,"BOF:",'#B4EEB4',"#1C1C1C",'verdana', '20','bold')
-    BOF_pg1.place(relx=0.05, rely=0.35)
-
-    site_pg1 = fun.CRIAR_LABEL(frame_1,BOF,'#B4EEB4',"#1C1C1C",'verdana', '20')
-    site_pg1.place(relx=0.15, rely=0.35)
-    
-    # {=======================ID=========================}
-    ID_pg1 = fun.CRIAR_LABEL(frame_1,"ID:",'#B4EEB4',"#1C1C1C",'verdana', '20','bold')
-    ID_pg1.place(relx=0.05, rely=0.45)
-
-    ID_informado_pg1 = fun.CRIAR_LABEL(frame_1,ID,'#B4EEB4',"#1C1C1C",'verdana', '20')
-    ID_informado_pg1.place(relx=0.12, rely=0.45)
-    
-    dados2 = tabela(int_arquivo)
-    vida = dados2[1]
-
-    data_foto = dados2[7] 
-    hora_foto = dados2[8] 
-    medidas_foto = dados2[9:] 
-
-    data_foto = dados2[7] # data_foto = dados2[5]
-    hora_foto = dados2[8] # hora_foto = dados2[6]
-    medidas_foto = dados2[9:] # medidas_foto = dados2[7:]
-
-    # {=======================Data=========================}
-    ID_pg1 = fun.CRIAR_LABEL(frame_1,"Data:",'#B4EEB4',"#1C1C1C",'verdana', '20','bold')
-    ID_pg1.place(relx=0.05, rely=0.55)
-
-    ID_informado_pg1 = fun.CRIAR_LABEL(frame_1,data_foto,'#B4EEB4',"#1C1C1C",'verdana', '20')
-    ID_informado_pg1.place(relx=0.17, rely=0.55)
-    
-    # {=======================Hora=========================}
-    ID_pg1 = fun.CRIAR_LABEL(frame_1,"Hora:",'#B4EEB4',"#1C1C1C",'verdana', '20','bold')
-    ID_pg1.place(relx=0.05, rely=0.65)
-
-    ID_informado_pg1 = fun.CRIAR_LABEL(frame_1,hora_foto,'#B4EEB4',"#1C1C1C",'verdana', '20')
-    ID_informado_pg1.place(relx=0.17, rely=0.65)
-    
-    # {=======================Botão Continuar=========================}
-    btContinuar_pg1 = tk.Button(frame_1,'MENU','#545454','white',4,'y','bold',"hand2",lambda: voltar_menu( inp_menu, inp_janela,janela_cadastro))
-    btContinuar_pg1.place(relx=0.55, rely=0.9, relwidth=0.12, relheight=0.08)
-    
-    # {=======================Registros=========================}
-
-    tabela_pg1 = ttk.Treeview(frame_1, height=10,column=("col1", "col2"),style="mystyle.Treeview")
-
-    style = ttk.Style()
-    style.configure("Treeview.Heading", font=('Verdana', 14,'bold'))
-    style.configure("mystyle.Treeview", highlightthickness=0, bd=0, font=('Verdana', 12))
-
-    tabela_pg1.heading("#0", text="")
-    tabela_pg1.heading("#1", text="Classe")
-    tabela_pg1.heading("#2", text="Diametro(mm²)")
-    
-    tabela_pg1.column("#0", width=1)
-    tabela_pg1.column("#1", width=180)
-    tabela_pg1.column("#2", width=200)
-    
-    i = 1
-    for dado in medidas_foto:
-        if i == 1:
-            tabela_pg1.insert("", tk.END, values=('Bico', dado))
-        else:
-            tabela_pg1.insert("", tk.END, values=(f'Furo {i-1}', dado))
-        i += 1
-                
-    tabela_pg1.place(relx=0.45, rely=0.15, relwidth=0.5, relheight=0.7)
+frame_2 = tk.Frame(janela, bd=2,
+                        bg= '#B4EEB4',
+                        highlightbackground= '#668B8B', 
+                        highlightthickness=1)
+frame_2.place(relx=0.01, rely=0.02,relwidth=0.38, relheight=0.96)
 
 
-def componentes_frame2(inp_janela): # {=========Componentes da direita=========}
-    
-    arquivofoto, arquivoguia = imagens(registro_foto)
-    print('\nArquivo_foto=',arquivofoto,'\nArquivo guia = ', arquivoguia)
-    # {=======================Imagem 1=========================}
-    img1_pg1 = tk.PhotoImage(file = arquivofoto)
-    img1_pg1 = img1_pg1.subsample(2, 2)
-    
-    fotoimg1_pg1 = tk.Label(frame_2,
-                            bg= '#B4EEB4',
-                            bd =0,
-                            image = img1_pg1)
-    fotoimg1_pg1.place(relx=0.5, rely=0.25, anchor=CENTER)
+arquivofoto = r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\FOTOS_ANALISE\registro_007_14-06-2024_12.14.png"
 
-    # {=======================Imagem 2=========================}
-    img2_pg1 = tk.PhotoImage(file = arquivoguia)
-    img2_pg1 = img2_pg1.subsample(2, 2)
+# {=======================Imagem 1=========================}
+bt_fechar_aba_menu = tk.Button(frame_2, text="X", command=janela.destroy, bg="red")
+bt_fechar_aba_menu.place(relx=0.96, rely=0.02, relwidth=0.03, relheight=0.04)
 
-    fotoimg2_pg1 = tk.Label(frame_2,
-                            bg= '#B4EEB4',
-                            bd =0,
-                            image = img2_pg1)
-    fotoimg2_pg1.place(relx=0.5, rely=0.7, anchor=CENTER)
+img1_pg1 = tk.PhotoImage(file = arquivofoto)
+img1_pg1 = img1_pg1.subsample(2, 2)
 
-    # {=======================WRL=========================}
-    titulo2_pg1 = fun.CRIAR_LABEL(frame_2,"Wear Register Lances (WRL)",'#B4EEB4',"#2F4F4F",'italic', '18')
-    titulo2_pg1.place(relx=0.01, rely=0.94)
-    
-    inp_janela.mainloop()
+fotoimg1_pg1 = tk.Label(frame_2,
+                        borderwidth=3,
+                        highlightthickness=4,
+                        highlightbackground='gray',
+                        bg= '#B4EEB4',
+                        image = img1_pg1)
+fotoimg1_pg1.place(relx=0.5, rely=0.25, anchor=CENTER)
+
+# fotoimg1_pg1 = tk.Label(frame_2,
+#                         borderwidth=2,  # Largura da borda em pixels
+#                         highlightthickness=2,  # Espessura da borda em pixels
+#                         highlightbackground='black',  # Cor da borda
+#                         bg='#B4EEB4',
+#                         image=img1_pg1)
+
+janela.mainloop()

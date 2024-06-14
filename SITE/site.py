@@ -10,7 +10,8 @@ import sqlite3 as sql
 
 warnings.filterwarnings("ignore")  # ->ignorar os erros que aparecem no site
 
-pasta = r'C:\Users\20221CECA0402\Documents\PROJETO_WRL'
+#pasta = r'C:\Users\20221CECA0402\Documents\PROJETO_WRL'
+pasta = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL'
 
 # {=======================Estilos da página=========================}
 

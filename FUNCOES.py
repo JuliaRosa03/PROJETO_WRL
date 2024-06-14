@@ -80,7 +80,7 @@ class DepthCamera:
         return self.depth_scale,self.depth_sensor
     
     def release(self):
-        self.pipeline.stop()
+        self.pipeline.stop()()
 
 
 dc=DepthCamera() #inicia a camera
@@ -123,6 +123,7 @@ def tirar_foto(color_frame, infra_image, id_bico):
         cv2.imwrite(caminho_completo_fotografia_APP, color_frame)
         
     print('\nImagem salva')
+    messagebox.showinfo("INFO","Imagem salva")
 
     return lista_arq, caminho_completo_fotografia_BW, caminho_completo_fotografia_APP, nome_arquivo_APP
 ret, depth_frame, color_frame, infra_image, Abertura = dc.get_frame() # Chamando as propriedades da câmera
@@ -177,6 +178,7 @@ def analisar_imagem(model, imagem, nome, depth_frame, Abertura):
                 y = depth_data_numpy_coordenada[i,2].astype(int) #coordenada y da mascara do bico de lança
                 depth_data_numpy_binaria[j][x,y] = ((math.tan(float(Abertura)/2*math.pi/180)*predict_z(x,y)*2)/640)
                 
+            # print(f'Lista loc: {depth_data_numpy_coordenada[1:7]}')
             #separar as mascaras
             furo_1 = depth_data_numpy_binaria[6]        
             furo_2 = (depth_data_numpy_binaria[5]-depth_data_numpy_binaria[6])

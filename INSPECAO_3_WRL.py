@@ -4,6 +4,7 @@ import sqlite3 as sql
 import colorama as color
 import customtkinter
 from PIL import Image, ImageTk
+import pyrealsense2 as rs
 
 import FUNCOES_WRL as fun
 
@@ -55,6 +56,9 @@ def imagens(registro_foto):  # {=========Informações para imagens(FRAME 2)====
     return arquivofoto, arquivoguia
 
 def voltar_menu(aba_menu, insp_1,insp_2, insp_3):
+    # pipeline = rs.pipeline()
+    # pipeline.stop()()
+
     aba_menu.deiconify()  # Exiba a janela da aba 1
     insp_3.destroy()  # Destrua a janela da aba 2
     insp_2.destroy()  # Destrua a janela cadastro
@@ -221,8 +225,10 @@ def componentes_frame2(inp_janela): # {=========Componentes da direita=========}
     img1_pg1 = img1_pg1.subsample(2, 2)
     
     fotoimg1_pg1 = tk.Label(frame_2,
+                            borderwidth=3,
+                            highlightthickness=4,
+                            highlightbackground='gray',
                             bg= '#B4EEB4',
-                            bd =0,
                             image = img1_pg1)
     fotoimg1_pg1.place(relx=0.5, rely=0.25, anchor=CENTER)
 
@@ -231,8 +237,10 @@ def componentes_frame2(inp_janela): # {=========Componentes da direita=========}
     img2_pg1 = img2_pg1.subsample(2, 2)
 
     fotoimg2_pg1 = tk.Label(frame_2,
+                            borderwidth=3,
+                            highlightthickness=4,
+                            highlightbackground='gray',
                             bg= '#B4EEB4',
-                            bd =0,
                             image = img2_pg1)
     fotoimg2_pg1.place(relx=0.5, rely=0.7, anchor=CENTER)
 

@@ -17,6 +17,7 @@ from ultralytics import YOLO
 from skimage.measure import regionprops
 import keyboard
 import FUNCOES as f
+from FUNCOES import DepthCamera
 import FUNCOES_WRL as fun
 import numpy as np
 
@@ -44,6 +45,7 @@ class DepthCamera:
         self.pipeline.start(config)
 
     def get_frame(self):
+        
         frames = self.pipeline.wait_for_frames(timeout_ms=2000)
         color_frame = frames.get_color_frame()
         infrared = frames.get_infrared_frame()
@@ -61,7 +63,7 @@ class DepthCamera:
     def release(self):
         self.pipeline.stop()
 
-# Initialize the DepthCamera
+# # Initialize the DepthCamera
 dc = DepthCamera()
 
 def voltar(aba_1, aba_2):
@@ -103,6 +105,7 @@ def componentes_frame2(inp_frame, lista):
     borda.place(relx=0, rely=0, relwidth=1, relheight=1)
 
     def exibir_video():
+    
         global lista_arq, caminhoBW, caminhoAPP, nome_arquivo_BW, stop, lista_APP, qtd_furos, Abertura, infra_image, centro
         ret, color_frame, infra_image, Abertura, depth_frame = dc.get_frame()
         lista_APP, id_bico, qtd_furos = f.organizar_dados_app(lista)
@@ -117,31 +120,30 @@ def componentes_frame2(inp_frame, lista):
             borda.configure(image=image)
             borda.image = image
             centro = f.definir_centro(altura, largura)
-            #results = model(frame,device ='cpu',retina_masks=True, save = True, save_crop = True,save_frames=True,overlap_mask=True)
             
-
             if keyboard.is_pressed('ctrl') or keyboard.is_pressed('right control') or keyboard.is_pressed('q'):
                 lista_arq, caminhoBW, caminhoAPP, nome_arquivo_BW = f.tirar_foto(color_frame, infra_image, id_bico)
                 stop = True
+                
                 return
 
         if not stop:
             borda.after(10, exibir_video)
 
     exibir_video()
+    
 
 def aba_camera(inp_janela,dados,inp_menu):
     global lista_arq, caminhoBW, caminhoAPP, nome_arquivo_BW, stop, lista_APP, qtd_furos, Abertura, infra_image, centro
     print('Dados: ',dados)
     lista_wl = dados
-    # lista_wl = ['MINERADORA/BH/BRASIL', 'Bloco 2', '6', '5', '30/5', '81', 'JONAS']
     janela_tres = tk.Toplevel(inp_janela)
-    # janela_tres = tk.Tk()
     
     tela(janela_tres)
     frames_da_tela(janela_tres)
     componentes_frame1(frame_um,janela_tres, inp_janela)
     componentes_frame2(frame_dois, lista_wl)
+    
     
     def aba_camera2():
         # Esperar até que a variável `stop` seja definida como True
@@ -154,29 +156,28 @@ def aba_camera(inp_janela,dados,inp_menu):
         return lista_arq, caminhoBW, caminhoAPP, nome_arquivo_BW, lista_APP, qtd_furos, Abertura, infra_image, centro
 
     lista_arq, caminhoBW, caminhoAPP, nome_arquivo_BW, lista_APP, qtd_furos, Abertura, infra_image, centro = aba_camera2()
+    
 
     Depth_Frame = f.obter_depth_frame()
     lista_dh = f.extrair_data_e_hora(lista_arq[0])
     lista_diametros, img_segmentada, mascaras, resultados, foto_original = f.analisar_imagem(model, cv2.imread(caminhoBW), lista_arq[0], Depth_Frame, Abertura)
     caixas_detectadas, nomes_classes, propriedades = f.extrair_dados(resultados, mascaras, nome_arquivo_BW)
  
-    ############### Parte Nobel
     # Extrair coordenadas e centro das caixas delimitadoras
     lista_pontos = f.extrair_coordenadas_centro(caixas_detectadas, nomes_classes)
     # Filtrar o ponto central se detectado como furo
     lista_pontos = f.filtrar_ponto_central(lista_pontos, centro)
     f.enumerar_furos(lista_pontos, qtd_furos, cv2.imread(caminhoBW), lista_arq[0])
-    ###################
     
     for dado in lista_dh:
         lista_arq.append(dado)
 
     lista_completa = f.reunir_dados(lista_APP, lista_arq, lista_diametros)
     f.salvar_registros(lista_completa, qtd_furos)
-    # f.exibir_imagens(cv2.imread(caminhoAPP), img_segmentada, img_identificada)
-    
+ 
     janela_cadastro = aba_dados(inp_janela, dados[3], dados[4], lista_arq[0],inp_menu,inp_janela )
     janela_cadastro.deiconify()
+    dc.release()
     
     return janela_tres
 
