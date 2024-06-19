@@ -5,11 +5,10 @@ import colorama as color
 import customtkinter
 from PIL import Image, ImageTk
 import pyrealsense2 as rs
-
 import FUNCOES_WRL as fun
 
-# pasta = r'C:\Users\20221CECA0402\Documents\PROJETO_WRL'
-pasta = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL'
+pasta = r'C:\Users\20221CECA0402\Documents\PROJETO_WRL'
+# pasta = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL'
 
 
 def selecao(inp_ID, inp_tipo): # {=========Leitura Grupo, SIte, BOF e ID(FRAME 1)=========}

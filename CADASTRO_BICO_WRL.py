@@ -1,14 +1,13 @@
 from tkinter import ttk, CENTER, messagebox
-import tkinter as tk
-# import sqlite3 as sql
-import colorama as color
 from customtkinter import *
-# from PIL import Image, ImageTk
-
+import tkinter as tk
+import colorama as color
 import FUNCOES_WRL as fun
 
-caminho = r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\REGISTROS_WRL.db"
-# caminho = r'C:\Users\20221CECA0402\Documents\PROJETO_WRL\REGISTROS_WRL.db'
+# caminho = r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\REGISTROS_WRL.db"
+caminho = r'C:\Users\20221CECA0402\Documents\PROJETO_WRL\REGISTROS_WRL.db'
+
+# OBS: Adicionar o BOF(localização do bico dentro do Site0)
 
 def USINAS():
     conn, cursor = fun.CONECTA_BD(caminho)
@@ -68,25 +67,22 @@ def tela(inp_janela):
     inp_janela.title("CADASTRAR BICO")
     inp_janela.configure(background= '#9BCD9B')
     inp_janela.geometry("1200x600")
-    inp_janela.resizable(False, False) #se quiser impedir que amplie ou diminua a tela, altere para False
-    # janela.maxsize(width=1920, height=1080) #limite máximo da tela
+    inp_janela.resizable(True, True) #se quiser impedir que amplie ou diminua a tela, altere para False
+    inp_janela.maxsize(width=1200, height=600) #limite máximo da tela
     inp_janela.minsize(width=700, height=450) #limite minimo da tela
 
 def frames_da_tela(inp_janela): 
-        global frame_1, frame_2
-        frame_1 = tk.Frame(inp_janela,
-                            bg= '#B4FF9A',
-                            highlightbackground= '#668B8B')
-        frame_1.place(relx=0.01, rely=0.02,relwidth=0.48, relheight=0.96)
+    global frame_1, frame_2
+    frame_1 = tk.Frame( inp_janela,
+                        bg= '#B4FF9A',
+                        highlightbackground= '#668B8B')
+    frame_1.place(relx=0.01, rely=0.02,relwidth=0.43, relheight=0.96)
 
-        frame_2 = tk.Frame(inp_janela,
-                            bg= '#B4FF9A',
-                            highlightbackground= '#668B8B')
-        frame_2.place(relx=0.5, rely=0.02,relwidth=0.49, relheight=0.96)
-        
-        return frame_1, frame_2
-
-
+    frame_2 = tk.Frame( inp_janela,
+                        bg= '#B4FF9A',
+                        highlightbackground= '#668B8B')
+    frame_2.place(relx=0.45, rely=0.02,relwidth=0.54, relheight=0.96)
+    
 def componentes_frame1(inp_frame,inp_janela, inp_menu):
     # {=======================Título=========================}
     titulo = fun.CRIAR_LABEL(inp_frame, "Cadastrar Bico", '#B4FF9A', "#005200", 'arial', '25', 'bold')
@@ -122,7 +118,6 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
     input_site.config(font=("Arial", 18))
     input_site.place(relx=0.15, rely=0.35, relwidth=0.8, relheight=0.07)
 
-
     # {=======================FUROS=========================}
     label_furos = fun.CRIAR_LABEL(inp_frame, "Furos: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold' )
     label_furos.place(relx=0.03, rely=0.5)
@@ -145,10 +140,16 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
     input_ID.place(relx=0.11, rely=0.65, relwidth=0.85, relheight=0.07)
     
     # {=======================Botão Voltar e Continuar=========================}
+    bt_voltar = fun.CRIAR_BOTAO(inp_frame, "VOLTAR",'#258D19', 'white',3,'15','',"hand2",lambda: voltar( inp_menu, inp_janela))
+    bt_voltar.place(relx=0.05, rely=0.89, relwidth=0.2, relheight=0.08)
+
+    bt_continuar = fun.CRIAR_BOTAO(inp_frame, "SALVAR",'#258D19', 'white',3,'15','',"hand2",lambda: salvar(inp_menu, inp_janela))
+    bt_continuar.place(relx=0.75, rely=0.89, relwidth=0.2, relheight=0.08)
     
+    # {======================= Mostrando avisos =========================}
     def salvar(aba_1, aba_2):
         dados_obtidos = []
-        flag = True
+        # flag = True  #OBS: ver para que serve
         
         dados_obtidos.append(Var_Usina.get())
         dados_obtidos.append(Var_site.get())
@@ -173,8 +174,6 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
         else:
             param = 0
             for tupla in todos_tabela:
-                # print('todos_tabela: ',todos_tabela)
-                
                 ultimo_algarismo_tupla = str(tupla[-1])[-1]  # Obtém o último dígito da tupla
                 if dados_obtidos[-1] == ultimo_algarismo_tupla:
                     messagebox.showwarning("AVISO","Este ID já existe")
@@ -194,12 +193,6 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
                 aba_1.deiconify()  # Exiba a janela da aba 1
                 aba_2.destroy() 
     
-    bt_voltar = fun.CRIAR_BOTAO(inp_frame, "VOLTAR",'#258D19', 'white',3,'18','',"hand2",lambda: voltar( inp_menu, inp_janela))
-    bt_voltar.place(relx=0.05, rely=0.89, relwidth=0.2, relheight=0.08)
-
-    bt_continuar = fun.CRIAR_BOTAO(inp_frame, "SALVAR",'#258D19', 'white',3,'18','',"hand2",lambda: salvar(inp_menu, inp_janela))
-    bt_continuar.place(relx=0.65, rely=0.89, relwidth=0.2, relheight=0.08)
-
 def componentes_frame2(inp_frame):
     # {=======================Título=========================}
     titulo = fun.CRIAR_LABEL(inp_frame, "Bicos Registrados", '#B4FF9A', "#005200", 'arial', '25', 'bold')
@@ -209,7 +202,7 @@ def componentes_frame2(inp_frame):
 
     style = ttk.Style()
     style.configure("Treeview.Heading", font=('Verdana', 12,'bold'))
-    style.configure("mystyle.Treeview", highlightthickness=0, bd=0, font=('Verdana', 10))
+    style.configure("mystyle.Treeview", highlightthickness=0, bd=0, font=('Verdana', 11))
 
     Tabela.heading("#0", text="")
     Tabela.heading("#1", text="Grupo")
@@ -220,32 +213,24 @@ def componentes_frame2(inp_frame):
     
     Tabela.column("#0", width=1)
     Tabela.column("#1", width=150)
-    Tabela.column("#2", width=100)
-    Tabela.column("#3", width=30)
-    Tabela.column("#4", width=60)
-    Tabela.column("#5", width=20)
+    Tabela.column("#2", width=75)
+    Tabela.column("#3", width=25)
+    Tabela.column("#4", width=25)
+    Tabela.column("#5", width=15)
     
     for dado in tabela():
         Tabela.insert("", tk.END, values=(dado[0], dado[1], dado[2], dado[3], dado[4]))
         
-    Tabela.place(relx=0.05, rely=0.12, relwidth=0.9, relheight=0.85)
-        
-        
-    
-def aba_cadastro_bico(inp_janela): # AVISO -> passar a variavel "inp_janela" dentro dos ()
+    Tabela.place(relx=0.05, rely=0.2, relwidth=0.9, relheight=0.75)
+       
+def aba_cadastro_bico(inp_janela):
     janela_atual = tk.Toplevel(inp_janela)
-    # janela_atual = tk.Tk() #AVISO ->tirar esta linha e manter a de cima
     tela(janela_atual)
     frames_da_tela(janela_atual)
     componentes_frame1(frame_1, janela_atual, inp_janela)
     componentes_frame2(frame_2)
     
     janela_atual.transient(inp_janela)
-    janela_atual.focus_force() #era pra janela ser o foco
+    janela_atual.focus_force()
     janela_atual.grab_set()
-    
-    # janela_atual.mainloop() #AVISO ->tirar esta linha
     return janela_atual
-
-
-# aba_cadastro_bico() #AVISO ->tirar esta linha

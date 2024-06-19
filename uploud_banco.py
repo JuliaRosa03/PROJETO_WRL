@@ -4,7 +4,7 @@ import sqlite3 as sql
 import colorama as color
 import customtkinter
 from PIL import Image, ImageTk
-import FUNCOES_WRL as fun
+import FUNCOES_WRL_2 as fun
 
 
 
@@ -125,41 +125,18 @@ import FUNCOES_WRL as fun
 # print (tabela(int_arquivo))
 
 import tkinter as tk
-janela = tk.Tk()
+from tkinter import ttk
 
-janela.title("DADOS DA INSPECÇÃO")
-janela.configure(background='#9BCD9B')
-janela.attributes("-fullscreen", True)
+root = tk.Tk()
 
-frame_2 = tk.Frame(janela, bd=2,
-                        bg= '#B4EEB4',
-                        highlightbackground= '#668B8B', 
-                        highlightthickness=1)
-frame_2.place(relx=0.01, rely=0.02,relwidth=0.38, relheight=0.96)
+# Import the tcl file
+root.tk.call('source', 'forest-dark.tcl')
 
+# Set the theme with the theme_use method
+ttk.Style().theme_use('forest-dark')
 
-arquivofoto = r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\FOTOS_ANALISE\registro_007_14-06-2024_12.14.png"
+# A themed (ttk) button
+button = ttk.Button(root, text="I'm a themed button")
+button.pack(pady=20)
 
-# {=======================Imagem 1=========================}
-bt_fechar_aba_menu = tk.Button(frame_2, text="X", command=janela.destroy, bg="red")
-bt_fechar_aba_menu.place(relx=0.96, rely=0.02, relwidth=0.03, relheight=0.04)
-
-img1_pg1 = tk.PhotoImage(file = arquivofoto)
-img1_pg1 = img1_pg1.subsample(2, 2)
-
-fotoimg1_pg1 = tk.Label(frame_2,
-                        borderwidth=3,
-                        highlightthickness=4,
-                        highlightbackground='gray',
-                        bg= '#B4EEB4',
-                        image = img1_pg1)
-fotoimg1_pg1.place(relx=0.5, rely=0.25, anchor=CENTER)
-
-# fotoimg1_pg1 = tk.Label(frame_2,
-#                         borderwidth=2,  # Largura da borda em pixels
-#                         highlightthickness=2,  # Espessura da borda em pixels
-#                         highlightbackground='black',  # Cor da borda
-#                         bg='#B4EEB4',
-#                         image=img1_pg1)
-
-janela.mainloop()
+root.mainloop()

@@ -16,15 +16,14 @@ from datetime import datetime
 from ultralytics import YOLO
 from skimage.measure import regionprops
 import keyboard
-import FUNCOES as f
-from FUNCOES import DepthCamera
 import FUNCOES_WRL as fun
+from FUNCOES_WRL import DepthCamera
 import numpy as np
 
 from INSPECAO_3_WRL import aba_dados
 
-# pasta = r'C:\Users\20221CECA0402\Documents\PROJETO_WRL'
-pasta = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL'
+pasta = r'C:\Users\20221CECA0402\Documents\PROJETO_WRL'
+# pasta = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL'
 
 model = YOLO(fr'{pasta}\pesos\best.pt')
 
@@ -108,7 +107,7 @@ def componentes_frame2(inp_frame, lista):
     
         global lista_arq, caminhoBW, caminhoAPP, nome_arquivo_BW, stop, lista_APP, qtd_furos, Abertura, infra_image, centro
         ret, color_frame, infra_image, Abertura, depth_frame = dc.get_frame()
-        lista_APP, id_bico, qtd_furos = f.organizar_dados_app(lista)
+        lista_APP, id_bico, qtd_furos = fun.organizar_dados_app(lista)
 
         if ret:
             frame = cv2.cvtColor(infra_image, cv2.COLOR_BGR2RGB)
@@ -119,10 +118,10 @@ def componentes_frame2(inp_frame, lista):
             image = ImageTk.PhotoImage(image=img)
             borda.configure(image=image)
             borda.image = image
-            centro = f.definir_centro(altura, largura)
+            centro = fun.definir_centro(altura, largura)
             
             if keyboard.is_pressed('ctrl') or keyboard.is_pressed('right control') or keyboard.is_pressed('q'):
-                lista_arq, caminhoBW, caminhoAPP, nome_arquivo_BW = f.tirar_foto(color_frame, infra_image, id_bico)
+                lista_arq, caminhoBW, caminhoAPP, nome_arquivo_BW = fun.tirar_foto(color_frame, infra_image, id_bico)
                 stop = True
                 
                 return
@@ -158,21 +157,21 @@ def aba_camera(inp_janela,dados,inp_menu):
     lista_arq, caminhoBW, caminhoAPP, nome_arquivo_BW, lista_APP, qtd_furos, Abertura, infra_image, centro = aba_camera2()
     
 
-    Depth_Frame = f.obter_depth_frame()
-    lista_dh = f.extrair_data_e_hora(lista_arq[0])
-    lista_diametros, img_segmentada, mascaras, resultados, foto_original = f.analisar_imagem(model, cv2.imread(caminhoBW), lista_arq[0], Depth_Frame, Abertura)
-    caixas_detectadas, nomes_classes, propriedades = f.extrair_dados(resultados, mascaras, nome_arquivo_BW)
+    Depth_Frame = fun.obter_depth_frame()
+    lista_dh = fun.extrair_data_e_hora(lista_arq[0])
+    lista_diametros, img_segmentada, mascaras, resultados, foto_original = fun.analisar_imagem(model, cv2.imread(caminhoBW), lista_arq[0], Depth_Frame, Abertura)
+    caixas_detectadas, nomes_classes, propriedades = fun.extrair_dados(resultados, mascaras, nome_arquivo_BW)
  
     # Extrair coordenadas e centro das caixas delimitadoras
-    lista_pontos = f.extrair_coordenadas_centro(caixas_detectadas, nomes_classes)
+    lista_pontos = fun.extrair_coordenadas_centro(caixas_detectadas, nomes_classes)
     # Filtrar o ponto central se detectado como furo
-    lista_pontos = f.filtrar_ponto_central(lista_pontos, centro)
-    f.enumerar_furos(lista_pontos, qtd_furos, cv2.imread(caminhoBW), lista_arq[0])
+    lista_pontos = fun.filtrar_ponto_central(lista_pontos, centro)
+    fun.enumerar_furos(lista_pontos, qtd_furos, cv2.imread(caminhoBW), lista_arq[0])
     
     for dado in lista_dh:
         lista_arq.append(dado)
 
-    lista_completa = f.reunir_dados(lista_APP, lista_arq, lista_diametros)
+    lista_completa = fun.reunir_dados(lista_APP, lista_arq, lista_diametros)
     f.salvar_registros(lista_completa, qtd_furos)
  
     janela_cadastro = aba_dados(inp_janela, dados[3], dados[4], lista_arq[0],inp_menu,inp_janela )

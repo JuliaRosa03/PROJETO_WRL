@@ -8,8 +8,46 @@ import sqlite3 as sql
 import FUNCOES_WRL as fun
 from INSPECAO_2_WRL import aba_camera
 
-caminho = r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\REGISTROS_WRL.db"
-# caminho = r"C:\Users\20221CECA0402\Documents\PROJETO_WRL\REGISTROS_WRL.db"
+# caminho = r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\REGISTROS_WRL.db"
+caminho = r"C:\Users\20221CECA0402\Documents\PROJETO_WRL\REGISTROS_WRL.db"
+
+def CONECTA_BD(inp_caminho):
+    conn = sql.connect(inp_caminho)
+    cursor = conn.cursor(); print("\nConectando ao banco de dados")
+    return conn, cursor
+    
+def DESCONECTA_BD(conn):
+    conn.close(); print("Desconectando do banco de dados\n")
+
+def CRIAR_FRAME(inp_frame, inp_bg, inp_light = None):
+    frame = tk.Frame(inp_frame,
+                    bg= inp_bg,
+                    highlightbackground= inp_light)
+    return frame
+
+def CRIAR_BOTAO(inp_frame, inp_texto, inp_bg, inp_fg, inp_borda = None,inp_tamanho= None, inp_style = None, inp_cursor = None, inp_comando = None):
+    #
+    """Retorna um botão seguindo o parametros comentados"""
+    botao = tk.Button(  inp_frame, # frame
+                        text = inp_texto, # texto
+                        bg = inp_bg, # background
+                        fg = inp_fg, # 
+                        bd = inp_borda, #borda do botão
+                        font= ("arial", inp_tamanho ,inp_style), #fonte, tamanho, style
+                        cursor = inp_cursor, # estilo do cursor
+                        command = inp_comando) # comando
+    return botao
+    
+def CRIAR_LABEL(inp_frame, inp_texto, inp_bg, inp_fg, inp_fonte = None, inp_tam_fonte = None, inp_style = None):
+    label = tk.Label(inp_frame, # frame
+                    text = inp_texto, # texto
+                    bg = inp_bg, # background
+                    fg = inp_fg, # cor da letra
+                    font = (inp_fonte, inp_tam_fonte, inp_style))#fonte, tamanho, style
+    return label
+
+
+
 
 def USINAS():
     conn, cursor = fun.CONECTA_BD(caminho)
