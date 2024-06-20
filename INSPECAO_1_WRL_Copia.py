@@ -1,9 +1,7 @@
-# from tkinter import ttk
+from tkinter import ttk
 import tkinter as tk
 from tkinter import messagebox
 import colorama as color
-#from customtkinter import *
-# from PIL import Image, ImageTk
 import sqlite3 as sql
 import FUNCOES_WRL as fun
 from INSPECAO_2_WRL import aba_camera
@@ -25,89 +23,14 @@ def CRIAR_FRAME(inp_frame, inp_bg, inp_light = None):
                     highlightbackground= inp_light)
     return frame
 
-# def USINAS():
-#     conn, cursor = fun.CONECTA_BD(caminho)
-#     comando = f"SELECT Grupo FROM DADOS_EMPRESAS "
-#     cursor.execute(comando)
-#     dados_banco = cursor.fetchall()
-#     fun.DESCONECTA_BD(conn)
-    
-#     dados_filtrados = list(set(item[0] for item in dados_banco))
-#     return dados_filtrados
+def tabela(): # {=========Informações da tabela(FRAME 2)=========}
+    conn, cursor = fun.CONECTA_BD(caminho)
+    comando = f"SELECT * FROM DADOS_EMPRESAS "
+    cursor.execute(comando)
+    dados_tabela =cursor.fetchall()
+    fun.DESCONECTA_BD(conn)
 
-# def USINA_SITE(inp_usina):
-#     conn, cursor = fun.CONECTA_BD(caminho)
-#     comando = f"SELECT Site FROM DADOS_EMPRESAS WHERE GRUPO = '{inp_usina}'"
-#     cursor.execute(comando)
-#     dados_banco = cursor.fetchall()
-#     fun.DESCONECTA_BD(conn)
-    
-#     dados_filtrados = list(set(item[0] for item in dados_banco))
-#     return dados_filtrados
-
-# def SITE():
-#     conn, cursor = fun.CONECTA_BD(caminho)
-#     comando = f"SELECT Site FROM DADOS_EMPRESAS "
-#     cursor.execute(comando)
-#     dados_banco = cursor.fetchall()
-#     fun.DESCONECTA_BD(conn)
-    
-#     dados_filtrados = list(set(item[0] for item in dados_banco))
-#     return dados_filtrados
-
-# def FUROS_ID():
-    
-#     conn, cursor = fun.CONECTA_BD(caminho)
-#     ID = f"SELECT ID FROM DADOS_EMPRESAS "
-#     cursor.execute(ID)
-#     dados_ID = cursor.fetchall()
-    
-#     FUROS = f"SELECT FUROS FROM DADOS_EMPRESAS "
-#     cursor.execute(FUROS)
-#     dados_FUROS = cursor.fetchall()
-#     fun.DESCONECTA_BD(conn)
-    
-#     dados_filtrados = [f"{furos[0]} - {id[0]}" for furos, id in zip(dados_FUROS, dados_ID)]
-#     return dados_filtrados
-
-# def USINA_SITE_IDTIPO(inp_site):
-    
-#     conn, cursor = fun.CONECTA_BD(caminho)
-#     ID = f"SELECT ID FROM DADOS_EMPRESAS WHERE SITE = '{inp_site}'"
-#     cursor.execute(ID)
-#     dados_ID = cursor.fetchall()
-    
-#     FUROS = f"SELECT FUROS FROM DADOS_EMPRESAS WHERE SITE = '{inp_site}' "
-#     cursor.execute(FUROS)
-#     dados_FUROS = cursor.fetchall()
-#     fun.DESCONECTA_BD(conn)
-    
-#     dados_filtrados = [f"{furos[0]} - {id[0]}" for furos, id in zip(dados_FUROS, dados_ID)]
-#     return dados_filtrados
-
-# def USINA_SITE_IDTIPO_TIPO(inp_IDTipo):
-#     inp_IDTipo = inp_IDTipo.split('-')
-#     ID = inp_IDTipo[1]
-    
-#     conn, cursor = fun.CONECTA_BD(caminho)
-#     comando = f"SELECT TIPO FROM DADOS_EMPRESAS WHERE ID = {ID} "
-#     cursor.execute(comando)
-#     dados_banco = cursor.fetchall()
-#     fun.DESCONECTA_BD(conn)
-    
-#     dados_filtrados = list(set(item[0] for item in dados_banco))
-#     return dados_filtrados
-
-# def TIPO():
-    
-#     conn, cursor = fun.CONECTA_BD(caminho)
-#     comando = f"SELECT TIPO FROM DADOS_EMPRESAS "
-#     cursor.execute(comando)
-#     dados_banco = cursor.fetchall()
-#     fun.DESCONECTA_BD(conn)
-    
-#     dados_filtrados = list(set(item[0] for item in dados_banco))
-#     return dados_filtrados
+    return dados_tabela
 
 def ENTRY_INT(inp_text):
     if inp_text == "": return True
@@ -268,6 +191,36 @@ def componentes_frame1(inp_frame,inp_janela):# #TOPLEVEL, inp_menu
     # {=======================FECHAR ABA=========================}
     bt_fechar_aba_menu = tk.Button(inp_frame, text="X", command=inp_janela.destroy, bg="red").place(relx=0.96, rely=0.02, relwidth=0.03, relheight=0.04) #AVISO ->tirar esta linha pro tk.tk
 
+    # {=======================Tabela=========================}
+    #OBS: adicionar filtro a partir do ID
+    #OBS: clicar 2 vezes e prencher os entrys
+    label_aviso = fun.CRIAR_LABEL(inp_frame, "Click 2 vezes sobre \na linha desejada", '#9BCD9B', "white", 'calibri', '18', 'bold')
+    label_aviso.place(relx=0.85, rely=0.15)
+    
+    Tabela = ttk.Treeview(inp_frame, height=10,column=("col1", "col2", "col3", "col4", "col2 5"),style="mystyle.Treeview")
+
+    style = ttk.Style()
+    style.configure("Treeview.Heading", font=('Verdana', 12,'bold'))
+    style.configure("mystyle.Treeview", highlightthickness=0, bd=0, font=('Verdana', 11))
+
+    Tabela.heading("#0", text="")
+    Tabela.heading("#1", text="Grupo")
+    Tabela.heading("#2", text="Site")
+    Tabela.heading("#3", text="Furos")
+    Tabela.heading("#4", text="Tipo")
+    Tabela.heading("#5", text="ID")
+    
+    Tabela.column("#0", width=1)
+    Tabela.column("#1", width=150)
+    Tabela.column("#2", width=75)
+    Tabela.column("#3", width=25)
+    Tabela.column("#4", width=25)
+    Tabela.column("#5", width=15)
+    
+    for dado in tabela():
+        Tabela.insert("", tk.END, values=(dado[0], dado[1], dado[2], dado[3], dado[4]))
+        
+    Tabela.place(relx=0.45, rely=0.25, relwidth=0.5, relheight=0.45)
         
 def aba_cadastro(): 
     janela_dois = tk.Tk()
