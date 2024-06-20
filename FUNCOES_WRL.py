@@ -26,6 +26,39 @@ from PIL import Image, ImageTk
 pasta = r'C:\Users\20221CECA0402\Documents\PROJETO_WRL'
 #pasta = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL'
 
+class Camera:
+    def __init__(self):
+        self.pipeline = rs.pipeline()
+        config = rs.config()
+        pipeline_wrapper = rs.pipeline_wrapper(self.pipeline)
+        pipeline_profile = config.resolve(pipeline_wrapper)
+        device = pipeline_profile.get_device()
+        device.query_sensors()[0].set_option(rs.option.laser_power, 12)
+        device_product_line = str(device.get_info(rs.camera_info.product_line))
+        config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)
+        config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
+        config.enable_stream(rs.stream.infrared, 1, 640, 480, rs.format.y8, 30)
+        self.pipeline.start(config)
+
+    def get_frames(self):
+        
+        frames = self.pipeline.wait_for_frames(timeout_ms=2000)
+        color_frame = frames.get_color_frame()
+        infrared = frames.get_infrared_frame()
+        depth_frame = frames.get_depth_frame()
+        infra_image = np.asanyarray(infrared.get_data())
+        depth_intrin = depth_frame.profile.as_video_stream_profile().intrinsics
+        Abertura = format(math.degrees(2 * math.atan(depth_intrin.width / (2 * depth_intrin.fx))))
+        depth_image = np.asanyarray(depth_frame.get_data())
+        color_image = np.asanyarray(color_frame.get_data())
+
+        if not color_frame:
+            return False, None, None, None, None
+        return True, color_image, infra_image, Abertura
+
+    def release(self):
+        self.pipeline.stop()
+
 class DepthCamera:
 
     def __init__(self):
@@ -183,6 +216,7 @@ def analisar_imagem(model, imagem, nome, depth_frame, Abertura):
         mascaras = result.masks.data # Máscaras extraídas - extracted_masks
         depth_data_numpy_binaria = mascaras.cpu().numpy()   #tranformar array em np.array
         detections = len(result)  #quantidades de detecções
+        print('detections = ', detections)
         depth_data_numpy_coordenada=np.argwhere(depth_data_numpy_binaria[0] == 1)#transformar formascara em coordenada nos pontos em que tem mascara
         x = depth_data_numpy_coordenada[0:len(depth_data_numpy_coordenada),0]
         y = depth_data_numpy_coordenada[0:len(depth_data_numpy_coordenada),1]
@@ -216,22 +250,19 @@ def analisar_imagem(model, imagem, nome, depth_frame, Abertura):
                 depth_data_numpy_binaria[j][x,y] = ((math.tan(float(Abertura)/2*math.pi/180)*predict_z(x,y)*2)/640)
                 
             # print(f'Lista loc: {depth_data_numpy_coordenada[1:7]}')
-            #separar as mascaras
-            furo_1 = depth_data_numpy_binaria[6]        
-            furo_2 = (depth_data_numpy_binaria[5]-depth_data_numpy_binaria[6])
-            furo_3 = (depth_data_numpy_binaria[4]-depth_data_numpy_binaria[5])
-            furo_4 = (depth_data_numpy_binaria[3]-depth_data_numpy_binaria[4])
-            furo_5 = (depth_data_numpy_binaria[2]-depth_data_numpy_binaria[3])
-            furo_6 = (depth_data_numpy_binaria[1]-depth_data_numpy_binaria[2])
-            bico_completo = (depth_data_numpy_binaria[0])
+            valores = []
+            for i in range((detections - 1), -1, -1):
+                if i == 0:
+                    bico_completo = (depth_data_numpy_binaria[i])
 
-# ------------
-        
-        # pcd2 = o3d.geometry.PointCloud()
-        # points2 = np.column_stack((filtered_x,filtered_y,depth_frame[filtered_x,filtered_y]))
-        # pcd2.points = o3d.utility.Vector3dVector(points2)
-        # o3d.visualization.draw_geometries([pcd2])
-# ------------
+                elif i == (detections - 1):
+                    furo = depth_data_numpy_binaria[i]
+                    valores.append(furo)
+
+                else:
+                    furo = (depth_data_numpy_binaria[i]-depth_data_numpy_binaria[i+1])
+                    valores.append(furo)
+            
         lista_diametros = []
     
         area_total = np.sum(depth_data_numpy_binaria)
@@ -239,32 +270,14 @@ def analisar_imagem(model, imagem, nome, depth_frame, Abertura):
         
         # Armazenando o diametro externo na lista
         lista_diametros.append(round(diametro_externo, 2))
-
-        area_furo_1 = np.sum(furo_1)
-        diametro_furo_1_mm = 2*(np.sqrt(area_furo_1/math.pi))
-        lista_diametros.append(round(diametro_furo_1_mm,2))
-
-        area_furo_2 = np.sum(furo_2)
-        diametro_furo_2_mm = 2*(np.sqrt(area_furo_2/math.pi))
-        lista_diametros.append(round(diametro_furo_2_mm, 2))
-
-        area_furo_3 = np.sum(furo_3)
-        diametro_furo_3_mm = 2*(np.sqrt(area_furo_3/math.pi))
-        lista_diametros.append(round(diametro_furo_3_mm, 2))
-
-        area_furo_4 = np.sum(furo_4)
-        diametro_furo_4_mm = 2*(np.sqrt(area_furo_4/math.pi))
-        lista_diametros.append(round(diametro_furo_4_mm,2))
         
-        area_furo_5 = np.sum(furo_5)
-        diametro_furo_5_mm = 2*(np.sqrt(area_furo_5/math.pi))
-        lista_diametros.append(round(diametro_furo_5_mm,2))
-    
-        area_furo_6 = np.sum(furo_6)
-        diametro_furo_6_mm = 2*(np.sqrt(area_furo_6/math.pi))
-        lista_diametros.append(round(diametro_furo_6_mm,2))
+        # Armazenando o diametro dos furos na lista  
+        for valor in valores:
+            area_furo = np.sum(valor)
+            diametro_furo_mm = 2*(np.sqrt(area_furo/math.pi))
+            lista_diametros.append(round(diametro_furo_mm,2))
         
-    return lista_diametros, img_segmentada, mascaras, results, imagem_bgr
+    return lista_diametros, mascaras, results
 
 def extrair_data_e_hora(nome_arquivo):
     lista = nome_arquivo.split("_")
@@ -314,45 +327,8 @@ def extrair_dados(resultado, mascaras, nome):
     # Armazenando os nomes das classes em uma lista
     nomes_classes = list(resultado[0].names.values())
 
-    return caixas_detectadas, nomes_classes, lista_proprs
+    return caixas_detectadas, nomes_classes
 
-# def identificar_furos(caixas_detectadas, nomes_classes, imagem, frame):
-#     # Extrair as coordenadas e centro das caixas delimitadoras
-#     coordenadas_caixas = []
-#     pontos = []
-#     for box in caixas_detectadas:
-#         x1, y1, x2, y2, sla, classe = box.tolist()
-#         centro_x = int((x1 + x2) / 2)
-#         centro_y = int((y1 + y2) / 2)
-
-#         ponto = (centro_x, centro_y)
-#         pontos.append(ponto)
-        
-#         coordenadas_caixas.append({
-#             'Classe': nomes_classes[int(classe)],
-#             'Centro': {
-#                 'x': centro_x,
-#                 'y': centro_y
-#             }
-#         })
-
-#     img = imagem.copy()
-#     # Adicionar texto para identificar cada objeto detectado (id)
-#     for i in range(1, len(pontos)):
-#         imagem_final = cv2.putText(img, f'{i}', pontos[i], cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 1)
-
-#     data = datetime.now()
-#     diretorio_guias =  fr'{pasta}\FOTOS_GUIA'
-#     nome_arquivo = data.strftime('registro_%d-%m-%Y_%H.%M') + '.png'
-#     caminho = os.path.join(diretorio_guias, nome_arquivo)
-    
-#     cv2.imwrite(caminho, imagem_final)
-
-#     imagem_id = cv2.imread(caminho)
-
-#     return imagem_id
-
-##################### PARTE DO NOBEL
 # Função para ordenar os pontos em sentido horário
 def sort_points_clockwise(pts):
     center = np.mean(pts, axis=0)
@@ -476,3 +452,18 @@ def salvar_registros(lista, num):
 
     # Feche a conexão com o banco de dados
     cursor.close()
+    
+def sobrepor_molde(infra_image):
+    back_frame = infra_image.copy()
+    back_frame = cv2.cvtColor(back_frame, cv2.COLOR_GRAY2RGB)
+    molde = cv2.imread(fr'{pasta}\MOLDE.png')
+    # Redimensionar a imagem para o tamanho do frame
+    molde_resized = cv2.resize(molde, (infra_image.shape[1], infra_image.shape[0]))
+    # Definir a região de interesse onde a imagem será sobreposta
+    roi = back_frame[0:molde_resized.shape[0], 0:molde_resized.shape[1]]
+    # Sobrepor a imagem na região de interesse (roi)
+    for c in range(0, 2):
+        roi[:, :, c] = molde_resized[:, :, c] * (molde_resized[:, :, 2] / 255.0) + roi[:, :, c] * (1.0 - molde_resized[:, :, 2] / 255.0)
+    
+    return back_frame
+    

@@ -17,7 +17,7 @@ from ultralytics import YOLO
 from skimage.measure import regionprops
 import keyboard
 import FUNCOES_WRL as fun
-from FUNCOES_WRL import DepthCamera
+from FUNCOES_WRL import Camera
 import numpy as np
 
 from INSPECAO_3_WRL import aba_dados
@@ -27,43 +27,9 @@ pasta = r'C:\Users\20221CECA0402\Documents\PROJETO_WRL'
 
 model = YOLO(fr'{pasta}\pesos\best.pt')
 
-
-# Define the DepthCamera class
-class DepthCamera:
-    def __init__(self):
-        self.pipeline = rs.pipeline()
-        config = rs.config()
-        pipeline_wrapper = rs.pipeline_wrapper(self.pipeline)
-        pipeline_profile = config.resolve(pipeline_wrapper)
-        device = pipeline_profile.get_device()
-        device.query_sensors()[0].set_option(rs.option.laser_power, 12)
-        device_product_line = str(device.get_info(rs.camera_info.product_line))
-        config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)
-        config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
-        config.enable_stream(rs.stream.infrared, 1, 640, 480, rs.format.y8, 30)
-        self.pipeline.start(config)
-
-    def get_frame(self):
-        
-        frames = self.pipeline.wait_for_frames(timeout_ms=2000)
-        color_frame = frames.get_color_frame()
-        infrared = frames.get_infrared_frame()
-        depth_frame = frames.get_depth_frame()
-        infra_image = np.asanyarray(infrared.get_data())
-        depth_intrin = depth_frame.profile.as_video_stream_profile().intrinsics
-        Abertura = format(math.degrees(2 * math.atan(depth_intrin.width / (2 * depth_intrin.fx))))
-        depth_image = np.asanyarray(depth_frame.get_data())
-        color_image = np.asanyarray(color_frame.get_data())
-
-        if not color_frame:
-            return False, None, None, None, None
-        return True, color_image, infra_image, Abertura, depth_frame
-
-    def release(self):
-        self.pipeline.stop()
-
-# # Initialize the DepthCamera
-dc = DepthCamera()
+# # Define a classe 
+# Initialize the DepthCamera
+dc = Camera()
 
 def voltar(aba_1, aba_2):
     aba_1.deiconify()  # Exiba a janela da aba 1
@@ -106,11 +72,15 @@ def componentes_frame2(inp_frame, lista):
     def exibir_video():
     
         global lista_arq, caminhoBW, caminhoAPP, nome_arquivo_BW, stop, lista_APP, qtd_furos, Abertura, infra_image, centro
-        ret, color_frame, infra_image, Abertura, depth_frame = dc.get_frame()
+        ret, color_frame, infra_image, Abertura = dc.get_frames()
+    
+        back_frame = fun.sobrepor_molde(infra_image)
+        
         lista_APP, id_bico, qtd_furos = fun.organizar_dados_app(lista)
-
+        
+        
         if ret:
-            frame = cv2.cvtColor(infra_image, cv2.COLOR_BGR2RGB)
+            frame = cv2.cvtColor(back_frame, cv2.COLOR_BGR2RGB)
             img = Image.fromarray(frame)
             altura = borda.winfo_height()
             largura = borda.winfo_width()
@@ -159,8 +129,8 @@ def aba_camera(inp_janela,dados,inp_menu):
 
     Depth_Frame = fun.obter_depth_frame()
     lista_dh = fun.extrair_data_e_hora(lista_arq[0])
-    lista_diametros, img_segmentada, mascaras, resultados, foto_original = fun.analisar_imagem(model, cv2.imread(caminhoBW), lista_arq[0], Depth_Frame, Abertura)
-    caixas_detectadas, nomes_classes, propriedades = fun.extrair_dados(resultados, mascaras, nome_arquivo_BW)
+    lista_diametros, mascaras, resultados = fun.analisar_imagem(model, cv2.imread(caminhoBW), lista_arq[0], Depth_Frame, Abertura)
+    caixas_detectadas, nomes_classes = fun.extrair_dados(resultados, mascaras, nome_arquivo_BW)
  
     # Extrair coordenadas e centro das caixas delimitadoras
     lista_pontos = fun.extrair_coordenadas_centro(caixas_detectadas, nomes_classes)
@@ -172,7 +142,7 @@ def aba_camera(inp_janela,dados,inp_menu):
         lista_arq.append(dado)
 
     lista_completa = fun.reunir_dados(lista_APP, lista_arq, lista_diametros)
-    f.salvar_registros(lista_completa, qtd_furos)
+    fun.salvar_registros(lista_completa, qtd_furos)
  
     janela_cadastro = aba_dados(inp_janela, dados[3], dados[4], lista_arq[0],inp_menu,inp_janela )
     janela_cadastro.deiconify()

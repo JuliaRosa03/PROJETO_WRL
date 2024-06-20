@@ -63,7 +63,7 @@ class Funcs():
         self.input_nome.delete(0, tk.END)
         self.input_cidade.delete(0, tk.END)
     def conecta_bd(self):
-        self.conn = sql.connect(r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\clientes.db")
+        self.conn = sql.connect(r"C:\Users\20221CECA0402\Documents\PROJETO_WRL\clientes.db")
         self.cursor = self.conn.cursor(); print("Conectando ao banco de dados")
     def desconecta_bd(self):
         self.conn.close(); print("Desconectando do banco de dados")
@@ -259,12 +259,12 @@ class Application(Funcs, Relatorios,Validadores):
         self.input_cidade = tk.Entry(self.frame_1)
         self.input_cidade.place(relx=0.32, rely=0.72, relwidth=0.5, relheight=0.14)
         ### drop down button
-        self.Tipvar = tk.StringVar(self.aba)
-        self.TipV = ("Solteiro(a)", "Casado(a)", "Viuvo(a)")
-        self.Tipvar.set("Solteiro(a)")
-        self.popupMenu = tk.OptionMenu(self.aba, self.Tipvar,*self.TipV)
-        self.popupMenu.place(relx=0.1, rely=0.1, relwidth=0.4, relheight=0.3)
-        self.estado_civil = self.Tipvar.get
+        # self.Tipvar = tk.StringVar(self.aba)
+        # self.TipV = ("Solteiro(a)", "Casado(a)", "Viuvo(a)")
+        # self.Tipvar.set("Solteiro(a)")
+        # self.popupMenu = tk.OptionMenu(self.aba, self.Tipvar,*self.TipV)
+        # self.popupMenu.place(relx=0.1, rely=0.1, relwidth=0.4, relheight=0.3)
+        # self.estado_civil = self.Tipvar.get
 
         self.bt_calendario = tk.Button(self.frame_1, text= "Data", command= self.calendario)
         self.bt_calendario.place(relx=0.5 ,rely=0.02)
