@@ -4,7 +4,7 @@ import sqlite3 as sql
 import colorama as color
 import customtkinter
 from PIL import Image, ImageTk
-import FUNCOES_WRL_2 as fun
+
 
 
 
@@ -127,16 +127,40 @@ import FUNCOES_WRL_2 as fun
 import tkinter as tk
 from tkinter import ttk
 
-root = tk.Tk()
+class ExampleApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.geometry("800x600")
 
-# Import the tcl file
-root.tk.call('source', 'forest-dark.tcl')
+        self.frame_2 = tk.Frame(self.root)
+        self.frame_2.pack(fill="both", expand=True)
 
-# Set the theme with the theme_use method
-ttk.Style().theme_use('forest-dark')
+        # Criando a Treeview
+        self.listaCli = ttk.Treeview(self.frame_2, height=10, column=("col1", "col2", "col3", "col4"))
+        self.listaCli.heading("#0", text="")
+        self.listaCli.heading("#1", text="Codigo")
+        self.listaCli.heading("#2", text="Nome")
+        self.listaCli.heading("#3", text="Telefone")
+        self.listaCli.heading("#4", text="Cidade")
 
-# A themed (ttk) button
-button = ttk.Button(root, text="I'm a themed button")
-button.pack(pady=20)
+        self.listaCli.column("#0", width=1)
+        self.listaCli.column("#1", width=50)
+        self.listaCli.column("#2", width=200)
+        self.listaCli.column("#3", width=125)
+        self.listaCli.column("#4", width=125)
 
-root.mainloop()
+        self.listaCli.place(relx=0.01, rely=0.1, relwidth=0.95, relheight=0.85)
+
+        # Criando a barra de rolagem vertical
+        self.scroolLista = tk.Scrollbar(self.frame_2, orient='vertical', command=self.listaCli.yview)
+        self.listaCli.configure(yscrollcommand=self.scroolLista.set)
+        self.scroolLista.place(relx=0.96, rely=0.1, relwidth=0.04, relheight=0.85)
+
+        # Inserindo dados na Treeview como exemplo
+        for i in range(100):
+            self.listaCli.insert("", tk.END, values=(f"Codigo {i}", f"Nome {i}", f"Telefone {i}", f"Cidade {i}"))
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = ExampleApp(root)
+    root.mainloop()

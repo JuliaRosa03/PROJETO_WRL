@@ -219,8 +219,8 @@ class Application(Funcs, Relatorios,Validadores):
         # self.btnovo = tk.PhotoImage(file = r"C:\Users\20211MPECA0020\Documents\Projeto\Aplicativo\botaonovo.gif")
         # self.btnovo = self.btnovo.subsample(2, 2)
 
-        # self.bt_novo = tk.Button(self.frame_1, bd =0, image = self.btnovo, command= self.add_cliente)
-        # self.bt_novo.place(relx=0.5, rely=0.08, width=60, height=40)
+        self.bt_novo = tk.Button(self.frame_1,  text='Novo' , bg = '#107db2', fg = 'white',  command= self.add_cliente)#image = self.btnovo,
+        self.bt_novo.place(relx=0.5, rely=0.08, width=60, height=40)
 
         ### Criação do botao alterar
         self.bt_alterar = tk.Button(self.frame_1, text='Alterar' , bg = '#107db2', fg = 'white', command=self.altera_cliente)
@@ -266,10 +266,10 @@ class Application(Funcs, Relatorios,Validadores):
         # self.popupMenu.place(relx=0.1, rely=0.1, relwidth=0.4, relheight=0.3)
         # self.estado_civil = self.Tipvar.get
 
-        self.bt_calendario = tk.Button(self.frame_1, text= "Data", command= self.calendario)
-        self.bt_calendario.place(relx=0.5 ,rely=0.02)
-        self.entry_data = tk.Entry(self.frame_1, width= 10)
-        self.entry_data.place(relx=0.5 ,rely=0.2)
+        # self.bt_calendario = tk.Button(self.frame_1, text= "Data", command= self.calendario)
+        # self.bt_calendario.place(relx=0.5 ,rely=0.02)
+        # self.entry_data = tk.Entry(self.frame_1, width= 10)
+        # self.entry_data.place(relx=0.5 ,rely=0.2)
 
     def lista_frame2(self):
         self.listaCli = ttk.Treeview(self.frame_2, height=3,column=("col1", "col2", "col3", "col4"))
