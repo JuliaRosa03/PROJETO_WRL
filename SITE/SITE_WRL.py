@@ -13,6 +13,9 @@ warnings.filterwarnings("ignore")  # ->ignorar os erros que aparecem no site
 pasta = r'C:\Users\20221CECA0402\Documents\PROJETO_WRL'
 # pasta = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL'
 
+# VERSÃO 26/06/2024
+
+
 # {=======================Estilos da página=========================}
 
 st.set_page_config(page_title= "Homepage WRL", page_icon=":clipboard:", layout="wide")  #->Titulo da aba no navegador
@@ -65,7 +68,7 @@ for table in tables:
     rows = cursor.fetchall()
     dfs[table_name] = pd.DataFrame(rows, columns=[i[0] for i in cursor.description])
 
-table_names = table_names[1:]
+table_names = table_names[0:-1]
 
 conn.close()
 
@@ -125,6 +128,7 @@ if selected_tables:
             st.sidebar.warning("Selecione no máximo uma opção de ID")
     
         #print('df6: ', df6)
+        
 # {=======================Logos IFES e fuso horário=========================}
 st.sidebar.image(imagem_LOGOS, width=250) 
 
@@ -165,9 +169,20 @@ if id and selected_tables:
     st.markdown(f"# Gráfico de desgaste - Análise com todos os diâmetros\n # ID: {', '.join(id)}")
 
     filtered_df = df3[df3["ID"].isin(id)] # Gráficos gerados a partir do id
-    #print('filtered: ', filtered_df)
-    # Selecionar as colunas desejadas
+    print('filtered: ', filtered_df)
 
+    #{=======================Seleção de Datas=========================}
+    col1, col2 = st.columns((2))
+    startDate = pd.to_datetime(filtered_df["DATA"]).min()
+    endDate = pd.to_datetime(filtered_df["DATA"]).max()
+    
+    with col1:
+        date1 = pd.to_datetime(st.date_input("Data de início", startDate))
+
+    with col2:
+        date2 = pd.to_datetime(st.date_input("Data final", endDate))
+
+    # Selecionar as colunas desejadas
     if not filtered_df.empty:
         # Transformar o DataFrame para o formato longo
         long_df = pd.melt(filtered_df, id_vars=['ID','VIDA'], 
@@ -194,7 +209,7 @@ if id and selected_tables:
         filtro_vida = filtered_df[filtered_df['VIDA'] == vida]
 
         if not filtro_vida.empty:
-            # Pegar o primeiro valor encontrado na coluna 'Região A' correspondente
+            # Pegar o primeiro valor encontrado na coluna 'VIDA' correspondente
             registro = filtro_vida['ARQUIVO'].values[0]
             data = filtro_vida['DATA'].values[0]
             hora = filtro_vida['HORA'].values[0]
