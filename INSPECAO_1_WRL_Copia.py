@@ -10,11 +10,12 @@ from direction import direction
 
 caminho = direction()
 
-def tabela(): # {=========Informações da tabela(FRAME 2)=========}
+def tabela(filtro_id=None):
     conn, cursor = fun.CONECTA_BD(caminho)
-    comando = f"SELECT * FROM DADOS_EMPRESAS "
+    
+    comando = "SELECT Grupo, Site, BOF, TIPO, ID, ULTIMA_VIDA FROM DADOS_EMPRESAS"
     cursor.execute(comando)
-    dados_tabela =cursor.fetchall()
+    dados_tabela = cursor.fetchall()
     fun.DESCONECTA_BD(conn)
 
     return dados_tabela
@@ -117,7 +118,7 @@ def frames_da_tela(inp_janela):
 def componentes_frame1(inp_frame,inp_janela):# #TOPLEVEL, inp_menu
     # {=======================Título=========================}
     titulo = fun.CRIAR_LABEL(inp_frame, "Selecionar Bico", '#B4FF9A', "#005200", 'arial', '35', 'bold')
-    titulo.place(relx=0.42, rely=0.05) 
+    titulo.place(relx=0.4, rely=0.05) 
     
     # {=======================USINA=========================}
     label_usina = fun.CRIAR_LABEL(inp_frame, "Usina/Grupo: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
@@ -194,13 +195,57 @@ def componentes_frame1(inp_frame,inp_janela):# #TOPLEVEL, inp_menu
     bt_fechar_aba_menu = tk.Button(inp_frame, text="X", command=inp_janela.destroy, bg="red").place(relx=0.96, rely=0.02, relwidth=0.03, relheight=0.04) #AVISO ->tirar esta linha pro tk.tk
 
     # {=======================Tabela=========================}
-    #OBS: adicionar filtro a partir do ID
-    #OBS: atualizar o banco de dados
-    #OBS: mostrar a ultima vida registrada
-    #OBS: a vida não pode ser menor do que a anterior
-    label_aviso = fun.CRIAR_LABEL(inp_frame, "Click 2 vezes sobre \na linha desejada", '#9BCD9B', "white", 'calibri', '18', 'bold')
-    label_aviso.place(relx=0.8, rely=0.13)
     
+    #OBS: a vida não pode ser menor do que a anterior
+
+    label_aviso = fun.CRIAR_LABEL(inp_frame, "Click 2 vezes sobre \na linha desejada", '#9BCD9B', "white", 'calibri', '18', 'bold')
+    label_aviso.place(relx=0.8, rely=0.15)
+    
+    filtrar_ID = tk.Entry(inp_frame, validate= "key",font=("Arial", 25), validatecommand= validador(inp_frame) )
+    filtrar_ID.place(relx=0.45, rely=0.2, relwidth=0.1, relheight=0.06)
+
+    bt_buscar = fun.CRIAR_BOTAO(inp_frame, "Buscar ID", '#258D19', 'white', 3, '20', "", "hand2", lambda: buscar_id(filtrar_ID.get()))
+    bt_buscar.place(relx=0.55, rely=0.2, relwidth=0.15, relheight=0.06)
+
+    def buscar_id(id_filtro):
+        if not id_filtro: 
+            Tabela.delete(*Tabela.get_children()) 
+
+            conn, cursor = fun.CONECTA_BD(caminho)
+            comando = "SELECT Grupo, Site, BOF, TIPO, ID, ULTIMA_VIDA FROM DADOS_EMPRESAS"
+            cursor.execute(comando)
+            dados_tabela = cursor.fetchall()
+            fun.DESCONECTA_BD(conn)
+
+            for dado in dados_tabela:
+                Tabela.insert("", tk.END, values=dado)
+        
+        else:
+            Tabela.delete(*Tabela.get_children()) 
+
+            conn, cursor = fun.CONECTA_BD(caminho)
+            comando = f"SELECT Grupo, Site, BOF, TIPO, ID, ULTIMA_VIDA FROM DADOS_EMPRESAS WHERE ID = ?"
+            cursor.execute(comando, (id_filtro,))
+            dados_filtrados = cursor.fetchall()
+            fun.DESCONECTA_BD(conn)
+
+            if not dados_filtrados:
+                messagebox.showwarning("ID Não Encontrado", f"O ID '{id_filtro}' não foi encontrado na base de dados.")
+                Tabela.delete(*Tabela.get_children()) 
+
+                conn, cursor = fun.CONECTA_BD(caminho)
+                comando = "SELECT Grupo, Site, BOF, TIPO, ID, ULTIMA_VIDA FROM DADOS_EMPRESAS"
+                cursor.execute(comando)
+                dados_tabela = cursor.fetchall()
+                fun.DESCONECTA_BD(conn)
+
+                for dado in dados_tabela:
+                    Tabela.insert("", tk.END, values=dado)
+            else:
+                for dado in dados_filtrados:
+                    Tabela.insert("", tk.END, values=dado)
+        
+
     Tabela = ttk.Treeview(inp_frame, height=10,column=("col1", "col2", "col3", "col4", "col5","col6" ),style="mystyle.Treeview")
 
     style = ttk.Style()
@@ -214,9 +259,9 @@ def componentes_frame1(inp_frame,inp_janela):# #TOPLEVEL, inp_menu
     Tabela.heading("#1", text="Grupo")
     Tabela.heading("#2", text="Site")
     Tabela.heading("#3", text="BOF")
-    Tabela.heading("#4", text="Furos")
-    Tabela.heading("#5", text="Tipo")
-    Tabela.heading("#6", text="ID")
+    Tabela.heading("#4", text="TIPO")
+    Tabela.heading("#5", text="ID")
+    Tabela.heading("#6", text="Vida")
     
     Tabela.column("#1", width=150)
     Tabela.column("#2", width=75)
@@ -228,11 +273,11 @@ def componentes_frame1(inp_frame,inp_janela):# #TOPLEVEL, inp_menu
     for dado in tabela():
         Tabela.insert("", tk.END, values=(dado[0], dado[1], dado[2], dado[3], dado[4], dado[5]))
         
-    Tabela.place(relx=0.45, rely=0.25, relwidth=0.5, relheight=0.45)
+    Tabela.place(relx=0.45, rely=0.29, relwidth=0.5, relheight=0.45)
     
     scroolLista = tk.Scrollbar(inp_frame, orient='vertical', command=Tabela.yview)
     Tabela.configure(yscrollcommand = scroolLista.set)
-    scroolLista.place(relx=0.94, rely=0.25, relwidth=0.01, relheight=0.45)
+    scroolLista.place(relx=0.94, rely=0.29, relwidth=0.01, relheight=0.45)
     
     Tabela.bind("<Double-1>",lambda event: OnDoubleClick(event, Tabela, input_usina, input_site, input_BOF, input_ID, input_Furos, input_tipo))
         
@@ -249,8 +294,6 @@ def aba_cadastro():
     # janela_dois.grab_set() #TOPLEVEL
     janela_dois.mainloop() #AVISO ->tirar esta linha
     
-
-
 
 print("\n\n", color.Fore.GREEN + "Iniciando o código - Registro pre-medição" + color.Style.RESET_ALL)
 aba_cadastro() #AVISO ->tirar esta linha
