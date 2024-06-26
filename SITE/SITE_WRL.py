@@ -13,6 +13,9 @@ warnings.filterwarnings("ignore")  # ->ignorar os erros que aparecem no site
 pasta = r'C:\Users\20221CECA0402\Documents\PROJETO_WRL'
 # pasta = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL'
 
+# VERSÃO 26/06/2024
+
+
 # {=======================Estilos da página=========================}
 
 st.set_page_config(page_title= "Homepage WRL", page_icon=":clipboard:", layout="wide")  #->Titulo da aba no navegador
