@@ -23,8 +23,9 @@ from tkinter import ttk
 from customtkinter import *
 from PIL import Image, ImageTk
 
-pasta = r'C:\Users\20221CECA0402\Documents\PROJETO_WRL'
-#pasta = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL'
+from direction import folder
+
+pasta = folder()
 
 class Camera:
     def __init__(self):

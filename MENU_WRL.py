@@ -9,8 +9,9 @@ import FUNCOES_WRL as fun
 from INSPECAO_1_WRL import aba_cadastro #AQUI
 from CADASTRO_BICO_WRL import aba_cadastro_bico
 
-pasta = r'C:\Users\20221CECA0402\Documents\PROJETO_WRL'
-#pasta = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL'
+from direction import folder
+
+pasta = folder()
 
 def menu_WRL():
     Janela_menu = tk.Tk()

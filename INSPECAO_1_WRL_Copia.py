@@ -6,8 +6,9 @@ import sqlite3 as sql
 import FUNCOES_WRL as fun
 from INSPECAO_2_WRL import aba_camera
 
-# caminho = r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\REGISTROS_WRL.db"
-caminho = r"C:\Users\20221CECA0402\Documents\PROJETO_WRL\REGISTROS_WRL.db"
+from direction import direction
+
+caminho = direction()
 
 def tabela(): # {=========Informações da tabela(FRAME 2)=========}
     conn, cursor = fun.CONECTA_BD(caminho)
@@ -70,8 +71,6 @@ def botao_continuar_foto(inp_furos_ID, inp_tipo, inp_vida, inp_nome):
     Furos = str_furos_ID[0]
     ID = str_furos_ID[1]
     
-    caminho = r'C:\Users\20221CECA0402\Documents\PROJETO_WRL\REGISTROS_WRL.db'
-    #caminho =  r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\REGISTROS_WRL.db"
     conn, cursor = fun.CONECTA_BD(caminho)
     
     tabela = 'B' + Furos 
@@ -200,7 +199,7 @@ def componentes_frame1(inp_frame,inp_janela):# #TOPLEVEL, inp_menu
     #OBS: mostrar a ultima vida registrada
     #OBS: a vida não pode ser menor do que a anterior
     label_aviso = fun.CRIAR_LABEL(inp_frame, "Click 2 vezes sobre \na linha desejada", '#9BCD9B', "white", 'calibri', '18', 'bold')
-    label_aviso.place(relx=0.85, rely=0.15)
+    label_aviso.place(relx=0.8, rely=0.13)
     
     Tabela = ttk.Treeview(inp_frame, height=10,column=("col1", "col2", "col3", "col4", "col5","col6" ),style="mystyle.Treeview")
 
