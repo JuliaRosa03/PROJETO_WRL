@@ -420,7 +420,7 @@ def reunir_dados(dados_app, dados_arquivo, dados_diametros):
 def organizar_dados_app(lista):
 
     lista_APP = [lista[0], lista[1], lista[6], lista[5], lista[3], lista[4]]
-    qtd_furos = int(lista[2])
+    qtd_furos = int(lista[5])
     id = '00' + str(lista[3])
     
     return lista_APP, id, qtd_furos

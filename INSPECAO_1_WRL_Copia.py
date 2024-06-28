@@ -10,9 +10,9 @@ from direction import direction
 caminho = direction()
 
 def tabela(filtro_id=None):
-    conn, cursor = fun.CONECTA_BD(caminho)
     
-    comando = "SELECT Grupo, Site, BOF, TIPO, ID, ULTIMA_VIDA FROM DADOS_EMPRESAS"
+    conn, cursor = fun.CONECTA_BD(caminho)
+    comando = "SELECT * FROM DADOS_EMPRESAS"
     cursor.execute(comando)
     dados_tabela = cursor.fetchall()
     fun.DESCONECTA_BD(conn)
@@ -38,49 +38,31 @@ def voltar(aba_1, aba_2):
     aba_1.deiconify()  # Exiba a proxima janela 
     aba_2.destroy()  # Destrua a janela atual
     
-def adquirir_dados(inp_usina_grupo, inp_site, inp_furos_ID, inp_tipo, inp_vida, inp_nome): #juliaaaaaa
+def comandos_botao_continuar(inp_janela,inp_furos, inp_usina_grupo, inp_site, inp_BOF, inp_tipo, inp_ID, inp_usuario, inp_vida, inp_menu): #juliaaaaaa
     DADOS_INSERIDOS = []
-    try: 
-        usina_grupo = inp_usina_grupo.get()
-        site = inp_site.get()
-        furos_ID = inp_furos_ID.get()
-        separacao_furos_ID = furos_ID.split('-')
-        
-        furos = separacao_furos_ID[0].strip()
-        ID = separacao_furos_ID[1].strip()
-        
-        tipo = inp_tipo.get()
-        vida = inp_vida.get()
-        nome = inp_nome.get().upper()
-        
-        for dado in [usina_grupo, site, furos, ID, tipo, vida, nome]:
-            DADOS_INSERIDOS.append(dado)
-            
-        return DADOS_INSERIDOS
-    except:
-        messagebox.showwarning("AVISO","Selecione ID-Bico")
     
-def botao_continuar_foto(inp_furos_ID, inp_tipo, inp_vida, inp_nome):
-    
-    str_furos_ID = inp_furos_ID.split('-')
-    Furos = str_furos_ID[0]
-    ID = str_furos_ID[1]
-    
-    conn, cursor = fun.CONECTA_BD(caminho)
-    
-    tabela = 'B' + Furos 
-    comando = f"INSERT INTO {tabela} VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-    registro = (inp_nome, inp_vida, ID, inp_tipo, inp_vida, inp_nome)
-    
-    cursor.execute(comando)
-    dados_banco = cursor.fetchall()
-    fun.DESCONECTA_BD(conn)
+    DADOS_INSERIDOS.append(inp_furos.get())
+    DADOS_INSERIDOS.append(inp_usina_grupo.get())
+    DADOS_INSERIDOS.append(inp_site.get())
+    DADOS_INSERIDOS.append(inp_BOF.get())
+    DADOS_INSERIDOS.append(inp_tipo.get())
+    DADOS_INSERIDOS.append(inp_ID.get())
+    DADOS_INSERIDOS.append(inp_usuario.get().upper())
+    DADOS_INSERIDOS.append(inp_vida.get())
 
-def comandos_botao_continuar(inp_janela,inp_usina_grupo, inp_site, inp_furos_ID, inp_tipo, inp_vida, inp_nome,inp_menu):
-    dados = adquirir_dados(inp_usina_grupo, inp_site, inp_furos_ID, inp_tipo, inp_vida, inp_nome)
-    janela_cadastro = aba_camera(inp_janela, dados, inp_menu)
-    janela_cadastro.deiconify()
+    param = 0
+    for dado in DADOS_INSERIDOS:
+        if dado == '':
+            param += 1
 
+    if param > 0:
+        messagebox.showwarning("AVISO","Preencha todos os espaços")
+
+    else:
+        print("\nDADOS_INS:", DADOS_INSERIDOS)
+        janela_cadastro = aba_camera(inp_janela, DADOS_INSERIDOS, inp_menu)
+        janela_cadastro.deiconify()
+    
 def OnDoubleClick(event, listaCli,usina, site, BOF, ID, Furos, Tipo):
     usina.delete(0, tk.END)
     site.delete(0, tk.END)
@@ -90,12 +72,13 @@ def OnDoubleClick(event, listaCli,usina, site, BOF, ID, Furos, Tipo):
     Tipo.delete(0, tk.END)
 
     for n in listaCli.selection():
-        col1, col2, col3, col4, col5, col6 = listaCli.item(n, 'values')
-        usina.insert(tk.END, col1)
-        site.insert(tk.END, col2)
-        BOF.insert(tk.END, col3)
+        col1, col2, col3, col4, col5, col6, col7 = listaCli.item(n, 'values')
+        usina.insert(tk.END, col2)
+        site.insert(tk.END, col3)
+        BOF.insert(tk.END, col4)
+
         ID.insert(tk.END, col6)
-        Furos.insert(tk.END, col4)
+        Furos.insert(tk.END, col1) 
         Tipo.insert(tk.END, col5)
                         
 def tela(inp_janela):
@@ -113,8 +96,9 @@ def frames_da_tela(inp_janela):
         
         return frame_1
 
-def componentes_frame1(inp_frame,inp_janela):# #TOPLEVEL, inp_menu
+def componentes_frame1(inp_frame,inp_janela, inp_menu):# #TOPLEVEL
     # {=======================Título=========================}
+    # obs: POR TITULO NO CENTRO (GPT)
     titulo = fun.CRIAR_LABEL(inp_frame, "Selecionar Bico", '#B4FF9A', "#005200", 'arial', '35', 'bold')
     titulo.place(relx=0.4, rely=0.05) 
     
@@ -148,10 +132,10 @@ def componentes_frame1(inp_frame,inp_janela):# #TOPLEVEL, inp_menu
     
     # {======================= FUROS =========================}
     label_Furos = fun.CRIAR_LABEL(inp_frame, "Furos: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
-    label_Furos.place(relx=0.2, rely=0.6)
+    label_Furos.place(relx=0.22, rely=0.6)
 
     input_Furos = tk.Entry(inp_frame, validate= "key",font=("Arial", 20), validatecommand="key")
-    input_Furos.place(relx=0.2, rely=0.65, relwidth=0.13, relheight=0.06)
+    input_Furos.place(relx=0.22, rely=0.65, relwidth=0.13, relheight=0.06)
 
     # {=======================TIPO=========================}
     label_tipo = fun.CRIAR_LABEL(inp_frame, "Tipo: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
@@ -162,10 +146,10 @@ def componentes_frame1(inp_frame,inp_janela):# #TOPLEVEL, inp_menu
     
     # {=======================VIDA=========================}
     label_vida = fun.CRIAR_LABEL(inp_frame, "Vida: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
-    label_vida.place(relx=0.2, rely=0.75)
+    label_vida.place(relx=0.22, rely=0.75)
 
     input_vida = tk.Entry(inp_frame, validate= "key",font=("Arial", 20), validatecommand= validador(inp_frame) )
-    input_vida.place(relx=0.2, rely=0.8, relwidth=0.13, relheight=0.06)
+    input_vida.place(relx=0.22, rely=0.8, relwidth=0.13, relheight=0.06)
 
     # {=======================Divisória=========================}
     label_divisor = fun.CRIAR_LABEL(inp_frame, "", '#9BCD9B', "#1C1C1C", 'arial', '20', 'bold')
@@ -182,15 +166,16 @@ def componentes_frame1(inp_frame,inp_janela):# #TOPLEVEL, inp_menu
     input_usuario.config(validatecommand=vcmd)
 
     # {=======================Botão Voltar e Continuar=========================}
-    bt_voltar = fun.CRIAR_BOTAO(inp_frame, "MENU",'#258D19', 'white',3,'20','',"hand2")# #TOPLEVEL, lambda: voltar( inp_menu, inp_janela)
+    #obs: Por figuras ilustrativas com os botões
+    bt_voltar = fun.CRIAR_BOTAO(inp_frame, "MENU",'#258D19', 'white',3,'20','',"hand2", lambda: voltar( inp_menu, inp_janela))# #TOPLEVEL
     bt_voltar.place(relx=0.05, rely=0.9, relwidth=0.13, relheight=0.06)
     # inp_janela.withdraw()
 
-    bt_continuar = fun.CRIAR_BOTAO(inp_frame, "CONTINUAR",'#258D19', 'white',3,'20','',"hand2")#,lambda: comandos_botao_continuar(inp_janela,Var_Usina,Var_site,Var_IDTipo,Var_tipo,input_vida,input_usuario,inp_menu)
-    bt_continuar.place(relx=0.8, rely=0.9, relwidth=0.13, relheight=0.06)
+    bt_continuar = fun.CRIAR_BOTAO(inp_frame, "PRÓXIMO",'#258D19', 'white',3,'20','',"hand2",lambda: comandos_botao_continuar(inp_janela,input_usina,input_site,input_BOF,input_ID,input_tipo,input_Furos,input_vida,input_usuario,inp_menu))
+    bt_continuar.place(relx=0.82, rely=0.9, relwidth=0.13, relheight=0.06)
     
     # {=======================FECHAR ABA=========================}
-    bt_fechar_aba_menu = tk.Button(inp_frame, text="X", command=inp_janela.destroy, bg="red").place(relx=0.96, rely=0.02, relwidth=0.03, relheight=0.04) #AVISO ->tirar esta linha pro tk.tk
+    # bt_fechar_aba_menu = tk.Button(inp_frame, text="X", command=inp_janela.destroy, bg="red").place(relx=0.96, rely=0.02, relwidth=0.03, relheight=0.04) #AVISO ->tirar esta linha pro tk.tk
 
     # {=======================Tabela=========================}
     #OBS: a vida não pode ser menor do que a anterior
@@ -208,7 +193,7 @@ def componentes_frame1(inp_frame,inp_janela):# #TOPLEVEL, inp_menu
         conn, cursor = fun.CONECTA_BD(caminho)
 
         if not id_filtro: 
-            comando = "SELECT Grupo, Site, BOF, TIPO, ID, ULTIMA_VIDA FROM DADOS_EMPRESAS"
+            comando = "SELECT * FROM DADOS_EMPRESAS"
             cursor.execute(comando)
             dados_tabela = cursor.fetchall()
             fun.DESCONECTA_BD(conn)
@@ -217,7 +202,7 @@ def componentes_frame1(inp_frame,inp_janela):# #TOPLEVEL, inp_menu
                 Tabela.insert("", tk.END, values=dado)
         
         else:
-            comando = f"SELECT Grupo, Site, BOF, TIPO, ID, ULTIMA_VIDA FROM DADOS_EMPRESAS WHERE ID = ?"
+            comando = f"SELECT * FROM DADOS_EMPRESAS WHERE ID = ?"
             cursor.execute(comando, (id_filtro,))
             dados_filtrados = cursor.fetchall()
             fun.DESCONECTA_BD(conn)
@@ -237,7 +222,7 @@ def componentes_frame1(inp_frame,inp_janela):# #TOPLEVEL, inp_menu
                     Tabela.insert("", tk.END, values=dado)
         
 
-    Tabela = ttk.Treeview(inp_frame, height=10,column=("col1", "col2", "col3", "col4", "col5","col6" ),style="mystyle.Treeview")
+    Tabela = ttk.Treeview(inp_frame, height=10,column=("col1", "col2", "col3", "col4", "col5","col6","col7" ),style="mystyle.Treeview")
 
     style = ttk.Style()
     style.configure("Treeview.Heading", font=('Verdana', 12,'bold'))
@@ -246,45 +231,49 @@ def componentes_frame1(inp_frame,inp_janela):# #TOPLEVEL, inp_menu
     Tabela.column("#0", width=0, stretch=tk.NO)# Ocultando a primeira coluna
     Tabela.heading("#0", text="")
 
-    Tabela.heading("#1", text="Grupo")
-    Tabela.heading("#2", text="Site")
-    Tabela.heading("#3", text="BOF")
-    Tabela.heading("#4", text="TIPO")
-    Tabela.heading("#5", text="ID")
-    Tabela.heading("#6", text="Vida")
+    Tabela.heading("#1", text="Furos")
+    Tabela.heading("#2", text="Grupo")
+    Tabela.heading("#3", text="Site")
+    Tabela.heading("#4", text="BOF")
+    Tabela.heading("#5", text="TIPO")
+    Tabela.heading("#6", text="ID")
+    Tabela.heading("#7", text="Ult. Vida")
     
-    Tabela.column("#1", width=150)
-    Tabela.column("#2", width=75)
-    Tabela.column("#3", width=15, anchor='center')
-    Tabela.column("#4", width=15, anchor='center')
+    Tabela.column("#1", width=15, anchor='center')
+    Tabela.column("#2", width=150)
+    Tabela.column("#3", width=75)
+    Tabela.column("#4", width=10, anchor='center')
     Tabela.column("#5", width=15, anchor='center')
-    Tabela.column("#6", width=15, anchor='center')
+    Tabela.column("#6", width=10, anchor='center')
+    Tabela.column("#7", width=15, anchor='center')
     
     for dado in tabela():
-        Tabela.insert("", tk.END, values=(dado[0], dado[1], dado[2], dado[3], dado[4], dado[5]))
+        Tabela.insert("", tk.END, values=(dado[0], dado[1], dado[2], dado[3], dado[4], dado[5], dado[6]))
         
     Tabela.place(relx=0.4, rely=0.29, relwidth=0.55, relheight=0.45)
     
     scroolLista = tk.Scrollbar(inp_frame, orient='vertical', command=Tabela.yview)
     Tabela.configure(yscrollcommand = scroolLista.set)
-    scroolLista.place(relx=0.94, rely=0.29, relwidth=0.01, relheight=0.45)
+    scroolLista.place(relx=0.95, rely=0.29, relwidth=0.01, relheight=0.45)
     
     Tabela.bind("<Double-1>",lambda event: OnDoubleClick(event, Tabela, input_usina, input_site, input_BOF, input_ID, input_Furos, input_tipo))
         
-def aba_cadastro(): 
-    janela_dois = tk.Tk()
-    # janela_dois = tk.Toplevel(inp_janela) #TOPLEVEL
+def aba_cadastro(inp_janela): 
+    # janela_dois = tk.Tk()
+    janela_dois = tk.Toplevel(inp_janela) #TOPLEVEL
     
     tela(janela_dois)
     frames_da_tela(janela_dois)
-    componentes_frame1(frame_1,janela_dois)#  #TOPLEVEL
+    componentes_frame1(frame_1,janela_dois,inp_janela)#  #TOPLEVEL
 
-    # janela_dois.transient(inp_janela) #TOPLEVEL
-    # janela_dois.focus_force() #TOPLEVEL
-    # janela_dois.grab_set() #TOPLEVEL
-    janela_dois.mainloop() #AVISO ->tirar esta linha
+    janela_dois.transient(inp_janela) #TOPLEVEL
+    janela_dois.focus_force() #TOPLEVEL
+    janela_dois.grab_set() #TOPLEVEL
+    # janela_dois.mainloop() #AVISO ->tirar esta linha
+
+    return janela_dois
     
 
 print("\n\n", color.Fore.GREEN + "Iniciando o código - Registro pre-medição" + color.Style.RESET_ALL)
-aba_cadastro() #AVISO ->tirar esta linha
+# aba_cadastro() #AVISO ->tirar esta linha
 print(color.Fore.RED + "Finalizando o código - Registro pre-medição" + color.Style.RESET_ALL, "\n")

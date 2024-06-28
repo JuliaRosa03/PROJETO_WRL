@@ -6,7 +6,7 @@ from customtkinter import *
 from PIL import Image, ImageTk
 
 import FUNCOES_WRL as fun
-from INSPECAO_1_WRL import aba_cadastro #AQUI
+from INSPECAO_1_WRL_Copia import aba_cadastro #AQUI
 from CADASTRO_BICO_WRL import aba_cadastro_bico
 
 from direction import folder
@@ -46,12 +46,9 @@ def frames_da_tela(inp_menu):
 
 def componentes_frame1(inp_menu):
     # {=======================Título=========================}
-    titulo = fun.CRIAR_LABEL(frame_1, "Wear Register", '#B4FF9A', "#005200", 'calibri', '50', 'bold')
-    titulo.place(relx=0.2, rely=0.15)
+    titulo = fun.CRIAR_LABEL(frame_1, "Wear Register\nLances             ", '#B4FF9A', "#005200", 'calibri', '40', 'bold')
+    titulo.place(relx=0.23, rely=0.13)
     
-    titulo = fun.CRIAR_LABEL(frame_1, "Lances", '#B4FF9A', "#005200", 'calibri', '50', 'bold')
-    titulo.place(relx=0.2, rely=0.22)
-
     # {=======================Imagem IFES=========================}
     img1_pg1 = tk.PhotoImage(file = fr'{pasta}\ifes.png')
     img1_pg1 = img1_pg1.subsample(4,4)
@@ -60,7 +57,7 @@ def componentes_frame1(inp_menu):
                                     bg= '#B4FF9A',
                                     bd =0,
                                     image = img1_pg1)
-    fotoimg1_pg1.place(relx=0.1, rely=0.23, anchor=CENTER)
+    fotoimg1_pg1.place(relx=0.13, rely=0.23, anchor=CENTER)
 
     # {=======================Botões de Cadastro=========================}
     # inp_frame, inp_texto, inp_bg, inp_fg, inp_borda = None,inp_tamanho= None, inp_style = None, inp_cursor = None, inp_comando = None
@@ -74,7 +71,7 @@ def componentes_frame1(inp_menu):
     # bt_visualizar_tabela = fun.CRIAR_BOTAO(frame_1,'Ultimos Registros','#258D19','#005200',4,'32','bold',"hand2")
     # bt_visualizar_tabela.place(relx=0.55, rely=0.06, relwidth=0.4, relheight=0.2)
     
-    bt_visualizar_site = fun.CRIAR_BOTAO(frame_1,'SITE COF','#4EA93B','#005200',4,'32','bold',"hand2")
+    bt_visualizar_site = fun.CRIAR_BOTAO(frame_1,'SITE WRL','#4EA93B','#005200',4,'32','bold',"hand2")
     bt_visualizar_site.place(relx=0.55, rely=0.21, relwidth=0.4, relheight=0.2)
     
     # {=======================Botão Iniciar Inspeção=========================}

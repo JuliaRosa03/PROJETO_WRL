@@ -21,9 +21,7 @@ from FUNCOES_WRL import Camera
 import numpy as np
 
 from INSPECAO_3_WRL import aba_dados
-
 from direction import folder
-
 pasta = folder()
 
 model = YOLO(fr'{pasta}\pesos\best.pt')
@@ -45,7 +43,6 @@ def tela(inp_janela):
     inp_janela.configure(background='#9BCD9B')
     inp_janela.attributes("-fullscreen", True)
     
-
 def frames_da_tela(inp_janela):
     global frame_um, frame_dois
     frame_um = tk.Frame(inp_janela, bd=2, bg='#B4EEB4', highlightbackground='#668B8B', highlightthickness=1)
@@ -55,9 +52,6 @@ def frames_da_tela(inp_janela):
     return frame_um, frame_dois
 
 def componentes_frame1(inp_frame,inp_janela, inp_menu):
-    # bt_fechar_aba_menu = tk.Button(inp_frame, text="X", command=inp_janela.destroy, bg="red")
-    # bt_fechar_aba_menu.place(relx=0.90, relwidth=0.05, relheight=0.05)
-    
     bt_voltar = fun.CRIAR_BOTAO(inp_frame, "Voltar",'#258D19', 'white',3,'15','',"hand2", lambda: voltar( inp_menu, inp_janela))# #TOPLEVEL
     bt_voltar.place(relx=0.05, rely=0.88, relwidth=0.2, relheight=0.08)
     
@@ -78,7 +72,6 @@ def componentes_frame2(inp_frame, lista):
         back_frame = fun.sobrepor_molde(infra_image)
         
         lista_APP, id_bico, qtd_furos = fun.organizar_dados_app(lista)
-        
         
         if ret:
             frame = cv2.cvtColor(back_frame, cv2.COLOR_BGR2RGB)
@@ -103,9 +96,9 @@ def componentes_frame2(inp_frame, lista):
     exibir_video()
     
 
-def aba_camera(inp_janela,dados,inp_menu):
+def aba_camera(inp_janela, dados, inp_menu):
     global lista_arq, caminhoBW, caminhoAPP, nome_arquivo_BW, stop, lista_APP, qtd_furos, Abertura, infra_image, centro
-    print('Dados: ',dados)
+    print('\nDados: ',dados)
     lista_wl = dados
     janela_tres = tk.Toplevel(inp_janela)
     
@@ -113,7 +106,6 @@ def aba_camera(inp_janela,dados,inp_menu):
     frames_da_tela(janela_tres)
     componentes_frame1(frame_um,janela_tres, inp_janela)
     componentes_frame2(frame_dois, lista_wl)
-    
     
     def aba_camera2():
         # Esperar até que a variável `stop` seja definida como True
