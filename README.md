@@ -2,6 +2,9 @@ HISTÓRICO DE MODIFICAÇÕES REALIZADAS
 
 * Registros das últimas alterações realizadas no projeto. Favor preencher adequadamente as informações solicitadas. 
 
+Autor: Waleska | Data: 12/06/2024  |  Commit: "wawa26_06"
+Descrição: Alteração da Inspecção_1_WRL (agora está mais prático e rápido para iniciar inspeção); novo arquivo "direction.py" que permite mudar o caminho das pasta de maneira mais prática; Unificando a aba nova com as demais
+
 Autor: Júlia | Data: 13/06/2024  |  Commit: "Integração"
 
 Descrição: Integrei os códigos avulsos no principal. Tiveram atualizações no código do aplicativo (parte Waleska), no da medição (parte Arthur), na identificação dos furos (parte Nobel), e no site também (parte Júlia).

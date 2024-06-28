@@ -8,9 +8,7 @@ import pyrealsense2 as rs
 import FUNCOES_WRL as fun
 
 from direction import folder
-
 pasta = folder()
-
 
 def selecao(inp_ID, inp_tipo): # {=========Leitura Grupo, SIte, BOF e ID(FRAME 1)=========}
     global ID

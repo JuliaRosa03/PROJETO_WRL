@@ -124,43 +124,45 @@ from PIL import Image, ImageTk
 
 # print (tabela(int_arquivo))
 
-import tkinter as tk
-from tkinter import ttk
+# import tkinter as tk
+# from tkinter import ttk
 
-class ExampleApp:
-    def __init__(self, root):
-        self.root = root
-        self.root.geometry("800x600")
+# class ExampleApp:
+#     def __init__(self, root):
+#         self.root = root
+#         self.root.geometry("800x600")
 
-        self.frame_2 = tk.Frame(self.root)
-        self.frame_2.pack(fill="both", expand=True)
+#         self.frame_2 = tk.Frame(self.root)
+#         self.frame_2.pack(fill="both", expand=True)
 
-        # Criando a Treeview
-        self.listaCli = ttk.Treeview(self.frame_2, height=10, column=("col1", "col2", "col3", "col4"))
-        self.listaCli.heading("#0", text="")
-        self.listaCli.heading("#1", text="Codigo")
-        self.listaCli.heading("#2", text="Nome")
-        self.listaCli.heading("#3", text="Telefone")
-        self.listaCli.heading("#4", text="Cidade")
+#         # Criando a Treeview
+#         self.listaCli = ttk.Treeview(self.frame_2, height=10, column=("col1", "col2", "col3", "col4"))
+#         self.listaCli.heading("#0", text="")
+#         self.listaCli.heading("#1", text="Codigo")
+#         self.listaCli.heading("#2", text="Nome")
+#         self.listaCli.heading("#3", text="Telefone")
+#         self.listaCli.heading("#4", text="Cidade")
 
-        self.listaCli.column("#0", width=1)
-        self.listaCli.column("#1", width=50)
-        self.listaCli.column("#2", width=200)
-        self.listaCli.column("#3", width=125)
-        self.listaCli.column("#4", width=125)
+#         self.listaCli.column("#0", width=1)
+#         self.listaCli.column("#1", width=50)
+#         self.listaCli.column("#2", width=200)
+#         self.listaCli.column("#3", width=125)
+#         self.listaCli.column("#4", width=125)
 
-        self.listaCli.place(relx=0.01, rely=0.1, relwidth=0.95, relheight=0.85)
+#         self.listaCli.place(relx=0.01, rely=0.1, relwidth=0.95, relheight=0.85)
 
-        # Criando a barra de rolagem vertical
-        self.scroolLista = tk.Scrollbar(self.frame_2, orient='vertical', command=self.listaCli.yview)
-        self.listaCli.configure(yscrollcommand=self.scroolLista.set)
-        self.scroolLista.place(relx=0.96, rely=0.1, relwidth=0.04, relheight=0.85)
+#         # Criando a barra de rolagem vertical
+#         self.scroolLista = tk.Scrollbar(self.frame_2, orient='vertical', command=self.listaCli.yview)
+#         self.listaCli.configure(yscrollcommand=self.scroolLista.set)
+#         self.scroolLista.place(relx=0.96, rely=0.1, relwidth=0.04, relheight=0.85)
 
-        # Inserindo dados na Treeview como exemplo
-        for i in range(100):
-            self.listaCli.insert("", tk.END, values=(f"Codigo {i}", f"Nome {i}", f"Telefone {i}", f"Cidade {i}"))
+#         # Inserindo dados na Treeview como exemplo
+#         for i in range(100):
+#             self.listaCli.insert("", tk.END, values=(f"Codigo {i}", f"Nome {i}", f"Telefone {i}", f"Cidade {i}"))
 
-if __name__ == "__main__":
-    root = tk.Tk()
-    app = ExampleApp(root)
-    root.mainloop()
+# if __name__ == "__main__":
+#     root = tk.Tk()
+#     app = ExampleApp(root)
+#     root.mainloop()
+
+
