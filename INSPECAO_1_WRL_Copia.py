@@ -104,7 +104,7 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):# #TOPLEVEL
     
     # {=======================USINA=========================}
     label_usina = fun.CRIAR_LABEL(inp_frame, "Usina/Grupo: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
-    label_usina.place(rely=0.15, anchor='center')
+    label_usina.place(rely=0.05, anchor='center')
 
     input_usina = tk.Entry(inp_frame, validate= "key",font=("Arial", 20), validatecommand="key")
     input_usina.place(relx=0.05, rely=0.2, relwidth=0.3, relheight=0.06)
@@ -134,7 +134,7 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):# #TOPLEVEL
     label_Furos = fun.CRIAR_LABEL(inp_frame, "Furos: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
     label_Furos.place(relx=0.22, rely=0.6)
 
-    input_Furos = tk.Entry(inp_frame, validate= "key",font=("Arial", 20), validatecommand="key")
+    input_Furos = tk.Entry(inp_frame, validate= "key",font=("Arial", 20), validatecommand= validador(inp_frame))
     input_Furos.place(relx=0.22, rely=0.65, relwidth=0.13, relheight=0.06)
 
     # {=======================TIPO=========================}
@@ -179,7 +179,8 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):# #TOPLEVEL
 
     # {=======================Tabela=========================}
     #OBS: a vida não pode ser menor do que a anterior
-    label_aviso = fun.CRIAR_LABEL(inp_frame, "Click 2 vezes sobre \na linha desejada", '#9BCD9B', "white", 'calibri', '18', 'bold')
+    #OBS: consertar o clique para 2 vezes
+    label_aviso = fun.CRIAR_LABEL(inp_frame, "Clique sobre na\nlinha desejada", '#9BCD9B', "white", 'calibri', '18', 'bold')
     label_aviso.place(relx=0.8, rely=0.15)
     
     filtrar_ID = tk.Entry(inp_frame, validate= "key",font=("Arial", 20), validatecommand= validador(inp_frame) )

@@ -74,7 +74,7 @@ def componentes_frame1(inp_menu):
     bt_cadastro_lanca = fun.CRIAR_BOTAO(frame_1,'Cadastrar Bico','#258D19', '#005200',3,'32','bold',"hand2",lambda:ABA_CADASTRO_BICO(inp_menu))
     bt_cadastro_lanca.place(relx=0.55, rely=0.46, relwidth=0.4, relheight=0.2)
 
-    bt_cadastro_funcionario = fun.CRIAR_BOTAO(frame_1,'Cadastrar Usina','#4EA93B','#005200',3,'32','bold',"hand2",lambda:ABA_CADASTRO_BICO(inp_menu))
+    bt_cadastro_funcionario = fun.CRIAR_BOTAO(frame_1,'Cadastrar Usina','#4EA93B','#005200',3,'32','bold',"hand2",lambda:ABA_CADASTRO_USINA(inp_menu))
     bt_cadastro_funcionario.place(relx=0.55, rely=0.71, relwidth=0.4, relheight=0.2)
 
     # {=======================Botões de Visualização=========================}
