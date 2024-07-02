@@ -34,8 +34,8 @@ def voltar(aba_1, aba_2):
     aba_1.deiconify()  # Exiba a janela da aba 1
     aba_2.destroy()  # Destrua a janela da aba 2
 # Define global variables for storing the results
-global lista_arq, caminhoBW, caminhoAPP, nome_arquivo_BW, stop
-lista_arq = caminhoBW = caminhoAPP = nome_arquivo_BW = None
+global dados_arquivo, caminhoBW, caminhoAPP, nome_arquivo_BW, stop
+dados_arquivo = caminhoBW = caminhoAPP = nome_arquivo_BW = None
 stop = False
 
 def tela(inp_janela):
@@ -59,14 +59,14 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
     btfoto_pg2.place(relx=0.5, rely=0.93, anchor=CENTER)
 
 def componentes_frame2(inp_frame, lista):
-    global lista_arq, caminhoBW, caminhoAPP, nome_arquivo_BW, stop
+    global dados_arquivo, caminhoBW, caminhoAPP, nome_arquivo_BW, stop
 
     borda = tk.Label(inp_frame, bg="black")
     borda.place(relx=0, rely=0, relwidth=1, relheight=1)
 
     def exibir_video():
     
-        global lista_arq, caminhoBW, caminhoAPP, nome_arquivo_BW, stop, lista_APP, qtd_furos, Abertura, infra_image, centro
+        global dados_arquivo, caminhoBW, caminhoAPP, nome_arquivo_BW, stop, lista_APP, qtd_furos, Abertura, infra_image, centro
         ret, color_frame, infra_image, Abertura = dc.get_frames()
     
         back_frame = fun.sobrepor_molde(infra_image)
@@ -85,7 +85,7 @@ def componentes_frame2(inp_frame, lista):
             centro = fun.definir_centro(altura, largura)
             
             if keyboard.is_pressed('ctrl') or keyboard.is_pressed('right control') or keyboard.is_pressed('q'):
-                lista_arq, caminhoBW, caminhoAPP, nome_arquivo_BW = fun.tirar_foto(color_frame, infra_image, id_bico)
+                dados_arquivo, caminhoBW, caminhoAPP, nome_arquivo_BW = fun.tirar_foto(color_frame, infra_image, id_bico)
                 stop = True
                 
                 return
@@ -97,7 +97,7 @@ def componentes_frame2(inp_frame, lista):
     
 
 def aba_camera(inp_janela, dados, inp_menu):
-    global lista_arq, caminhoBW, caminhoAPP, nome_arquivo_BW, stop, lista_APP, qtd_furos, Abertura, infra_image, centro
+    global dados_arquivo, caminhoBW, caminhoAPP, nome_arquivo_BW, stop, lista_APP, qtd_furos, Abertura, infra_image, centro
     print('\nDados: ',dados)
     lista_wl = dados
     janela_tres = tk.Toplevel(inp_janela)
@@ -115,29 +115,30 @@ def aba_camera(inp_janela, dados, inp_menu):
 
         janela_tres.destroy()
 
-        return lista_arq, caminhoBW, caminhoAPP, nome_arquivo_BW, lista_APP, qtd_furos, Abertura, infra_image, centro
+        return dados_arquivo, caminhoBW, caminhoAPP, nome_arquivo_BW, lista_APP, qtd_furos, Abertura, infra_image, centro
 
-    lista_arq, caminhoBW, caminhoAPP, nome_arquivo_BW, lista_APP, qtd_furos, Abertura, infra_image, centro = aba_camera2()
+    dados_arquivo, caminhoBW, caminhoAPP, nome_arquivo_BW, lista_APP, qtd_furos, Abertura, infra_image, centro = aba_camera2()
     
 
     Depth_Frame = fun.obter_depth_frame()
-    lista_dh = fun.extrair_data_e_hora(lista_arq[0])
-    lista_diametros, mascaras, resultados = fun.analisar_imagem(model, cv2.imread(caminhoBW), lista_arq[0], Depth_Frame, Abertura)
+    lista_dh = fun.extrair_data_e_hora(dados_arquivo[0])
+    lista_diametros, mascaras, resultados = fun.analisar_imagem(model, cv2.imread(caminhoBW), dados_arquivo[0], Depth_Frame, Abertura)
     caixas_detectadas, nomes_classes = fun.extrair_dados(resultados, mascaras, nome_arquivo_BW)
  
     # Extrair coordenadas e centro das caixas delimitadoras
     lista_pontos = fun.extrair_coordenadas_centro(caixas_detectadas, nomes_classes)
     # Filtrar o ponto central se detectado como furo
     lista_pontos = fun.filtrar_ponto_central(lista_pontos, centro)
-    fun.enumerar_furos(lista_pontos, qtd_furos, cv2.imread(caminhoBW), lista_arq[0])
+    fun.enumerar_furos(lista_pontos, qtd_furos, cv2.imread(caminhoBW), dados_arquivo[0])
     
     for dado in lista_dh:
-        lista_arq.append(dado)
+        dados_arquivo.append(dado)
 
-    lista_completa = fun.reunir_dados(lista_APP, lista_arq, lista_diametros)
+    lista_completa = fun.reunir_dados(lista_APP, dados_arquivo, lista_diametros)
+    print(lista_completa)
     fun.salvar_registros(lista_completa, qtd_furos)
  
-    janela_cadastro = aba_dados(inp_janela, dados[3], dados[4], lista_arq[0],inp_menu,inp_janela )
+    janela_cadastro = aba_dados(inp_janela, dados[3], dados[4], dados_arquivo[0],inp_menu,inp_janela )
     janela_cadastro.deiconify()
     dc.release()
     

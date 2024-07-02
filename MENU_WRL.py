@@ -38,7 +38,7 @@ def ABA_CADASTRO_BICO(inp_menu):
 def INICIAR_INSPECAO(inp_menu):
     janela_cadastro = aba_cadastro(inp_menu)
     janela_cadastro.deiconify()
-
+445
 def ABA_CADASTRO_USINA(inp_menu):
     janela_cadastrar_bico = aba_cadastro_usina(inp_menu)
     janela_cadastrar_bico.deiconify()

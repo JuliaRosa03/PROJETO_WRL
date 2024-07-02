@@ -144,15 +144,12 @@ def componentes_frame1(inp_ID, inp_tipo, int_arquivo,inp_menu, janela_cadastro1,
     
     
     dados2 = tabela(int_arquivo)
+    print('DADOS2:', dados2)
     vida = dados2[1]
 
-    data_foto = dados2[7] 
-    hora_foto = dados2[8] 
-    medidas_foto = dados2[9:] 
-
-    data_foto = dados2[7] # data_foto = dados2[5]
-    hora_foto = dados2[8] # hora_foto = dados2[6]
-    medidas_foto = dados2[9:] # medidas_foto = dados2[7:]
+    data_foto = dados2[9] 
+    hora_foto = dados2[10] 
+    medidas_foto = dados2[11:] 
 
     # {=======================Data=========================}
     ID_pg1 = fun.CRIAR_LABEL(frame_1,"Data:",'#B4EEB4',"#1C1C1C",'verdana', '20','bold')

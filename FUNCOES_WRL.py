@@ -419,10 +419,10 @@ def reunir_dados(dados_app, dados_arquivo, dados_diametros):
 
 def organizar_dados_app(lista):
 
-    lista_APP = [lista[0], lista[1], lista[6], lista[5], lista[3], lista[4]]
+    lista_APP = [lista[5], lista[0], lista[1], lista[2], lista[4], lista[3], lista[7], lista[6]]
     qtd_furos = int(lista[5])
     id = '00' + str(lista[3])
-    
+        
     return lista_APP, id, qtd_furos
 
 
@@ -432,9 +432,9 @@ def salvar_registros(lista, num):
     cursor = banco.cursor()
 
     if num == 6:
-        comando = "INSERT INTO B6 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        comando = "INSERT INTO B6 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
-        registro = (lista[0], lista[1], lista[2], lista[3], lista[4], lista[5], lista[6], lista[7], lista[8], lista[9], lista[10], lista[11], lista[12], lista[13], lista[14], lista[15])
+        registro = (lista[0], lista[1], lista[2], lista[3], lista[4], lista[5], lista[6], lista[7], lista[8], lista[9], lista[10], lista[11], lista[12], lista[13], lista[14], lista[15], lista[16], lista[17])
 
         cursor.execute(comando, registro)
 
@@ -442,7 +442,7 @@ def salvar_registros(lista, num):
         banco.commit()
 
     else:
-        comando = "INSERT INTO B4 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        comando = "INSERT INTO B4 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
         registro = (lista[0], lista[1], lista[2], lista[3], lista[4], lista[5], lista[6], lista[7], lista[8], lista[9], lista[10], lista[11], lista[12], lista[13], lista[14], lista[15])
 
