@@ -135,7 +135,7 @@ def CRIAR_FRAME(inp_frame, inp_bg, inp_light = NONE):
     return frame
 
 def CRIAR_BOTAO(inp_frame, inp_texto, inp_bg, inp_fg, inp_borda = NONE,inp_tamanho= NONE, inp_style = NONE, inp_cursor = NONE, inp_comando = NONE):
-    #
+    
     """Retorna um botão seguindo o parametros comentados"""
     botao = tk.Button(  inp_frame, # frame
                         text = inp_texto, # texto

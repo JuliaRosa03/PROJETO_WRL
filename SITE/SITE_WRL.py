@@ -68,7 +68,7 @@ for table in tables:
     rows = cursor.fetchall()
     dfs[table_name] = pd.DataFrame(rows, columns=[i[0] for i in cursor.description])
 
-table_names = table_names[0:-1]
+table_names = table_names[1:]
 
 conn.close()
 
@@ -173,20 +173,24 @@ if id and selected_tables:
 
     #{=======================Seleção de Datas=========================}
     col1, col2 = st.columns((2))
+    
     startDate = pd.to_datetime(filtered_df["DATA"]).min()
     endDate = pd.to_datetime(filtered_df["DATA"]).max()
     
     with col1:
-        date1 = pd.to_datetime(st.date_input("Data de início", startDate))
+        date1 = st.date_input("Data de início", startDate, format="DD/MM/YYYY")
 
     with col2:
-        date2 = pd.to_datetime(st.date_input("Data final", endDate))
+        date2 = st.date_input("Data final", endDate, format="DD/MM/YYYY")
+
+
 
     # Selecionar as colunas desejadas
     if not filtered_df.empty:
+        
         # Transformar o DataFrame para o formato longo
         long_df = pd.melt(filtered_df, id_vars=['ID','VIDA'], 
-                        value_vars=df3.columns[9:], 
+                        value_vars=df3.columns[11:], 
                         var_name='Região', value_name='DIÂMETRO [mm²]')
 
         # Criar o gráfico de linhas
@@ -204,6 +208,7 @@ if id and selected_tables:
         st.plotly_chart(fig, use_container_width=True)
         st.divider()
 
+        # Segundo gráfico
         vida = st.selectbox("Vida:".format(limite), filtered_df["VIDA"].unique(), placeholder="Selecione uma opção") 
         # Filtrar linhas onde 'ID' é igual a 1
         filtro_vida = filtered_df[filtered_df['VIDA'] == vida]
@@ -273,7 +278,7 @@ if id and selected_tables:
     st.markdown(f"# Gráfico de desgaste - Diâmetros específicos\n # ID: {', '.join(id)}")
     
     # Selecionar a coluna desejada para plotar
-    selected_column = st.multiselect("Selecione a região desejada:", df3.columns[9:], placeholder="Selecione uma opção")
+    selected_column = st.multiselect("Selecione a região desejada:", df3.columns[11:], placeholder="Selecione uma opção")
 
     if not filtered_df.empty:
         
@@ -299,27 +304,27 @@ if id and selected_tables:
     else:
         st.write("Nenhum dado disponível para a região selecionada.")
 
-# {=======================Seleção de datas=========================}
+# # {=======================Seleção de datas=========================}
 
-st.caption('Este é um Projeto desenvolvido por alunos do **IFES** com os seguintes colaboradores:')
-col1, col2 = st.columns(2)
-with col1:
-    st.caption('**Orientador:** Gustavo Maia de Almeida')
-    st.caption('**Co-orientador:** Caio Mario Carletti Vilela Santos')
-    st.divider()
+# st.caption('Este é um Projeto desenvolvido por alunos do **IFES** com os seguintes colaboradores:')
+# col1, col2 = st.columns(2)
+# with col1:
+#     st.caption('**Orientador:** Gustavo Maia de Almeida')
+#     st.caption('**Co-orientador:** Caio Mario Carletti Vilela Santos')
+#     st.divider()
     
-    st.caption('**3D Protótipo:** Robson Almeida de Souza')
-    st.caption('**3D Protótipo:** Waleska Sulke dos Santos')
-    st.caption('**3D Protótipo:** Matheus Policário Amorim')
+#     st.caption('**3D Protótipo:** Robson Almeida de Souza')
+#     st.caption('**3D Protótipo:** Waleska Sulke dos Santos')
+#     st.caption('**3D Protótipo:** Matheus Policário Amorim')
     
-with col2:
-    st.caption('**Melhorias de precisão:** Davi Nobel Vilela de Souza')
-    st.caption('**Melhorias de precisão:** Júlia Rosa Celante')
-    st.caption('**Melhorias de precisão:** Remerson Victor Silva da Assurreição')
-    st.caption('**Melhorias de precisão:** Caio victor delaqua Lima')
-    st.caption('**Melhorias de precisão:** Arthur Candido Maria')
+# with col2:
+#     st.caption('**Melhorias de precisão:** Davi Nobel Vilela de Souza')
+#     st.caption('**Melhorias de precisão:** Júlia Rosa Celante')
+#     st.caption('**Melhorias de precisão:** Remerson Victor Silva da Assurreição')
+#     st.caption('**Melhorias de precisão:** Caio victor delaqua Lima')
+#     st.caption('**Melhorias de precisão:** Arthur Candido Maria')
     
-    st.caption('**Plataforma Online:** Waleska Sulke dos Santos')
-    st.caption('**Plataforma Online:** Júlia Rosa Celante')
+#     st.caption('**Plataforma Online:** Waleska Sulke dos Santos')
+#     st.caption('**Plataforma Online:** Júlia Rosa Celante')
     
-st.divider()
+# st.divider()

@@ -45,10 +45,13 @@ def tela(inp_janela):
     
 def frames_da_tela(inp_janela):
     global frame_um, frame_dois
+    
     frame_um = tk.Frame(inp_janela, bd=2, bg='#B4EEB4', highlightbackground='#668B8B', highlightthickness=1)
     frame_um.place(relx=0.72, rely=0.02, relwidth=0.27, relheight=0.96)
+    
     frame_dois = tk.Frame(inp_janela, bd=2, bg='#B4EEB4', highlightbackground='#668B8B', highlightthickness=1)
-    frame_dois.place(relx=0.01, relwidth=0.7, relheight=0.96)
+    frame_dois.place(relx=0.01, rely=0.02, relwidth=0.7, relheight=0.96)
+    
     return frame_um, frame_dois
 
 def componentes_frame1(inp_frame,inp_janela, inp_menu):

@@ -63,23 +63,32 @@ def comandos_botao_continuar(inp_janela,inp_furos, inp_usina_grupo, inp_site, in
         janela_cadastro = aba_camera(inp_janela, DADOS_INSERIDOS, inp_menu)
         janela_cadastro.deiconify()
     
-def OnDoubleClick(event, listaCli,usina, site, BOF, ID, Furos, Tipo):
-    usina.delete(0, tk.END)
-    site.delete(0, tk.END)
-    BOF.delete(0, tk.END)
-    ID.delete(0, tk.END)
-    Furos.delete(0, tk.END)
-    Tipo.delete(0, tk.END)
-
-    for n in listaCli.selection():
+def OnClick(event, listaCli, usina, site, BOF, ID, Furos, Tipo):
+    selected_items = listaCli.selection()
+    if not selected_items:
+        return
+    
+    for n in selected_items:
         col1, col2, col3, col4, col5, col6, col7 = listaCli.item(n, 'values')
+        
+        # Limpando os campos
+        usina.delete(0, tk.END)
+        site.delete(0, tk.END)
+        BOF.delete(0, tk.END)
+        ID.delete(0, tk.END)
+        Furos.delete(0, tk.END)
+        Tipo.delete(0, tk.END)
+        
+        # Preenchendo os campos
         usina.insert(tk.END, col2)
         site.insert(tk.END, col3)
         BOF.insert(tk.END, col4)
-
         ID.insert(tk.END, col6)
-        Furos.insert(tk.END, col1) 
+        Furos.insert(tk.END, col1)
         Tipo.insert(tk.END, col5)
+        
+        print(f"Usina: {col2}, Site: {col3}, BOF: {col4}, ID: {col6}, Furos: {col1}, Tipo: {col5}")
+
                         
 def tela(inp_janela):
     inp_janela.title("INICIAR INSPECÇÃO")
@@ -89,9 +98,7 @@ def tela(inp_janela):
 def frames_da_tela(inp_janela): 
         global frame_1
         
-        frame_1 = tk.Frame(inp_janela,
-                            bg= '#B4FF9A',
-                            highlightbackground= '#668B8B')
+        frame_1 = tk.Frame(inp_janela, bg= '#B4FF9A', highlightbackground= '#668B8B')
         frame_1.place(relx=0.01, rely=0.02,relwidth=0.98, relheight=0.96)
         
         return frame_1
@@ -183,7 +190,7 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):# #TOPLEVEL
     label_aviso = fun.CRIAR_LABEL(inp_frame, "Clique sobre na\nlinha desejada", '#9BCD9B', "white", 'calibri', '18', 'bold')
     label_aviso.place(relx=0.8, rely=0.15)
     
-    filtrar_ID = tk.Entry(inp_frame, validate= "key",font=("Arial", 20), validatecommand= validador(inp_frame) )
+    filtrar_ID = tk.Entry(inp_frame, validate="key", font=("Arial", 20), validatecommand=validador(inp_frame))
     filtrar_ID.place(relx=0.4, rely=0.2, relwidth=0.1, relheight=0.06)
 
     bt_buscar = fun.CRIAR_BOTAO(inp_frame, "Buscar ID", '#258D19', 'white', 3, '20', "", "hand2", lambda: buscar_id(filtrar_ID.get()))
@@ -201,9 +208,9 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):# #TOPLEVEL
 
             for dado in dados_tabela:
                 Tabela.insert("", tk.END, values=dado)
-        
+
         else:
-            comando = f"SELECT * FROM DADOS_EMPRESAS WHERE ID = ?"
+            comando = "SELECT * FROM DADOS_EMPRESAS WHERE ID = ?"
             cursor.execute(comando, (id_filtro,))
             dados_filtrados = cursor.fetchall()
             fun.DESCONECTA_BD(conn)
@@ -217,19 +224,18 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):# #TOPLEVEL
                 fun.DESCONECTA_BD(conn)
                 for dado in dados_tabela:
                     Tabela.insert("", tk.END, values=dado)
-            
+
             else:
                 for dado in dados_filtrados:
                     Tabela.insert("", tk.END, values=dado)
-        
 
-    Tabela = ttk.Treeview(inp_frame, height=10,column=("col1", "col2", "col3", "col4", "col5","col6","col7" ),style="mystyle.Treeview")
+    Tabela = ttk.Treeview(inp_frame, height=10, column=("col1", "col2", "col3", "col4", "col5", "col6", "col7"), style="mystyle.Treeview")
 
     style = ttk.Style()
-    style.configure("Treeview.Heading", font=('Verdana', 12,'bold'))
+    style.configure("Treeview.Heading", font=('Verdana', 12, 'bold'))
     style.configure("mystyle.Treeview", highlightthickness=0, bd=0, font=('Verdana', 11))
 
-    Tabela.column("#0", width=0, stretch=tk.NO)# Ocultando a primeira coluna
+    Tabela.column("#0", width=0, stretch=tk.NO)  # Ocultando a primeira coluna
     Tabela.heading("#0", text="")
 
     Tabela.heading("#1", text="Furos")
@@ -239,7 +245,7 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):# #TOPLEVEL
     Tabela.heading("#5", text="TIPO")
     Tabela.heading("#6", text="ID")
     Tabela.heading("#7", text="Ult. Vida")
-    
+
     Tabela.column("#1", width=15, anchor='center')
     Tabela.column("#2", width=150)
     Tabela.column("#3", width=75)
@@ -247,18 +253,17 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):# #TOPLEVEL
     Tabela.column("#5", width=15, anchor='center')
     Tabela.column("#6", width=10, anchor='center')
     Tabela.column("#7", width=15, anchor='center')
-    
+
     for dado in tabela():
         Tabela.insert("", tk.END, values=(dado[0], dado[1], dado[2], dado[3], dado[4], dado[5], dado[6]))
-        
+
     Tabela.place(relx=0.4, rely=0.29, relwidth=0.55, relheight=0.45)
-    
+
     scroolLista = tk.Scrollbar(inp_frame, orient='vertical', command=Tabela.yview)
-    Tabela.configure(yscrollcommand = scroolLista.set)
+    Tabela.configure(yscrollcommand=scroolLista.set)
     scroolLista.place(relx=0.95, rely=0.29, relwidth=0.01, relheight=0.45)
-    
-    Tabela.bind("<Double-1>",lambda event: OnDoubleClick(event, Tabela, input_usina, input_site, input_BOF, input_ID, input_Furos, input_tipo))
-        
+
+    Tabela.bind("<ButtonRelease-1>", lambda event: OnClick(event, Tabela, input_usina, input_site, input_BOF, input_ID, input_Furos, input_tipo))  
 def aba_cadastro(inp_janela): 
     # janela_dois = tk.Tk()
     janela_dois = tk.Toplevel(inp_janela) #TOPLEVEL
