@@ -38,7 +38,7 @@ def voltar(aba_1, aba_2):
     aba_1.deiconify()  # Exiba a proxima janela 
     aba_2.destroy()  # Destrua a janela atual
     
-def comandos_botao_continuar(inp_janela,inp_furos, inp_usina_grupo, inp_site, inp_BOF, inp_tipo, inp_ID, inp_usuario, inp_vida, inp_menu): #juliaaaaaa
+def comandos_botao_continuar(inp_janela, inp_usina_grupo, inp_site, inp_BOF, inp_ID, inp_tipo, inp_furos, inp_vida, inp_usuario, inp_menu): 
     DADOS_INSERIDOS = []
     
     DADOS_INSERIDOS.append(inp_furos.get())
@@ -71,7 +71,6 @@ def OnClick(event, listaCli, usina, site, BOF, ID, Furos, Tipo):
     for n in selected_items:
         col1, col2, col3, col4, col5, col6, col7 = listaCli.item(n, 'values')
         
-        # Limpando os campos
         usina.delete(0, tk.END)
         site.delete(0, tk.END)
         BOF.delete(0, tk.END)
@@ -79,16 +78,12 @@ def OnClick(event, listaCli, usina, site, BOF, ID, Furos, Tipo):
         Furos.delete(0, tk.END)
         Tipo.delete(0, tk.END)
         
-        # Preenchendo os campos
         usina.insert(tk.END, col2)
         site.insert(tk.END, col3)
         BOF.insert(tk.END, col4)
         ID.insert(tk.END, col6)
         Furos.insert(tk.END, col1)
         Tipo.insert(tk.END, col5)
-        
-        print(f"Usina: {col2}, Site: {col3}, BOF: {col4}, ID: {col6}, Furos: {col1}, Tipo: {col5}")
-
                         
 def tela(inp_janela):
     inp_janela.title("INICIAR INSPECÇÃO")
@@ -105,36 +100,35 @@ def frames_da_tela(inp_janela):
 
 def componentes_frame1(inp_frame,inp_janela, inp_menu):# #TOPLEVEL
     # {=======================Título=========================}
-    # obs: POR TITULO NO CENTRO (GPT)
     titulo = fun.CRIAR_LABEL(inp_frame, "Selecionar Bico", '#B4FF9A', "#005200", 'arial', '35', 'bold')
-    titulo.place(relx=0.4, rely=0.05) 
+    titulo.place(relx=0.5, rely=0.05,anchor='center') 
     
     # {=======================USINA=========================}
     label_usina = fun.CRIAR_LABEL(inp_frame, "Usina/Grupo: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
-    label_usina.place(rely=0.05, anchor='center')
+    label_usina.place(relx=0.05, rely=0.15)
 
-    input_usina = tk.Entry(inp_frame, validate= "key",font=("Arial", 20), validatecommand="key")
+    input_usina = tk.Entry(inp_frame, validate= "key",font=("Arial", 20)) # validatecommand="key"
     input_usina.place(relx=0.05, rely=0.2, relwidth=0.3, relheight=0.06)
 
     # {=======================SITE=========================}
     label_site = fun.CRIAR_LABEL(inp_frame, "Site: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
     label_site.place(relx=0.05, rely=0.3)
 
-    input_site = tk.Entry(inp_frame, validate= "key",font=("Arial", 20), validatecommand="key")
+    input_site = tk.Entry(inp_frame, validate= "key",font=("Arial", 20))
     input_site.place(relx=0.05, rely=0.35, relwidth=0.3, relheight=0.06)
 
     # {======================= BOF =========================}
     label_BOF = fun.CRIAR_LABEL(inp_frame, "BOF: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
     label_BOF.place(relx=0.05, rely=0.45)
 
-    input_BOF = tk.Entry(inp_frame, validate= "key",font=("Arial", 20), validatecommand="key")
+    input_BOF = tk.Entry(inp_frame, validate= "key",font=("Arial", 20))
     input_BOF.place(relx=0.05, rely=0.5, relwidth=0.3, relheight=0.06)
     
     # {======================= ID =========================}
     label_ID = fun.CRIAR_LABEL(inp_frame, "ID: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
     label_ID.place(relx=0.05, rely=0.6)
 
-    input_ID = tk.Entry(inp_frame, validate= "key",font=("Arial", 20), validatecommand="key")
+    input_ID = tk.Entry(inp_frame, validate= "key",font=("Arial", 20))
     input_ID.place(relx=0.05, rely=0.65, relwidth=0.13, relheight=0.06)
     
     # {======================= FUROS =========================}
@@ -144,29 +138,29 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):# #TOPLEVEL
     input_Furos = tk.Entry(inp_frame, validate= "key",font=("Arial", 20), validatecommand= validador(inp_frame))
     input_Furos.place(relx=0.22, rely=0.65, relwidth=0.13, relheight=0.06)
 
-    # {=======================TIPO=========================}
+    # {======================= TIPO =========================}
     label_tipo = fun.CRIAR_LABEL(inp_frame, "Tipo: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
     label_tipo.place(relx=0.05, rely=0.75)
 
-    input_tipo = tk.Entry(inp_frame, validate= "key",font=("Arial", 20), validatecommand="key")
+    input_tipo = tk.Entry(inp_frame, validate= "key",font=("Arial", 20))
     input_tipo.place(relx=0.05, rely=0.8, relwidth=0.13, relheight=0.06)
     
-    # {=======================VIDA=========================}
+    # {======================= VIDA =========================}
     label_vida = fun.CRIAR_LABEL(inp_frame, "Vida: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
     label_vida.place(relx=0.22, rely=0.75)
 
     input_vida = tk.Entry(inp_frame, validate= "key",font=("Arial", 20), validatecommand= validador(inp_frame) )
     input_vida.place(relx=0.22, rely=0.8, relwidth=0.13, relheight=0.06)
 
-    # {=======================Divisória=========================}
+    # {======================= Divisória =========================}
     label_divisor = fun.CRIAR_LABEL(inp_frame, "", '#9BCD9B', "#1C1C1C", 'arial', '20', 'bold')
     label_divisor.place(relx=0.37, rely=0.15, relwidth=0.005, relheight=0.71)
     
-    # {=======================Usuário=========================}
+    # {======================= Usuário =========================}
     label_usuario = fun.CRIAR_LABEL(inp_frame, "Usuário: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
     label_usuario.place(relx=0.4, rely=0.75)
 
-    input_usuario = tk.Entry(inp_frame, validate= "key",font=("Arial", 20), validatecommand="key")
+    input_usuario = tk.Entry(inp_frame, validate= "key",font=("Arial", 20))
     input_usuario.place(relx=0.4, rely=0.8, relwidth=0.55, relheight=0.06)
     
     vcmd = (input_usuario.register(ENTRY_STRING), '%P')
@@ -176,7 +170,6 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):# #TOPLEVEL
     #obs: Por figuras ilustrativas com os botões
     bt_voltar = fun.CRIAR_BOTAO(inp_frame, "MENU",'#258D19', 'white',3,'20','',"hand2", lambda: voltar( inp_menu, inp_janela))# #TOPLEVEL
     bt_voltar.place(relx=0.05, rely=0.9, relwidth=0.13, relheight=0.06)
-    # inp_janela.withdraw()
 
     bt_continuar = fun.CRIAR_BOTAO(inp_frame, "PRÓXIMO",'#258D19', 'white',3,'20','',"hand2",lambda: comandos_botao_continuar(inp_janela,input_usina,input_site,input_BOF,input_ID,input_tipo,input_Furos,input_vida,input_usuario,inp_menu))
     bt_continuar.place(relx=0.82, rely=0.9, relwidth=0.13, relheight=0.06)
@@ -186,7 +179,6 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):# #TOPLEVEL
 
     # {=======================Tabela=========================}
     #OBS: a vida não pode ser menor do que a anterior
-    #OBS: consertar o clique para 2 vezes
     label_aviso = fun.CRIAR_LABEL(inp_frame, "Clique sobre na\nlinha desejada", '#9BCD9B', "white", 'calibri', '18', 'bold')
     label_aviso.place(relx=0.8, rely=0.15)
     

@@ -43,10 +43,11 @@ def voltar(aba_1, aba_2):
 def tela(inp_janela):
     inp_janela.title("CADASTRAR USINA")
     inp_janela.configure(background= '#9BCD9B')
-    inp_janela.geometry("1200x600")
-    inp_janela.resizable(True, True) #se quiser impedir que amplie ou diminua a tela, altere para False
-    inp_janela.maxsize(width=1200, height=600) #limite máximo da tela
-    inp_janela.minsize(width=700, height=450) #limite minimo da tela
+    inp_janela.attributes("-fullscreen", True)
+    # inp_janela.geometry("1200x600")
+    # inp_janela.resizable(True, True) #se quiser impedir que amplie ou diminua a tela, altere para False
+    # inp_janela.maxsize(width=1200, height=600) #limite máximo da tela
+    # inp_janela.minsize(width=700, height=450) #limite minimo da tela
 
 def frames_da_tela(inp_janela): 
     global frame_1

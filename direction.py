@@ -1,7 +1,7 @@
 """ option = 1 -> notebook DATEN
     option = 2 -> PC lab 913S"""
 
-option = 2
+option = 1
 
 def direction():
     if option ==1:
