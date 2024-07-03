@@ -169,7 +169,7 @@ if id and selected_tables:
     st.markdown(f"# Gráfico de desgaste - Análise com todos os diâmetros\n # ID: {', '.join(id)}")
 
     filtered_df = df3[df3["ID"].isin(id)] # Gráficos gerados a partir do id
-    print('filtered: ', filtered_df)
+    #print('filtered: ', filtered_df)
 
     #{=======================Seleção de Datas=========================}
     col1, col2 = st.columns((2))
@@ -183,93 +183,111 @@ if id and selected_tables:
     with col2:
         date2 = st.date_input("Data final", endDate, format="DD/MM/YYYY")
 
+    # Filtrar os diâmetros exibidos por data
+    df_date = pd.to_datetime(filtered_df['DATA'])
+    
+    inicio = pd.to_datetime(date1)
+    fim = pd.to_datetime(date2)
+    
+    print('startDate: ', startDate)
+    print('endDate: ', endDate)
+    print('inicio: ', inicio)
+    print('fim: ', fim)
+    
+    filtered_df_date = filtered_df[
+    (df_date >= pd.to_datetime(date1)) &
+    (df_date <= pd.to_datetime(date2))
+    ]
 
-
+    print(filtered_df_date)
     # Selecionar as colunas desejadas
     if not filtered_df.empty:
-        
-        # Transformar o DataFrame para o formato longo
-        long_df = pd.melt(filtered_df, id_vars=['ID','VIDA'], 
-                        value_vars=df3.columns[11:], 
-                        var_name='Região', value_name='DIÂMETRO [mm²]')
-
-        # Criar o gráfico de linhas
-        fig = px.line(long_df, 
-                    x='VIDA', 
-                    y='DIÂMETRO [mm²]', 
-                    color='Região', 
-                    line_group='ID', 
-                    markers=True, 
-                    template='seaborn', 
-                    facet_col='ID', 
-                    title="Valores dos Diâmetros ao Longo da Vida")
-
-        # Exibir o gráfico no Streamlit
-        st.plotly_chart(fig, use_container_width=True)
-        st.divider()
-
-        # Segundo gráfico
-        vida = st.selectbox("Vida:".format(limite), filtered_df["VIDA"].unique(), placeholder="Selecione uma opção") 
-        # Filtrar linhas onde 'ID' é igual a 1
-        filtro_vida = filtered_df[filtered_df['VIDA'] == vida]
-
-        if not filtro_vida.empty:
-            # Pegar o primeiro valor encontrado na coluna 'VIDA' correspondente
-            registro = filtro_vida['ARQUIVO'].values[0]
-            data = filtro_vida['DATA'].values[0]
-            hora = filtro_vida['HORA'].values[0]
-            tipo = filtro_vida['TIPO'].values[0]
-            usuario = filtro_vida['USUARIO'].values[0]
+        if inicio > endDate or fim < startDate:
+            st.write(f'Não há registros no intervalo de data informado')
+            #st.write(f'Não há registros entre os dias {date1.strftime("DD/MM/YYYY")} - {date2.strftime("DD/MM/YYYY")}')
         else:
-            st.write("Registro não localizado")
-        
-        # Criar tabela
-        data = {
-            'Coluna 1': ['FUNCIONÁRIO:', 'DATA:', 'HORA:', 'TIPO:'],
-            'Coluna 2': [usuario, data, hora, tipo]
-        }
-        table_df = pd.DataFrame(data)
+            # Transformar o DataFrame para o formato longo
+            long_df = pd.melt(filtered_df_date, id_vars=['ID','VIDA'], 
+                            value_vars=df3.columns[11:],
+                            var_name='Região', value_name='DIÂMETRO [mm²]')
 
-        col1, col2 = st.columns([2,4])
-        image_7F = Image.open(fr'{pasta}\FOTOS_SEGMENTADA\{registro}') 
-        
-        with col1:
-            st.image(image_7F, caption='Segmentação')
+            # Criar o gráfico de linhas
+            fig = px.line(long_df, 
+                        x='VIDA', 
+                        y='DIÂMETRO [mm²]', 
+                        color='Região', 
+                        line_group='ID', 
+                        markers=True, 
+                        template='seaborn', 
+                        facet_col='ID', 
+                        title="Valores dos Diâmetros ao Longo da Vida")
 
-        with col2:
-            hide_table_row_index = """
-                <style>
-                thead tr th:first-child {display:none}
-                tbody th {display:none}
-                .dataframe {
-                    background-color:#FFFFFF;
-                    border: 1px solid #ddd;
-                    border-radius: 3px;
-                    padding: 10px;
-                    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-                    margin-top: 20px;
-                }
-                .dataframe td {
-                    padding: 8px;
-                    text-align: left;
-                    font-family: Arial, sans-serif;
-                    font-size: 14px;
-                }
-                .dataframe td:nth-child(1) {
-                    width: 50%;  /* Ajuste a largura da primeira coluna */
-                }
-                .dataframe td:nth-child(2) {
-                    width: 50%;  /* Ajuste a largura da segunda coluna */
-                }
-                </style>
-            """
+            # Exibir o gráfico no Streamlit
+            st.plotly_chart(fig, use_container_width=True)
+            st.divider()
 
-            # Adicionando o CSS para esconder os índices e melhorar a aparência
-            st.markdown(hide_table_row_index, unsafe_allow_html=True)
+            # Segundo gráfico
+            vida = st.selectbox("Vida:".format(limite), filtered_df["VIDA"].unique(), placeholder="Selecione uma opção") 
+            # Filtrar linhas onde 'ID' é igual a 1
+            filtro_vida = filtered_df[filtered_df['VIDA'] == vida]
 
-            # Renderizando a tabela
-            st.write(table_df.style.hide(axis='index').hide(axis='columns').set_table_attributes('class="dataframe"').to_html(), unsafe_allow_html=True)
-            # st.write(table_df.style.background_gradient(cmap = "Greens"))
+            if not filtro_vida.empty:
+                # Pegar o primeiro valor encontrado na coluna 'VIDA' correspondente
+                registro = filtro_vida['ARQUIVO'].values[0]
+                data = filtro_vida['DATA'].values[0]
+                hora = filtro_vida['HORA'].values[0]
+                tipo = filtro_vida['TIPO'].values[0]
+                usuario = filtro_vida['USUARIO'].values[0]
+            else:
+                st.write("Registro não localizado")
+            
+            # Criar tabela
+            data = {
+                'Coluna 1': ['FUNCIONÁRIO:', 'DATA:', 'HORA:', 'TIPO:'],
+                'Coluna 2': [usuario, data, hora, tipo]
+            }
+            table_df = pd.DataFrame(data)
+
+            col1, col2 = st.columns([2,4])
+            image_7F = Image.open(fr'{pasta}\FOTOS_SEGMENTADA\{registro}') 
+            
+            with col1:
+                st.image(image_7F, caption='Segmentação')
+
+            with col2:
+                hide_table_row_index = """
+                    <style>
+                    thead tr th:first-child {display:none}
+                    tbody th {display:none}
+                    .dataframe {
+                        background-color:#FFFFFF;
+                        border: 1px solid #ddd;
+                        border-radius: 3px;
+                        padding: 10px;
+                        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+                        margin-top: 20px;
+                    }
+                    .dataframe td {
+                        padding: 8px;
+                        text-align: left;
+                        font-family: Arial, sans-serif;
+                        font-size: 14px;
+                    }
+                    .dataframe td:nth-child(1) {
+                        width: 50%;  /* Ajuste a largura da primeira coluna */
+                    }
+                    .dataframe td:nth-child(2) {
+                        width: 50%;  /* Ajuste a largura da segunda coluna */
+                    }
+                    </style>
+                """
+
+                # Adicionando o CSS para esconder os índices e melhorar a aparência
+                st.markdown(hide_table_row_index, unsafe_allow_html=True)
+
+                # Renderizando a tabela
+                st.write(table_df.style.hide(axis='index').hide(axis='columns').set_table_attributes('class="dataframe"').to_html(), unsafe_allow_html=True)
+                # st.write(table_df.style.background_gradient(cmap = "Greens"))
 
         st.divider()
     else:
