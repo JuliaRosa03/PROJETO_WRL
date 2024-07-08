@@ -10,11 +10,10 @@ import sqlite3 as sql
 
 warnings.filterwarnings("ignore")  # ->ignorar os erros que aparecem no site
 
-pasta = r'C:\Users\20221CECA0402\Documents\PROJETO_WRL'
+pasta = r'C:\Users\julia\OneDrive\Documentos\IFES\PROJETO_WRL'
 # pasta = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL'
 
-# VERSÃO 26/06/2024
-
+# VERSÃO 03/07/2024
 
 # {=======================Estilos da página=========================}
 
@@ -189,23 +188,20 @@ if id and selected_tables:
     inicio = pd.to_datetime(date1)
     fim = pd.to_datetime(date2)
     
-    print('startDate: ', startDate)
-    print('endDate: ', endDate)
-    print('inicio: ', inicio)
-    print('fim: ', fim)
-    
     filtered_df_date = filtered_df[
     (df_date >= pd.to_datetime(date1)) &
     (df_date <= pd.to_datetime(date2))
     ]
 
-    print(filtered_df_date)
+    print('aqui: ', filtered_df_date)
+
+
+    if inicio > endDate or fim < startDate:
+        st.write(f'Não há registros no intervalo de data informado')
+
+    else:
     # Selecionar as colunas desejadas
-    if not filtered_df.empty:
-        if inicio > endDate or fim < startDate:
-            st.write(f'Não há registros no intervalo de data informado')
-            #st.write(f'Não há registros entre os dias {date1.strftime("DD/MM/YYYY")} - {date2.strftime("DD/MM/YYYY")}')
-        else:
+        if not filtered_df.empty:
             # Transformar o DataFrame para o formato longo
             long_df = pd.melt(filtered_df_date, id_vars=['ID','VIDA'], 
                             value_vars=df3.columns[11:],
@@ -227,7 +223,10 @@ if id and selected_tables:
             st.divider()
 
             # Segundo gráfico
-            vida = st.selectbox("Vida:".format(limite), filtered_df["VIDA"].unique(), placeholder="Selecione uma opção") 
+            vida = st.selectbox("Vida:".format(limite), filtered_df_date["VIDA"].unique(), placeholder="Selecione uma opção") 
+
+            print('tipo: ', filtered_df["VIDA"].unique())
+
             # Filtrar linhas onde 'ID' é igual a 1
             filtro_vida = filtered_df[filtered_df['VIDA'] == vida]
 
@@ -289,40 +288,39 @@ if id and selected_tables:
                 st.write(table_df.style.hide(axis='index').hide(axis='columns').set_table_attributes('class="dataframe"').to_html(), unsafe_allow_html=True)
                 # st.write(table_df.style.background_gradient(cmap = "Greens"))
 
-        st.divider()
-    else:
-        st.write("Selecione pelo menos um ID para visualizar os dados.")
- 
-    st.markdown(f"# Gráfico de desgaste - Diâmetros específicos\n # ID: {', '.join(id)}")
+            st.divider()
+        else:
+            st.write("Selecione pelfo menos um ID para visualizar os dados.")
     
-    # Selecionar a coluna desejada para plotar
-    selected_column = st.multiselect("Selecione a região desejada:", df3.columns[11:], placeholder="Selecione uma opção")
+        st.markdown(f"# Gráfico de desgaste - Diâmetros específicos\n # ID: {', '.join(id)}")
+        
+        # Selecionar a coluna desejada para plotar
+        selected_column = st.multiselect("Selecione a região desejada:", df3.columns[11:], placeholder="Selecione uma opção")
 
-    if not filtered_df.empty:
-        
-        # Renomear a coluna selecionada para "Diâmetro (mm²)"
-        long_df = pd.melt(filtered_df, id_vars=['ID','VIDA'], 
-                        value_vars=selected_column, 
-                        var_name='Região', value_name='DIÂMETRO [mm²]')
-        
-        # Criar o gráfico de linhas
-        fig = px.line(long_df, 
-                    x='VIDA', 
-                    y='DIÂMETRO [mm²]', 
-                    color='Região', 
-                    line_group='ID', 
-                    markers=True, 
-                    template='seaborn', 
-                    facet_col='ID', 
-                    title=f"Valores dos Diâmetros ao Longo da Vida")
-        
-        # Exibir o gráfico no Streamlit
-        st.plotly_chart(fig, use_container_width=True)
-        st.divider()
-    else:
-        st.write("Nenhum dado disponível para a região selecionada.")
+        if not filtered_df.empty:
+            # Renomear a coluna selecionada para "Diâmetro (mm²)"
+            long_df = pd.melt(filtered_df_date, id_vars=['ID','VIDA'], 
+                            value_vars=selected_column, 
+                            var_name='Região', value_name='DIÂMETRO [mm²]')
+            
+            # Criar o gráfico de linhas
+            fig = px.line(long_df, 
+                        x='VIDA', 
+                        y='DIÂMETRO [mm²]', 
+                        color='Região', 
+                        line_group='ID', 
+                        markers=True, 
+                        template='seaborn', 
+                        facet_col='ID', 
+                        title=f"Valores dos Diâmetros ao Longo da Vida")
+            
+            # Exibir o gráfico no Streamlit
+            st.plotly_chart(fig, use_container_width=True)
+            st.divider()
+        else:
+            st.write("Nenhum dado disponível para a região selecionada.")
 
-# # {=======================Seleção de datas=========================}
+# # {=======================Créditos=========================}
 
 # st.caption('Este é um Projeto desenvolvido por alunos do **IFES** com os seguintes colaboradores:')
 # col1, col2 = st.columns(2)
