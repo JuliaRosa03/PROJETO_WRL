@@ -10,7 +10,7 @@ from direction import direction
 caminho = direction()
 
 def tabela(filtro_id=None):
-    
+
     conn, cursor = fun.CONECTA_BD(caminho)
     comando = "SELECT * FROM DADOS_EMPRESAS"
     cursor.execute(comando)
@@ -39,29 +39,42 @@ def voltar(aba_1, aba_2):
     aba_2.destroy()  # Destrua a janela atual
     
 def comandos_botao_continuar(inp_janela, inp_usina_grupo, inp_site, inp_BOF, inp_ID, inp_tipo, inp_furos, inp_vida, inp_usuario, inp_menu): 
-    DADOS_INSERIDOS = []
     
-    DADOS_INSERIDOS.append(inp_furos.get())
-    DADOS_INSERIDOS.append(inp_usina_grupo.get())
-    DADOS_INSERIDOS.append(inp_site.get())
-    DADOS_INSERIDOS.append(inp_BOF.get())
-    DADOS_INSERIDOS.append(inp_tipo.get())
-    DADOS_INSERIDOS.append(inp_ID.get())
-    DADOS_INSERIDOS.append(inp_usuario.get().upper())
-    DADOS_INSERIDOS.append(inp_vida.get())
+    conn, cursor = fun.CONECTA_BD(caminho)
+    comando = f"SELECT * FROM DADOS_EMPRESAS WHERE ID = '{inp_ID.get()}' AND TIPO = '{inp_tipo.get()}' "
+    cursor.execute(comando)
+    dados = cursor.fetchone()
+    fun.DESCONECTA_BD(conn)
 
-    param = 0
-    for dado in DADOS_INSERIDOS:
-        if dado == '':
-            param += 1
-
-    if param > 0:
-        messagebox.showwarning("AVISO","Preencha todos os espaços")
-
+    ultima_vida_registrada = dados[6]
+    
+    if inp_vida.get() <= ultima_vida_registrada:#OBS: deixar de fechar a tela
+        messagebox.showwarning("AVISO",f"A vida têm que\nser maior que a\nultima registrada ({ultima_vida_registrada})")
+    
     else:
-        print("\nDADOS_INS:", DADOS_INSERIDOS)
-        janela_cadastro = aba_camera(inp_janela, DADOS_INSERIDOS, inp_menu)
-        janela_cadastro.deiconify()
+        DADOS_INSERIDOS = []
+        
+        DADOS_INSERIDOS.append(inp_furos.get())
+        DADOS_INSERIDOS.append(inp_usina_grupo.get())
+        DADOS_INSERIDOS.append(inp_site.get())
+        DADOS_INSERIDOS.append(inp_BOF.get())
+        DADOS_INSERIDOS.append(inp_tipo.get())
+        DADOS_INSERIDOS.append(inp_ID.get())
+        DADOS_INSERIDOS.append(inp_usuario.get().upper())
+        DADOS_INSERIDOS.append(inp_vida.get())
+
+        param = 0
+        for dado in DADOS_INSERIDOS:
+            if dado == '':
+                param += 1
+
+        if param > 0:
+            messagebox.showwarning("AVISO","Preencha todos os espaços")
+
+        else:
+            print("\nDADOS_INS:", DADOS_INSERIDOS)
+            janela_cadastro = aba_camera(inp_janela, DADOS_INSERIDOS, inp_menu)
+            janela_cadastro.deiconify()
     
 def OnClick(event, listaCli, usina, site, BOF, ID, Furos, Tipo):
     selected_items = listaCli.selection()
@@ -250,12 +263,11 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):# #TOPLEVEL
         Tabela.insert("", tk.END, values=(dado[0], dado[1], dado[2], dado[3], dado[4], dado[5], dado[6]))
 
     Tabela.place(relx=0.4, rely=0.29, relwidth=0.55, relheight=0.45)
-
     scroolLista = tk.Scrollbar(inp_frame, orient='vertical', command=Tabela.yview)
     Tabela.configure(yscrollcommand=scroolLista.set)
     scroolLista.place(relx=0.95, rely=0.29, relwidth=0.01, relheight=0.45)
-
     Tabela.bind("<ButtonRelease-1>", lambda event: OnClick(event, Tabela, input_usina, input_site, input_BOF, input_ID, input_Furos, input_tipo))  
+
 def aba_cadastro(inp_janela): 
     # janela_dois = tk.Tk()
     janela_dois = tk.Toplevel(inp_janela) #TOPLEVEL
@@ -271,7 +283,6 @@ def aba_cadastro(inp_janela):
 
     return janela_dois
     
-
 print("\n\n", color.Fore.GREEN + "Iniciando o código - Registro pre-medição" + color.Style.RESET_ALL)
 # aba_cadastro() #AVISO ->tirar esta linha
 print(color.Fore.RED + "Finalizando o código - Registro pre-medição" + color.Style.RESET_ALL, "\n")

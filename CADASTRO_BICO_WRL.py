@@ -67,7 +67,7 @@ def add_placeholder(entry, placeholder):
             entry.delete(0, tk.END)
             entry.config(fg='black')
 
-    def on_focus_out(event):
+    def on_focus_out(event): #OBS: diminuir fonte
         if entry.get() == '':
             entry.insert(0, placeholder)
             entry.config(fg='grey')
@@ -141,14 +141,14 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
     label_furos.place(relx=0.03, rely=0.5)
 
     input_furos = tk.Entry(inp_frame, validate= "key",font=("Arial", 18), validatecommand= validador(inp_frame))
-    input_furos.place(relx=0.19, rely=0.5, relwidth=0.26, relheight=0.07)
+    input_furos.place(relx=0.2, rely=0.5, relwidth=0.26, relheight=0.07)
     
     # {=======================TIPO=========================}
     label_tipo = fun.CRIAR_LABEL(inp_frame, "Tipo: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
-    label_tipo.place(relx=0.47, rely=0.5)
+    label_tipo.place(relx=0.49, rely=0.5)
 
     input_tipo = tk.Entry(inp_frame,font=("Arial", 18))
-    input_tipo.place(relx=0.63, rely=0.5, relwidth=0.26, relheight=0.07)
+    input_tipo.place(relx=0.64, rely=0.5, relwidth=0.26, relheight=0.07)
     add_placeholder(input_tipo, "externa/interna")
     
     # {=======================BOF=========================}
@@ -156,14 +156,14 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
     label_BOF.place(relx=0.03, rely=0.65)
 
     input_BOF = tk.Entry(inp_frame, validate= "key",font=("Arial", 18), validatecommand= validador(inp_frame))
-    input_BOF.place(relx=0.19, rely=0.65, relwidth=0.26, relheight=0.07)
+    input_BOF.place(relx=0.2, rely=0.65, relwidth=0.26, relheight=0.07)
     
     # {=======================ID=========================}
     label_ID = fun.CRIAR_LABEL(inp_frame, "ID: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
-    label_ID.place(relx=0.47, rely=0.65)
+    label_ID.place(relx=0.49, rely=0.65)
 
     input_ID = tk.Entry(inp_frame, validate= "key",font=("Arial", 18), validatecommand= validador(inp_frame))
-    input_ID.place(relx=0.63, rely=0.65, relwidth=0.26, relheight=0.07)
+    input_ID.place(relx=0.64, rely=0.65, relwidth=0.26, relheight=0.07)
     
     # {=======================Botão Voltar, Continuar e excluir=========================}
     #OBS: por imagens nos botões
