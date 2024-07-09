@@ -440,7 +440,7 @@ def salvar_registros(lista, num):
     comando_vida = F"UPDATE DADOS_EMPRESAS SET ULTIMA_VIDA = {vida} WHERE Grupo = {lista[1]} AND ID = {lista[5]}"
     cursor.execute(comando_vida)
     banco.commit()
-
+    
 
     if num == 6:
         comando = "INSERT INTO B6 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
