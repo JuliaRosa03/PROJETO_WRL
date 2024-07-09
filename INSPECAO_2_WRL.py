@@ -99,7 +99,7 @@ def componentes_frame2(inp_frame, lista):
     exibir_video()
     
 
-def aba_camera(inp_janela, dados, inp_menu):
+def aba_camera(inp_janela, dados, inp_menu):#OBS: envez de usar 'dados' por o nome dsa variavel de forma intuitiva
     global dados_arquivo, caminhoBW, caminhoAPP, nome_arquivo_BW, stop, lista_APP, qtd_furos, Abertura, infra_image, centro
     print('\nDados: ',dados)
     lista_wl = dados
@@ -132,7 +132,7 @@ def aba_camera(inp_janela, dados, inp_menu):
     lista_pontos = fun.extrair_coordenadas_centro(caixas_detectadas, nomes_classes)
     # Filtrar o ponto central se detectado como furo
     lista_pontos = fun.filtrar_ponto_central(lista_pontos, centro)
-    fun.enumerar_furos(lista_pontos, qtd_furos, cv2.imread(caminhoBW), dados_arquivo[0])
+    # fun.enumerar_furos(lista_pontos, qtd_furos, cv2.imread(caminhoBW), dados_arquivo[0])
     
     for dado in lista_dh:
         dados_arquivo.append(dado)
@@ -140,8 +140,7 @@ def aba_camera(inp_janela, dados, inp_menu):
     lista_completa = fun.reunir_dados(lista_APP, dados_arquivo, lista_diametros)
     print(lista_completa)
     fun.salvar_registros(lista_completa, qtd_furos)
- 
-    janela_cadastro = aba_dados(inp_janela, dados[3], dados[4], dados_arquivo[0],inp_menu,inp_janela )
+    janela_cadastro = aba_dados(inp_janela, dados[5], dados[4], dados_arquivo[0],inp_menu,inp_janela )
     janela_cadastro.deiconify()
     dc.release()
     

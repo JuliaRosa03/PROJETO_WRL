@@ -142,9 +142,10 @@ def CRIAR_BOTAO(inp_frame, inp_texto, inp_bg, inp_fg, inp_borda = NONE,inp_taman
                         bg = inp_bg, # background
                         fg = inp_fg, # 
                         bd = inp_borda, #borda do botão
-                        font= ("arial", inp_tamanho ,inp_style), #fonte, tamanho, style
+                        font= ("calibri", inp_tamanho ,inp_style), #fonte, tamanho, style
                         cursor = inp_cursor, # estilo do cursor
-                        command = inp_comando) # comando
+                        command = inp_comando,
+                        relief='groove') # comando
     return botao
     
 def CRIAR_LABEL(inp_frame, inp_texto, inp_bg, inp_fg, inp_fonte = NONE, inp_tam_fonte = NONE, inp_style = NONE):
@@ -419,9 +420,10 @@ def reunir_dados(dados_app, dados_arquivo, dados_diametros):
 
 def organizar_dados_app(lista):
 
+    #lista -> furos, grupo, site, BOF, tipo, ID, funcionário, vida
     lista_APP = [lista[5], lista[0], lista[1], lista[2], lista[4], lista[3], lista[7], lista[6]]
-    qtd_furos = int(lista[5])
-    id = '00' + str(lista[3])
+    qtd_furos = int(lista[0])
+    id = '00' + str(lista[5])
         
     return lista_APP, id, qtd_furos
 
@@ -432,37 +434,35 @@ def salvar_registros(lista, num):
     cursor = banco.cursor()
     
     #para salvar a vida
-    # atualiza a coluna apenas dos objetos com atributo específico
-    # cursor.execute("UPDATE nome_tabela SET nome_coluna_1 = 'valor_1' WHERE nome_coluna_2 = 'valor_2' ")
-    vida = lista[7] 
-    print('vida',vida)
-
-    comando_vida = F"UPDATE DADOS_EMPRESAS SET ULTIMA_VIDA = {vida} WHERE Grupo = {lista[1]} AND ID = {lista[5]}"
+    comando_vida = F"UPDATE DADOS_EMPRESAS SET ULTIMA_VIDA = {lista[6]} WHERE ID = {lista[0]}"#OBD: adicionar -> Grupo = {lista[2]} AND
     cursor.execute(comando_vida)
     banco.commit()
+<<<<<<< HEAD
     
 
+=======
+    print("\n\n", color.Fore.CYAN + "VIDA ATUALIZADA - FUNCOES" + color.Style.RESET_ALL)
+
+    """Ordem para salvar -> Furos, Grupo, Site, BOF, Tipo, ID, Usuario, Vida, Arquivo, Data, Hora, Externo,Furo 1 a n
+    lista[0]= ID      lista[1]= Furos     lista[2]= Grupo
+    lista[3]= Site    lista[4]= Tipo      lista[5]= BOF
+    lista[6]= Vida    lista[7]= Usuario   lista[8]= Arquivo
+    lista[9]= Data    lista[10]= Hora     lista[11]= Externo
+    lista[12...]= Furos """
+>>>>>>> 584eb9e537de80f511f0fcec1641680f39abaa7b
     if num == 6:
+
         comando = "INSERT INTO B6 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-
-        registro = (lista[0], lista[1], lista[2], lista[3], lista[4], lista[5], lista[6], lista[7], lista[8], lista[9], lista[10], lista[11], lista[12], lista[13], lista[14], lista[15], lista[16], lista[17])
-
+        registro = (lista[1], lista[2], lista[3], lista[5], lista[4], lista[0], lista[7], lista[6], lista[8], lista[9], lista[10], lista[11], lista[12], lista[13], lista[14], lista[15], lista[16], lista[17])
         cursor.execute(comando, registro)
-
-        # Grava a transação
         banco.commit()
 
     else:
         comando = "INSERT INTO B4 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-
         registro = (lista[0], lista[1], lista[2], lista[3], lista[4], lista[5], lista[6], lista[7], lista[8], lista[9], lista[10], lista[11], lista[12], lista[13], lista[14], lista[15])
-
         cursor.execute(comando, registro)
-
-        # Grava a transação
         banco.commit()
 
-    # Feche a conexão com o banco de dados
     cursor.close()
     
 def sobrepor_molde(infra_image):

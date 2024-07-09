@@ -1,11 +1,9 @@
-from tkinter import ttk, CENTER
-import tkinter as tk
-import sqlite3 as sql
-import colorama as color
-import customtkinter
-from PIL import Image, ImageTk
-
-
+# from tkinter import ttk, CENTER
+# import tkinter as tk
+# import sqlite3 as sql
+# import colorama as color
+# import customtkinter
+# from PIL import Image, ImageTk
 
 
 # # try:
@@ -53,3 +51,26 @@ from PIL import Image, ImageTk
 
 
 
+# import sympy as sp
+# import math
+
+# v = sp.symbols('v')
+# T = 10
+# f = v**2
+# integral = sp.integrate(f,v)
+
+
+# RMS = math.sqrt(integral/T)
+# print(RMS)
+
+import FUNCOES_WRL as fun
+from direction import direction
+caminho = direction()
+
+conn, cursor = fun.CONECTA_BD(caminho)
+comando = f"SELECT * FROM DADOS_EMPRESAS WHERE ID = '8' AND TIPO = '40/5' "
+cursor.execute(comando)
+dados = cursor.fetchone()
+fun.DESCONECTA_BD(conn)
+
+print(dados)
