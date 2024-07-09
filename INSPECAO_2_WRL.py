@@ -61,7 +61,7 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
     btfoto_pg2 = tk.Button(inp_frame, text='CTRL', relief="ridge", cursor="circle", bd=4, bg='#545454', fg='white', font=("arial", 13))
     btfoto_pg2.place(relx=0.5, rely=0.93, anchor=CENTER)
 
-def componentes_frame2(inp_frame, lista):
+def componentes_frame2(inp_frame, lista_dados_inspecao):
     global dados_arquivo, caminhoBW, caminhoAPP, nome_arquivo_BW, stop
 
     borda = tk.Label(inp_frame, bg="black")
@@ -74,7 +74,7 @@ def componentes_frame2(inp_frame, lista):
     
         back_frame = fun.sobrepor_molde(infra_image)
         
-        lista_APP, id_bico, qtd_furos = fun.organizar_dados_app(lista)
+        lista_APP, id_bico, qtd_furos = fun.organizar_dados_app(lista_dados_inspecao)
         
         if ret:
             frame = cv2.cvtColor(back_frame, cv2.COLOR_BGR2RGB)
@@ -102,13 +102,13 @@ def componentes_frame2(inp_frame, lista):
 def aba_camera(inp_janela, dados, inp_menu):#OBS: envez de usar 'dados' por o nome dsa variavel de forma intuitiva
     global dados_arquivo, caminhoBW, caminhoAPP, nome_arquivo_BW, stop, lista_APP, qtd_furos, Abertura, infra_image, centro
     print('\nDados: ',dados)
-    lista_wl = dados
+    lista_dados_inspecao = dados
     janela_tres = tk.Toplevel(inp_janela)
     
     tela(janela_tres)
     frames_da_tela(janela_tres)
     componentes_frame1(frame_um,janela_tres, inp_janela)
-    componentes_frame2(frame_dois, lista_wl)
+    componentes_frame2(frame_dois, lista_dados_inspecao)
     
     def aba_camera2():
         # Esperar até que a variável `stop` seja definida como True
