@@ -184,20 +184,20 @@ def tirar_foto(color_frame, infra_image, id_bico):
     caminho_completo_fotografia_BW = os.path.join(diretorio_destino_imgBW, nome_arquivo_BW)
     
     # Formatar a data e hora como parte do nome do arquivo
-    diretorio_destino_imgAPP =  fr'{pasta}\FOTOS_REGISTRO'
-    nome_arquivo_APP = data.strftime(f'registro_{id_bico}_%d-%m-%Y_%H.%M') + '.png'
-    caminho_completo_fotografia_APP = os.path.join(diretorio_destino_imgAPP, nome_arquivo_APP)
-    lista_arq.append(nome_arquivo_APP)
+    diretorio_destino_imgColorida =  fr'{pasta}\FOTOS_REGISTRO'
+    nome_arquivo_colorido = data.strftime(f'registro_{id_bico}_%d-%m-%Y_%H.%M') + '.png'
+    caminho_completo_fotografia_colorida = os.path.join(diretorio_destino_imgColorida, nome_arquivo_colorido)
+    lista_arq.append(nome_arquivo_colorido)
 
     # Aguardar a tecla para salvar o frame
     if keyboard.is_pressed('ctrl') or keyboard.is_pressed('right control') or keyboard.is_pressed('q'):
         cv2.imwrite(caminho_completo_fotografia_BW, infra_image)
-        cv2.imwrite(caminho_completo_fotografia_APP, color_frame)
+        cv2.imwrite(caminho_completo_fotografia_colorida, color_frame)
         
     print('\nImagem salva')
     messagebox.showinfo("INFO","Imagem salva")
 
-    return lista_arq, caminho_completo_fotografia_BW, caminho_completo_fotografia_APP, nome_arquivo_APP
+    return lista_arq, caminho_completo_fotografia_BW, caminho_completo_fotografia_colorida, nome_arquivo_colorido
 ret, depth_frame, color_frame, infra_image, Abertura = dc.get_frame() # Chamando as propriedades da câmera
 
 def analisar_imagem(model, imagem, nome, depth_frame, Abertura):
@@ -210,8 +210,8 @@ def analisar_imagem(model, imagem, nome, depth_frame, Abertura):
     for result in results:
         img_segmentada = results[0].plot(masks= True, boxes=False) #plotar a segmentação - *resultados_array_bgr
         
-        diretorio_destino_imgAPP =  fr'{pasta}\FOTOS_SEGMENTADA'
-        caminho_completo_fotografia_segmentada = os.path.join(diretorio_destino_imgAPP, nome)
+        diretorio_destino_imgColorida =  fr'{pasta}\FOTOS_SEGMENTADA'
+        caminho_completo_fotografia_segmentada = os.path.join(diretorio_destino_imgColorida, nome)
         cv2.imwrite(caminho_completo_fotografia_segmentada, img_segmentada)
         
         
@@ -421,8 +421,9 @@ def reunir_dados(dados_app, dados_arquivo, dados_diametros):
 def organizar_dados_app(lista):
 
     #lista -> furos, grupo, site, BOF, tipo, ID, funcionário, vida
-    # lista_APP = [furos, grupo, site, bof, tipo, id, usuário, vida] | [('6', 'MINERADORA/BH/BRASIL', 'Bloco 1', '1', '30/5', '3', '140')]
-    lista_APP = [lista[0], lista[1], lista[2], lista[2], lista[3], lista[4], lista[5], lista[6]]
+    #['6'(0), 'MINERADORA/BH/BRASIL'(1), 'Bloco 1'(2), '1'(3), '30/5'(4), '3'(5), 'JULIA'(6), '140(7)']
+    # lista_APP = [furos, grupo, site, bof, tipo, id, usuário, vida] |
+    lista_APP = [lista[0], lista[1], lista[2], lista[3], lista[4], lista[5], lista[6], lista[7]]
     qtd_furos = int(lista[0])
     id = '00' + str(lista[5])
         
@@ -435,12 +436,28 @@ def salvar_registros(lista, num):
     cursor = banco.cursor()
     
     #para salvar a vida
-    comando_vida = F"UPDATE DADOS_EMPRESAS SET ULTIMA_VIDA = {lista[6]} WHERE ID = {lista[0]}"#OBD: adicionar -> Grupo = {lista[2]} AND
+    comando_vida = f"UPDATE DADOS_EMPRESAS SET ULTIMA_VIDA = {lista[7]} WHERE ID = {lista[5]}"#OBD: adicionar -> Grupo = {lista[2]} AND
     cursor.execute(comando_vida)
     banco.commit()
     
     print("\n\n", color.Fore.CYAN + "VIDA ATUALIZADA - FUNCOES" + color.Style.RESET_ALL)
 
+    nomes_colunas = ['FUROS','GRUPO','SITE','BOF','TIPO','ID','USUARIO','VIDA','ARQUIVO','DATA','HORA']
+
+    # Organização de dados para salvar no banco de dados"
+
+    # FUROS = lista[0]
+    # GRUPO = lista[1]
+    # SITE = lista[2]
+    # BOF = lista[3]
+    # TIPO = lista[4]
+    # ID = lista[5]
+    # USUARIO = lista[6]
+    # VIDA = lista[7]
+    # ARQUIVO = lista[8]
+    # DATA = lista[9]
+    # HORA = lista[10]
+    
     """Ordem para salvar -> Furos, Grupo, Site, BOF, Tipo, ID, Usuario, Vida, Arquivo, Data, Hora, Externo,Furo 1 a n
     lista[0]= ID      lista[1]= Furos     lista[2]= Grupo
     lista[3]= Site    lista[4]= Tipo      lista[5]= BOF
@@ -475,3 +492,72 @@ def sobrepor_molde(infra_image):
     
     return back_frame
     
+##  FUNÇÕES DO SITE - APENAS PARA O BICO DE 6 FUROS ##
+def identificar_estados(lista_completa):
+    # Lista de diâmetros (EXTERNO até FURO_N)
+    diametros = lista_completa[11:]
+
+    ESTADOS = []
+    for diametro in diametros:
+        if diametro >= 100:
+            if 400 <= diametro <= 500:
+                ESTADOS.append('Bom')
+            elif 500 < diametro <= 600 or 300 <= diametro < 400:
+                ESTADOS.append('Estável')
+            elif diametro < 300 or diametro > 600:
+                ESTADOS.append('Crítico') 
+            else:
+                print(f'Não foi possível analisar o diâmetro {diametro}')
+        else:
+
+            if 40 <= diametro <= 60:
+                ESTADOS.append('Bom')
+            elif 60 < diametro <= 70 or 30 <= diametro < 40:
+                ESTADOS.append('Estável')
+            elif diametro < 30 or diametro > 70:
+                ESTADOS.append('Crítico')
+            else:
+                print(f'Não foi possível analisar o diâmetro {diametro}')
+        
+    return ESTADOS, diametros
+
+def salvar_registros_desgaste(lista_completa, estados, dados_diametros):
+
+    # Lista com dados até a coluna ARQUIVO
+    dados_colunas = [lista_completa[0], lista_completa[1], lista_completa[2], lista_completa[4], lista_completa[5], lista_completa[7], lista_completa[8]]
+
+    #Criando a lista com as regiões analisadas, de EXTERNO até FURO_N
+    regioes = []
+    for i in range(len(dados_diametros)):
+        if i == 0:
+            regiao = 'EXTERNO'
+            regioes.append(regiao)
+        else:
+            regiao = f'FURO_{i}'
+            regioes.append(regiao)
+
+    lista = []
+    for k in range(len(dados_diametros)):
+        # Adicionando os dados até a coluna VIDA
+        for dado in dados_colunas:
+            lista.append(dado)
+        # Adicionando a região, o valor do diâmetro e o estado.
+        lista.append(regioes[k])
+        lista.append(dados_diametros[k])
+        lista.append(estados[k])
+
+        # Conectando ao banco 
+        banco = sql.connect(fr'{pasta}\REGISTROS_DESGASTE.db') #mudar dps
+        cursor = banco.cursor()
+
+        # Inserindo linha de dados
+        comando = 'INSERT INTO B6 VALUES (?,?,?,?,?,?,?,?,?,?)'
+        registros = (lista[0],lista[1],lista[2],lista[3],lista[4],lista[5],lista[6],lista[7],lista[8], lista[9])
+
+        cursor.execute(comando, registros)
+        banco.commit()
+        
+        lista.clear()
+
+    cursor.close()
+    print('DADOS INSERIDOS')
