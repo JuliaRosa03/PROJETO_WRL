@@ -10,7 +10,7 @@ from direction import direction
 caminho = direction()
 
 def tabela(filtro_id=None):
-    
+
     conn, cursor = fun.CONECTA_BD(caminho)
     comando = "SELECT * FROM DADOS_EMPRESAS"
     cursor.execute(comando)
@@ -34,45 +34,56 @@ def validador(input):
 def ENTRY_STRING(inp_text):
     return all(char.isalpha() or char.isspace() for char in inp_text) or inp_text == ""
 
-# def voltar(aba_1, aba_2):
-#     aba_1.deiconify()  # Exiba a proxima janela 
-#     aba_2.destroy()  # Destrua a janela atual
+def voltar(aba_1, aba_2):
+    aba_1.deiconify()  # Exiba a proxima janela 
+    aba_2.destroy()  # Destrua a janela atual
     
-def comandos_botao_continuar(inp_janela,inp_furos, inp_usina_grupo, inp_site, inp_BOF, inp_tipo, inp_ID, inp_usuario, inp_vida, inp_menu): #juliaaaaaa
-    DADOS_INSERIDOS = []
+def comandos_botao_continuar(inp_janela, inp_usina_grupo, inp_site, inp_BOF, inp_ID, inp_tipo, inp_furos, inp_vida, inp_usuario, inp_menu): 
     
-    DADOS_INSERIDOS.append(inp_furos.get())
-    DADOS_INSERIDOS.append(inp_usina_grupo.get())
-    DADOS_INSERIDOS.append(inp_site.get())
-    DADOS_INSERIDOS.append(inp_BOF.get())
-    DADOS_INSERIDOS.append(inp_tipo.get())
-    DADOS_INSERIDOS.append(inp_ID.get())
-    DADOS_INSERIDOS.append(inp_usuario.get().upper())
-    DADOS_INSERIDOS.append(inp_vida.get())
+    conn, cursor = fun.CONECTA_BD(caminho)
+    comando = f"SELECT * FROM DADOS_EMPRESAS WHERE ID = '{inp_ID.get()}' AND TIPO = '{inp_tipo.get()}' "
+    cursor.execute(comando)
+    dados = cursor.fetchone()
+    fun.DESCONECTA_BD(conn)
 
-    param = 0
-    for dado in DADOS_INSERIDOS:
-        if dado == '':
-            param += 1
-
-    if param > 0:
-        messagebox.showwarning("AVISO","Preencha todos os espaços")
-
+    ultima_vida_registrada = dados[6]
+    
+    if inp_vida.get() <= ultima_vida_registrada:#OBS: deixar de fechar a tela
+        messagebox.showwarning("AVISO",f"A vida têm que\nser maior que a\nultima registrada ({ultima_vida_registrada})")
+    
     else:
-        print("\nDADOS_INS:", DADOS_INSERIDOS)
-        janela_cadastro = aba_camera(inp_janela, DADOS_INSERIDOS, inp_menu)
-        janela_cadastro.deiconify()
+        DADOS_INSERIDOS = []
+        
+        DADOS_INSERIDOS.append(inp_furos.get())
+        DADOS_INSERIDOS.append(inp_usina_grupo.get())
+        DADOS_INSERIDOS.append(inp_site.get())
+        DADOS_INSERIDOS.append(inp_BOF.get())
+        DADOS_INSERIDOS.append(inp_tipo.get())
+        DADOS_INSERIDOS.append(inp_ID.get())
+        DADOS_INSERIDOS.append(inp_usuario.get().upper())
+        DADOS_INSERIDOS.append(inp_vida.get())
+
+        param = 0
+        for dado in DADOS_INSERIDOS:
+            if dado == '':
+                param += 1
+
+        if param > 0:
+            messagebox.showwarning("AVISO","Preencha todos os espaços")
+
+        else:
+            print("\nDADOS_INS:", DADOS_INSERIDOS)
+            janela_cadastro = aba_camera(inp_janela, DADOS_INSERIDOS, inp_menu)
+            janela_cadastro.deiconify()
     
 def OnClick(event, listaCli, usina, site, BOF, ID, Furos, Tipo):
     selected_items = listaCli.selection()
-    print(selected_items)
     if not selected_items:
         return
     
     for n in selected_items:
         col1, col2, col3, col4, col5, col6, col7 = listaCli.item(n, 'values')
         
-        # Limpando os campos
         usina.delete(0, tk.END)
         site.delete(0, tk.END)
         BOF.delete(0, tk.END)
@@ -80,16 +91,12 @@ def OnClick(event, listaCli, usina, site, BOF, ID, Furos, Tipo):
         Furos.delete(0, tk.END)
         Tipo.delete(0, tk.END)
         
-        # Preenchendo os campos
-        Furos.insert(tk.END, col1)
         usina.insert(tk.END, col2)
         site.insert(tk.END, col3)
         BOF.insert(tk.END, col4)
-        Tipo.insert(tk.END, col5)
         ID.insert(tk.END, col6)
-        
-        print(f"Usina: {col2}, Site: {col3}, BOF: {col4}, ID: {col6}, Furos: {col1}, Tipo: {col5}")
-
+        Furos.insert(tk.END, col1)
+        Tipo.insert(tk.END, col5)
                         
 def tela(inp_janela):
     inp_janela.title("INICIAR INSPECÇÃO")
@@ -104,19 +111,16 @@ def frames_da_tela(inp_janela):
         
         return frame_1
 
-def componentes_frame1(inp_frame,inp_janela):# #TOPLEVEL
-    """aqui"""
+def componentes_frame1(inp_frame,inp_janela, inp_menu):# #TOPLEVEL
     # {=======================Título=========================}
-    # obs: POR TITULO NO CENTRO (GPT)
     titulo = fun.CRIAR_LABEL(inp_frame, "Selecionar Bico", '#B4FF9A', "#005200", 'arial', '35', 'bold')
     titulo.place(relx=0.5, rely=0.05,anchor='center') 
     
     # {=======================USINA=========================}
     label_usina = fun.CRIAR_LABEL(inp_frame, "Usina/Grupo: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
     label_usina.place(relx=0.05, rely=0.15)
-    '''ate aqui'''
 
-    input_usina = tk.Entry(inp_frame, validate= "key",font=("Arial", 20))# validatecommand="key"
+    input_usina = tk.Entry(inp_frame, validate= "key",font=("Arial", 20)) # validatecommand="key"
     input_usina.place(relx=0.05, rely=0.2, relwidth=0.3, relheight=0.06)
 
     # {=======================SITE=========================}
@@ -144,28 +148,28 @@ def componentes_frame1(inp_frame,inp_janela):# #TOPLEVEL
     label_Furos = fun.CRIAR_LABEL(inp_frame, "Furos: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
     label_Furos.place(relx=0.22, rely=0.6)
 
-    input_Furos = tk.Entry(inp_frame, validate= "key",font=("Arial", 20))
+    input_Furos = tk.Entry(inp_frame, validate= "key",font=("Arial", 20), validatecommand= validador(inp_frame))
     input_Furos.place(relx=0.22, rely=0.65, relwidth=0.13, relheight=0.06)
 
-    # {=======================TIPO=========================}
+    # {======================= TIPO =========================}
     label_tipo = fun.CRIAR_LABEL(inp_frame, "Tipo: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
     label_tipo.place(relx=0.05, rely=0.75)
 
     input_tipo = tk.Entry(inp_frame, validate= "key",font=("Arial", 20))
     input_tipo.place(relx=0.05, rely=0.8, relwidth=0.13, relheight=0.06)
     
-    # {=======================VIDA=========================}
+    # {======================= VIDA =========================}
     label_vida = fun.CRIAR_LABEL(inp_frame, "Vida: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
     label_vida.place(relx=0.22, rely=0.75)
 
     input_vida = tk.Entry(inp_frame, validate= "key",font=("Arial", 20), validatecommand= validador(inp_frame) )
     input_vida.place(relx=0.22, rely=0.8, relwidth=0.13, relheight=0.06)
 
-    # {=======================Divisória=========================}
+    # {======================= Divisória =========================}
     label_divisor = fun.CRIAR_LABEL(inp_frame, "", '#9BCD9B', "#1C1C1C", 'arial', '20', 'bold')
     label_divisor.place(relx=0.37, rely=0.15, relwidth=0.005, relheight=0.71)
     
-    # {=======================Usuário=========================}
+    # {======================= Usuário =========================}
     label_usuario = fun.CRIAR_LABEL(inp_frame, "Usuário: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
     label_usuario.place(relx=0.4, rely=0.75)
 
@@ -177,19 +181,17 @@ def componentes_frame1(inp_frame,inp_janela):# #TOPLEVEL
 
     # {=======================Botão Voltar e Continuar=========================}
     #obs: Por figuras ilustrativas com os botões
-    # bt_voltar = fun.CRIAR_BOTAO(inp_frame, "MENU",'#258D19', 'white',3,'20','',"hand2", lambda: voltar( inp_menu, inp_janela))# #TOPLEVEL
-    # bt_voltar.place(relx=0.05, rely=0.9, relwidth=0.13, relheight=0.06)
-    # inp_janela.withdraw()
+    bt_voltar = fun.CRIAR_BOTAO(inp_frame, "MENU",'#258D19', 'white',3,'20','',"hand2", lambda: voltar( inp_menu, inp_janela))# #TOPLEVEL
+    bt_voltar.place(relx=0.05, rely=0.9, relwidth=0.13, relheight=0.06)
 
     bt_continuar = fun.CRIAR_BOTAO(inp_frame, "PRÓXIMO",'#258D19', 'white',3,'20','',"hand2",lambda: comandos_botao_continuar(inp_janela,input_usina,input_site,input_BOF,input_ID,input_tipo,input_Furos,input_vida,input_usuario,inp_menu))
     bt_continuar.place(relx=0.82, rely=0.9, relwidth=0.13, relheight=0.06)
     
     # {=======================FECHAR ABA=========================}
-    bt_fechar_aba_menu = tk.Button(inp_frame, text="X", command=inp_janela.destroy, bg="red").place(relx=0.96, rely=0.02, relwidth=0.03, relheight=0.04) #AVISO ->tirar esta linha pro tk.tk
+    # bt_fechar_aba_menu = tk.Button(inp_frame, text="X", command=inp_janela.destroy, bg="red").place(relx=0.96, rely=0.02, relwidth=0.03, relheight=0.04) #AVISO ->tirar esta linha pro tk.tk
 
     # {=======================Tabela=========================}
     #OBS: a vida não pode ser menor do que a anterior
-    #OBS: consertar o clique para 2 vezes
     label_aviso = fun.CRIAR_LABEL(inp_frame, "Clique sobre na\nlinha desejada", '#9BCD9B', "white", 'calibri', '18', 'bold')
     label_aviso.place(relx=0.8, rely=0.15)
     
@@ -261,28 +263,26 @@ def componentes_frame1(inp_frame,inp_janela):# #TOPLEVEL
         Tabela.insert("", tk.END, values=(dado[0], dado[1], dado[2], dado[3], dado[4], dado[5], dado[6]))
 
     Tabela.place(relx=0.4, rely=0.29, relwidth=0.55, relheight=0.45)
-
     scroolLista = tk.Scrollbar(inp_frame, orient='vertical', command=Tabela.yview)
     Tabela.configure(yscrollcommand=scroolLista.set)
     scroolLista.place(relx=0.95, rely=0.29, relwidth=0.01, relheight=0.45)
-
     Tabela.bind("<ButtonRelease-1>", lambda event: OnClick(event, Tabela, input_usina, input_site, input_BOF, input_ID, input_Furos, input_tipo))  
-def aba_cadastro(): 
-    janela_dois = tk.Tk()
-    #janela_dois = tk.Toplevel(inp_janela) #TOPLEVEL
+
+def aba_cadastro(inp_janela): 
+    # janela_dois = tk.Tk()
+    janela_dois = tk.Toplevel(inp_janela) #TOPLEVEL
     
     tela(janela_dois)
     frames_da_tela(janela_dois)
-    componentes_frame1(frame_1,janela_dois)#  #TOPLEVEL,inp_janela
+    componentes_frame1(frame_1,janela_dois,inp_janela)#  #TOPLEVEL
 
-    # janela_dois.transient(inp_janela) #TOPLEVEL
-    # janela_dois.focus_force() #TOPLEVEL
-    # janela_dois.grab_set() #TOPLEVEL
-    janela_dois.mainloop() #AVISO ->tirar esta linha
+    janela_dois.transient(inp_janela) #TOPLEVEL
+    janela_dois.focus_force() #TOPLEVEL
+    janela_dois.grab_set() #TOPLEVEL
+    # janela_dois.mainloop() #AVISO ->tirar esta linha
 
     return janela_dois
     
-
 print("\n\n", color.Fore.GREEN + "Iniciando o código - Registro pre-medição" + color.Style.RESET_ALL)
-aba_cadastro() #AVISO ->tirar esta linha
+# aba_cadastro() #AVISO ->tirar esta linha
 print(color.Fore.RED + "Finalizando o código - Registro pre-medição" + color.Style.RESET_ALL, "\n")
