@@ -521,6 +521,27 @@ def identificar_estados(lista_completa):
         
     return ESTADOS, diametros
 
+def estado_geral_bico(lista_diametros):
+    lista = lista_diametros[1:]
+    estado_bico = []
+    contagem_furos_bom = lista.count('Bom')
+    contagem_furos_estavel = lista.count('Estável')
+    contagem_furos_critico = lista.count('Crítico')
+
+    if contagem_furos_critico == 2:
+        estado_bico.append('Crítico')
+    elif contagem_furos_estavel >= 3 and contagem_furos_bom <= contagem_furos_estavel:
+        estado_bico.append('Estável')
+    elif contagem_furos_bom >= 3:
+        estado_bico.append('Bom')
+    else:
+        print('Não foi possível analisar o estado da lança')
+    
+    #print(f'A lança está em estado {estado_bico}. São {contagem_furos_bom} furo(s) em estado "Bom", {contagem_furos_estavel} furo(s) em estado "Estável" e {contagem_furos_critico} furo(s) em estado "Crítico"')
+
+    return estado_bico
+
+
 def salvar_registros_desgaste(lista_completa, estados, dados_diametros):
 
     # Lista com dados até a coluna ARQUIVO

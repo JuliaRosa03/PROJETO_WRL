@@ -141,6 +141,7 @@ def aba_camera(inp_janela, dados, inp_menu):#OBS: envez de usar 'dados' por o no
     print('Lista final: ', lista_completa)
     ## SITE ##
     estados, diametros = fun.identificar_estados(lista_completa)
+    estado_bico = estado_geral_bico(diametros)
     fun.salvar_registros_desgaste(lista_completa, estados, diametros)
     ##
     fun.salvar_registros(lista_completa, qtd_furos)
