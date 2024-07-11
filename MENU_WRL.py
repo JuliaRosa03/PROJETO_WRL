@@ -7,7 +7,7 @@ from PIL import Image, ImageTk
 import subprocess
 
 import FUNCOES_WRL as fun
-from INSPECAO_1_WRL_Copia import aba_cadastro #AQUI
+from INSPECAO_1_WRL import aba_cadastro #AQUI
 from CADASTRO_BICO_WRL import aba_cadastro_bico
 from CADASTRO_USINA_WRL import aba_cadastro_usina
 
@@ -44,7 +44,6 @@ def ABA_CADASTRO_USINA(inp_menu):
     janela_cadastrar_bico.deiconify()
     
 def abrir_streamlit():
-    # Substitua 'nome_arquivo.py' pelo nome do seu arquivo Streamlit
     comando = ['streamlit', 'run', 'SITE/SITE_WRL.py']
     subprocess.Popen(comando)
     
@@ -70,7 +69,6 @@ def componentes_frame1(inp_menu):
     fotoimg1_pg1.place(relx=0.13, rely=0.23, anchor=CENTER)
 
     # {=======================Botões de Cadastro=========================}
-    # inp_frame, inp_texto, inp_bg, inp_fg, inp_borda = None,inp_tamanho= None, inp_style = None, inp_cursor = None, inp_comando = None
     bt_cadastro_lanca = fun.CRIAR_BOTAO(frame_1,'Cadastrar Bico','#258D19', '#005200',3,'32','bold',"hand2",lambda:ABA_CADASTRO_BICO(inp_menu))
     bt_cadastro_lanca.place(relx=0.55, rely=0.46, relwidth=0.4, relheight=0.2)
 
@@ -78,9 +76,6 @@ def componentes_frame1(inp_menu):
     bt_cadastro_funcionario.place(relx=0.55, rely=0.71, relwidth=0.4, relheight=0.2)
 
     # {=======================Botões de Visualização=========================}
-    # bt_visualizar_tabela = fun.CRIAR_BOTAO(frame_1,'Ultimos Registros','#258D19','#005200',4,'32','bold',"hand2")
-    # bt_visualizar_tabela.place(relx=0.55, rely=0.06, relwidth=0.4, relheight=0.2)
-    
     bt_visualizar_site = fun.CRIAR_BOTAO(frame_1,'SITE WRL','#4EA93B','#005200',4,'32','bold',"hand2", lambda:abrir_streamlit())
     bt_visualizar_site.place(relx=0.55, rely=0.21, relwidth=0.4, relheight=0.2)
     

@@ -70,18 +70,26 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
 
     # {=======================USINA - NOME=========================}
     label_usina_nome = fun.CRIAR_LABEL(inp_frame, "Usina: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
-    label_usina_nome.place(relx=0.03, rely=0.3)
+    label_usina_nome.place(relx=0.03, rely=0.6)
 
     input_usina_nome = tk.Entry(inp_frame, validate= "key",font=("Arial", 18),  validatecommand="key")
-    input_usina_nome.place(relx=0.12, rely=0.3, relwidth=0.34, relheight=0.07)
+    input_usina_nome.place(relx=0.11, rely=0.6, relwidth=0.35, relheight=0.07)
     
     # {=======================USINA - ESTADO=========================}
-    #OBS: Apresentar todas as Siglas existentes 
+    estados_brasileiros = [ "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", 
+                            "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO" ]
+    
     label_usina_estado = fun.CRIAR_LABEL(inp_frame, "Estado: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
     label_usina_estado.place(relx=0.03, rely=0.45)
     
+    estado_var = StringVar()
+    estado_combobox = ttk.Combobox(inp_frame, textvariable=estado_var, font=("Arial", 18), state="readonly")
+    estado_combobox['values'] = estados_brasileiros
+    estado_combobox.place(relx=0.12, rely=0.45, relwidth=0.26, relheight=0.07)
+    estado_combobox.set("Escolha o estado")
+
     input_usina_estado = tk.Entry(inp_frame, validate= "key",font=("Arial", 18),  validatecommand="key")
-    input_usina_estado.place(relx=0.2, rely=0.45, relwidth=0.26, relheight=0.07)
+    input_usina_estado.place(relx=0.23, rely=0.45, relwidth=0.26, relheight=0.07)
     add_placeholder(input_usina_estado, "Sigla")
     
     vcmd = (input_usina_estado.register(ENTRY_STRING), '%P')
@@ -89,12 +97,12 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
     
     # {=======================USINA - PAÍS=========================}
     label_usina_pais = fun.CRIAR_LABEL(inp_frame, "País: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
-    label_usina_pais.place(relx=0.03, rely=0.6)
+    label_usina_pais.place(relx=0.03, rely=0.3)
 
     input_usina_pais = tk.Entry(inp_frame, validate= "key",font=("Arial", 18),  validatecommand="key")
-    input_usina_pais.place(relx=0.11, rely=0.6, relwidth=0.35, relheight=0.07)
-    vcmd2 = (input_usina_estado.register(ENTRY_STRING), '%P')
-    input_usina_estado.config(validatecommand = vcmd2)
+    input_usina_pais.place(relx=0.12, rely=0.3, relwidth=0.34, relheight=0.07)
+    vcmd2 = (input_usina_pais.register(ENTRY_STRING), '%P')
+    input_usina_pais.config(validatecommand = vcmd2)
     
     # {=======================SITE=========================}
     label_site = fun.CRIAR_LABEL(inp_frame, "Site: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')

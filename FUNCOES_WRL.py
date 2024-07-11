@@ -78,6 +78,7 @@ class DepthCamera:
             self.pipeline.start(config)
         except:
             messagebox.showwarning("AVISO","CONECTA A CAMÊRA")
+            pass
 
     def get_frame(self):      
         frames = self.pipeline.wait_for_frames(timeout_ms=2000) #timeout_ms=2000
