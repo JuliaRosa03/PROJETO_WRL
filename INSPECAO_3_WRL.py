@@ -20,7 +20,7 @@ def selecao(inp_ID, inp_tipo): # {=========Leitura Grupo, SIte, BOF e ID(FRAME 1
     comando = f"SELECT * FROM DADOS_EMPRESAS WHERE ID = {inp_ID} AND TIPO = '{inp_tipo}' "
     cursor.execute(comando)
     dados = cursor.fetchall()
-    print('dados', dados)
+    #print('dados', dados)
     fun.DESCONECTA_BD(conn)
     
     grupo_completo = list(dados[0])
