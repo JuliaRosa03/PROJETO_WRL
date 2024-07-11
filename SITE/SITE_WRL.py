@@ -7,13 +7,14 @@ from PIL import Image
 from datetime import datetime
 import locale
 import sqlite3 as sql
+import matplotlib.pyplot as plt
 
 warnings.filterwarnings("ignore")  # ->ignorar os erros que aparecem no site
 
 pasta = r'C:\Users\julia\OneDrive\Documentos\IFES\PROJETO_WRL'
 # pasta = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL'
 
-# VERSÃO 03/07/2024
+# VERSÃO 11/07/2024
 
 # {=======================Estilos da página=========================}
 
@@ -138,25 +139,43 @@ st.sidebar.write(data_formatada)
 
 # {=======================Texto na página=========================}
 st.markdown('''<div style="text-align: justify;">
-            <H4>Este projeto existe para monitorar o nível de desgaste nos furos do bico de lança do convertedor LD.
-            Este problema é um risco para o desempenho e segurança deste processo, ocasionando paradas, contaminação 
-            ambiental e riscos para os operadores, causando assim grandes prejuízos.
+            <H4>[Texto aqui]
             </H4></div>
             ''', unsafe_allow_html=True)
 
-st.markdown('''<div style="text-align: justify;">
-            <H4>Os moldes das lanças possuem este formato circular, onde cada diâmetro sofre variações conforme o seu uso.
-            A indústria dispõe de alguns moldes. Verifique as fotografias: 
-            </H4></div>
-            ''', unsafe_allow_html=True)
+# # {======================= Parte superior da tela =========================}
+# Conectando ao banco de dados
+conn = sql.connect(fr'{pasta}\SITE\REGISTROS_DESGASTE.db')
+query = "SELECT ESTADO, COUNT(*) as quantidade FROM B6 GROUP BY ESTADO"
+df = pd.read_sql_query(query, conn)
+conn.close()
 
-col1, col2, col3 = st.columns([4, 4, 4])
+# Verificando os estados
+df = df[df['ESTADO'].isin(['Bom', 'Estável', 'Crítico'])]
+
+# Definindo as cores para cada estado
+colors = {
+    'Bom': '#88DF76',
+    'Estável': '#D4884A',
+    'Crítico': '#CF5B47'}
+
+# Mapeando as cores para os estados
+state_colors = [colors[state] for state in df['ESTADO']]
+
+# Criando o gráfico de pizza
+fig, ax = plt.subplots(figsize=(4, 4))
+ax.pie(df['quantidade'], labels=df['ESTADO'], colors=state_colors, autopct='%1.1f%%', startangle=90)
+ax.axis('equal')  
+ax.set_title('Situação geral das lanças')
+
+# Exibindo o gráfico de pizza
+col1, col2 = st.columns(2)
 with col1:
-    st.image(image_4F, caption='Lança de Quatro Furos', width=250, output_format='auto')
+    st.header("Usina A")
+    st.pyplot(fig)
 with col2:
-    st.image(image_5F, caption='Lança de Cinco Furos', width=250, output_format='auto')
-with col3:
-    st.image(image_6F, caption='Lança de Seis Furos', width=250, output_format='auto')
+    st.header("Usina B")
+    st.pyplot(fig)
 
 st.divider()
 
