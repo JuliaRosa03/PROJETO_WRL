@@ -520,7 +520,7 @@ def identificar_estados(lista_completa):
             else:
                 print(f'Não foi possível analisar o diâmetro {diametro}')
         
-    return ESTADOS, diametros
+    return ESTADOS
 
 def estado_geral_bico(lista_diametros):
     lista = lista_diametros[1:]
@@ -538,12 +538,14 @@ def estado_geral_bico(lista_diametros):
     else:
         print('Não foi possível analisar o estado da lança')
     
-    #print(f'A lança está em estado {estado_bico}. São {contagem_furos_bom} furo(s) em estado "Bom", {contagem_furos_estavel} furo(s) em estado "Estável" e {contagem_furos_critico} furo(s) em estado "Crítico"')
+    #print(f'A lança está em estado {estado_bico[0]}. São {contagem_furos_bom} furo(s) em estado "Bom", {contagem_furos_estavel} furo(s) em estado "Estável" e {contagem_furos_critico} furo(s) em estado "Crítico"')
 
     return estado_bico
 
 
-def salvar_registros_desgaste(lista_completa, estados, dados_diametros):
+def salvar_registros_desgaste(lista_completa, estados, dados_diametros, estado_bico):
+    pasta = r'C:\Users\julia\OneDrive\Documentos\IFES\PROJETO_WRL\SITE'
+    dados_diametros = dados_diametros[1:]
 
     # Lista com dados até a coluna ARQUIVO
     dados_colunas = [lista_completa[0], lista_completa[1], lista_completa[2], lista_completa[4], lista_completa[5], lista_completa[7], lista_completa[8]]
@@ -567,14 +569,15 @@ def salvar_registros_desgaste(lista_completa, estados, dados_diametros):
         lista.append(regioes[k])
         lista.append(dados_diametros[k])
         lista.append(estados[k])
+        lista.append(estado_bico[0])
 
         # Conectando ao banco 
         banco = sql.connect(fr'{pasta}\REGISTROS_DESGASTE.db') #mudar dps
         cursor = banco.cursor()
 
         # Inserindo linha de dados
-        comando = 'INSERT INTO B6 VALUES (?,?,?,?,?,?,?,?,?,?)'
-        registros = (lista[0],lista[1],lista[2],lista[3],lista[4],lista[5],lista[6],lista[7],lista[8], lista[9])
+        comando = 'INSERT INTO B6 VALUES (?,?,?,?,?,?,?,?,?,?,?)'
+        registros = (lista[0],lista[1],lista[2],lista[3],lista[4],lista[5],lista[6],lista[7],lista[8], lista[9], lista[10])
 
         cursor.execute(comando, registros)
         banco.commit()
