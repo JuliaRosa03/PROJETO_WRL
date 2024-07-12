@@ -144,44 +144,186 @@ st.markdown('''<div style="text-align: justify;">
             ''', unsafe_allow_html=True)
 
 # # {======================= Parte superior da tela =========================}
-# Conectando ao banco de dados
-conn = sql.connect(fr'{pasta}\SITE\REGISTROS_DESGASTE.db')
-query = "SELECT ESTADO, COUNT(*) as quantidade FROM B6 GROUP BY ESTADO"
-df = pd.read_sql_query(query, conn)
-conn.close()
+if not selected_tables:
+    # # {======================= Gráfico de pizza - Considerando lanças de 4 e 6 furos =========================}
+    # Gráfico para USIMINAS/ES/BRASIL
+    conn = sql.connect(fr'{pasta}\SITE\REGISTROS_DESGASTE.db')
+    query = "SELECT GERAL, COUNT(*) as quantidade FROM B6 WHERE GRUPO = 'USIMINAS/ES/BRASIL' GROUP BY GERAL"
+    df = pd.read_sql_query(query, conn)
+    conn.close()
 
-# Verificando os estados
-df = df[df['ESTADO'].isin(['Bom', 'Estável', 'Crítico'])]
+    # Verificando os estados
+    df = df[df['GERAL'].isin(['Bom', 'Estável', 'Crítico'])]
 
-# Definindo as cores para cada estado
-colors = {
-    'Bom': '#88DF76',
-    'Estável': '#D4884A',
-    'Crítico': '#CF5B47'}
+    # Definindo as cores para cada estado
+    colors = {
+        'Bom': '#88DF76',
+        'Estável': '#D4884A',
+        'Crítico': '#CF5B47'}
 
-# Mapeando as cores para os estados
-state_colors = [colors[state] for state in df['ESTADO']]
+    # Mapeando as cores para os estados
+    state_colors = [colors[state] for state in df['GERAL']]
 
-# Criando o gráfico de pizza
-fig, ax = plt.subplots(figsize=(4, 4))
-ax.pie(df['quantidade'], labels=df['ESTADO'], colors=state_colors, autopct='%1.1f%%', startangle=90)
-ax.axis('equal')  
-ax.set_title('Situação geral das lanças')
+    # Criando o gráfico de pizza
+    fig1, ax = plt.subplots(figsize=(4, 4))
+    ax.pie(df['quantidade'], labels=df['GERAL'], colors=state_colors, autopct='%1.1f%%', startangle=90)
+    ax.axis('equal')  
+    ax.set_title('Situação geral das lanças')
 
-# Exibindo o gráfico de pizza
-col1, col2 = st.columns(2)
-with col1:
-    st.header("Usina A")
-    st.pyplot(fig)
-with col2:
-    st.header("Usina B")
-    st.pyplot(fig)
+    # Gráfico para MINERADORA/BH/BRASIL
+    conn = sql.connect(fr'{pasta}\SITE\REGISTROS_DESGASTE.db')
+    query = "SELECT GERAL, COUNT(*) as quantidade FROM B6 WHERE GRUPO = 'MINERADORA/BH/BRASIL' GROUP BY GERAL"
+    df = pd.read_sql_query(query, conn)
+    conn.close()
 
+    # Verificando os estados
+    df = df[df['GERAL'].isin(['Bom', 'Estável', 'Crítico'])]
+
+    # Definindo as cores para cada estado
+    colors = {
+        'Bom': '#88DF76',
+        'Estável': '#D4884A',
+        'Crítico': '#CF5B47'}
+
+    # Mapeando as cores para os estados
+    state_colors = [colors[state] for state in df['GERAL']]
+
+    # Criando o gráfico de pizza
+    fig2, ax = plt.subplots(figsize=(4, 4))
+    ax.pie(df['quantidade'], labels=df['GERAL'], colors=state_colors, autopct='%1.1f%%', startangle=90)
+    ax.axis('equal')  
+    ax.set_title('Situação geral das lanças')
+
+    # Exibindo o gráfico de pizza
+    col1, col2 = st.columns(2)
+    with col1:
+        st.markdown("""<h2 style='font-size:30px;'>Grupo USIMINAS/ES/BRASIL</h2>""", unsafe_allow_html=True)
+        st.pyplot(fig1)
+    with col2:
+        st.markdown("""<h2 style='font-size:30px;'>Grupo MINERADORA/BH/BRASIL</h2>""", unsafe_allow_html=True)
+        st.pyplot(fig2)
 st.divider()
 
 # {=======================Informações com a pré-seleção=========================}
 # {========= Filtros para o gráfico =========}
+if selected_tables and not grupo:
+    # # {======================= Gráfico de pizza - Considerando lanças de 4 e 6 furos =========================}
+    # Gráfico para USIMINAS/ES/BRASIL
+    conn = sql.connect(fr'{pasta}\SITE\REGISTROS_DESGASTE.db')
+    query = f"SELECT GERAL, COUNT(*) as quantidade FROM {selected_tables[0]} WHERE GRUPO = 'USIMINAS/ES/BRASIL' GROUP BY GERAL"
+    df = pd.read_sql_query(query, conn)
+    conn.close()
+
+    # Verificando os estados
+    df = df[df['GERAL'].isin(['Bom', 'Estável', 'Crítico'])]
+
+    # Definindo as cores para cada estado
+    colors = {
+        'Bom': '#88DF76',
+        'Estável': '#D4884A',
+        'Crítico': '#CF5B47'}
+
+    # Mapeando as cores para os estados
+    state_colors = [colors[state] for state in df['GERAL']]
+
+    # Criando o gráfico de pizza
+    fig1, ax = plt.subplots(figsize=(4, 4))
+    ax.pie(df['quantidade'], labels=df['GERAL'], colors=state_colors, autopct='%1.1f%%', startangle=90)
+    ax.axis('equal')  
+    ax.set_title('Situação geral das lanças')
+
+    # Gráfico para MINERADORA/BH/BRASIL
+    conn = sql.connect(fr'{pasta}\SITE\REGISTROS_DESGASTE.db')
+    query = f"SELECT GERAL, COUNT(*) as quantidade FROM {selected_tables[0]} WHERE GRUPO = 'MINERADORA/BH/BRASIL' GROUP BY GERAL"
+    df = pd.read_sql_query(query, conn)
+    conn.close()
+
+    # Verificando os estados
+    df = df[df['GERAL'].isin(['Bom', 'Estável', 'Crítico'])]
+
+    # Definindo as cores para cada estado
+    colors = {
+        'Bom': '#88DF76',
+        'Estável': '#D4884A',
+        'Crítico': '#CF5B47'}
+
+    # Mapeando as cores para os estados
+    state_colors = [colors[state] for state in df['GERAL']]
+
+    # Criando o gráfico de pizza
+    fig2, ax = plt.subplots(figsize=(4, 4))
+    ax.pie(df['quantidade'], labels=df['GERAL'], colors=state_colors, autopct='%1.1f%%', startangle=90)
+    ax.axis('equal')  
+    ax.set_title('Situação geral das lanças')
+
+    # Exibindo o gráfico de pizza
+    col1, col2 = st.columns(2)
+    with col1:
+        st.markdown("""<h2 style='font-size:30px;'>Grupo USIMINAS/ES/BRASIL</h2>""", unsafe_allow_html=True)
+        st.pyplot(fig1)
+    with col2:
+        st.markdown("""<h2 style='font-size:30px;'>Grupo MINERADORA/BH/BRASIL</h2>""", unsafe_allow_html=True)
+        st.pyplot(fig2)
+
+if selected_tables and grupo:
+    # Gráfico para USIMINAS/ES/BRASIL
+    conn = sql.connect(fr'{pasta}\SITE\REGISTROS_DESGASTE.db')
+    query = f"SELECT GERAL, COUNT(*) as quantidade FROM {selected_tables[0]} WHERE GRUPO = '{grupo[0]}' GROUP BY GERAL"
+    df = pd.read_sql_query(query, conn)
+    conn.close()
+
+    # Verificando os estados
+    df = df[df['GERAL'].isin(['Bom', 'Estável', 'Crítico'])]
+
+    # Definindo as cores para cada estado
+    colors = {
+        'Bom': '#88DF76',
+        'Estável': '#D4884A',
+        'Crítico': '#CF5B47'}
+
+    # Mapeando as cores para os estados
+    state_colors = [colors[state] for state in df['GERAL']]
+
+    # Criando o gráfico de pizza
+    fig, ax = plt.subplots(figsize=(4, 4))
+    ax.pie(df['quantidade'], labels=df['GERAL'], colors=state_colors, autopct='%1.1f%%', startangle=90)
+    ax.axis('equal')  
+    ax.set_title('Situação geral das lanças')
+
+    col1, col2 = st.columns(2)
+    with col1:
+        st.markdown("""<h2 style='font-size:30px;'>Grupo USIMINAS/ES/BRASIL</h2>""", unsafe_allow_html=True)
+        st.pyplot(fig)
+    with col2:
+        st.markdown("""<h2 style='font-size:20px;'>tabela com os ids e estados das lanças</h2>""", unsafe_allow_html=True)
+
 if id and selected_tables:
+    # {=======================Gráfico de pizza=========================}
+    # Gráfico para USIMINAS/ES/BRASIL
+    conn = sql.connect(fr'{pasta}\SITE\REGISTROS_DESGASTE.db')
+    query = f"SELECT ESTADO, COUNT(*) as quantidade FROM {selected_tables[0]} WHERE GRUPO = '{grupo[0]}' AND ID = '{id[0]}' AND VIDA = GROUP BY ESTADO"
+    df = pd.read_sql_query(query, conn)
+    conn.close()
+
+    # Verificando os estados
+    df = df[df['ESTADO'].isin(['Bom', 'Estável', 'Crítico'])]
+
+    # Definindo as cores para cada estado
+    colors = {
+        'Bom': '#88DF76',
+        'Estável': '#D4884A',
+        'Crítico': '#CF5B47'}
+
+    # Mapeando as cores para os estados
+    state_colors = [colors[state] for state in df['ESTADO']]
+
+    # Criando o gráfico de pizza
+    fig_id, ax = plt.subplots(figsize=(4, 4))
+    ax.pie(df['quantidade'], labels=df['ESTADO'], colors=state_colors, autopct='%1.1f%%', startangle=90)
+    ax.axis('equal')  
+    ax.set_title(f'Situação dos furos da lança {id[0]}')
+    fig_id.set_size_inches(2, 2)  # Ajuste o tamanho da figura (largura, altura)
+
     # {=======================Gráfico principal=========================}
 
     st.markdown(f"# Gráfico de desgaste - Análise com todos os diâmetros\n # ID: {', '.join(id)}")
@@ -261,45 +403,14 @@ if id and selected_tables:
             }
             table_df = pd.DataFrame(data)
 
-            col1, col2 = st.columns([2,4])
+            col1, col2 = st.columns([2,2])
             image_7F = Image.open(fr'{pasta}\FOTOS_SEGMENTADA\{registro}') 
             
             with col1:
                 st.image(image_7F, caption='Segmentação')
 
             with col2:
-                hide_table_row_index = """
-                    <style>
-                    thead tr th:first-child {display:none}
-                    tbody th {display:none}
-                    .dataframe {
-                        background-color:#FFFFFF;
-                        border: 1px solid #ddd;
-                        border-radius: 3px;
-                        padding: 10px;
-                        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-                        margin-top: 20px;
-                    }
-                    .dataframe td {
-                        padding: 8px;
-                        text-align: left;
-                        font-family: Arial, sans-serif;
-                        font-size: 14px;
-                    }
-                    .dataframe td:nth-child(1) {
-                        width: 50%;  /* Ajuste a largura da primeira coluna */
-                    }
-                    .dataframe td:nth-child(2) {
-                        width: 50%;  /* Ajuste a largura da segunda coluna */
-                    }
-                    </style>
-                """
-
-                # Adicionando o CSS para esconder os índices e melhorar a aparência
-                st.markdown(hide_table_row_index, unsafe_allow_html=True)
-
-                # Renderizando a tabela
-                st.write(table_df.style.hide(axis='index').hide(axis='columns').set_table_attributes('class="dataframe"').to_html(), unsafe_allow_html=True)
+                st.pyplot(fig_id)
 
             st.divider()
         else:
