@@ -3,7 +3,6 @@ from customtkinter import *
 import tkinter as tk
 import colorama as color
 import FUNCOES_WRL as fun1
-import FUNCOES_CAMERA_WRL as fun2 #Funcções para camêra
 
 from direction import direction
 caminho = direction()

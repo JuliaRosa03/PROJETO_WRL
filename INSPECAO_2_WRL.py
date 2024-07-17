@@ -148,9 +148,10 @@ def aba_camera(inp_janela, dados, inp_menu):#OBS: envez de usar 'dados' por o no
     ##########
 
     fun2.salvar_registros(lista_completa, qtd_furos)
+    dc.release()
+
     janela_cadastro = aba_dados(inp_janela, dados[5], dados[4], nome_arquivo[0],inp_menu,inp_janela )
     janela_cadastro.deiconify()
-    dc.release()
     
     return janela_tres
 

@@ -1,5 +1,4 @@
 import cv2
-from ultralytics import YOLO
 import numpy as np
 import pyrealsense2 as rs
 import matplotlib.pyplot as plt
@@ -12,16 +11,15 @@ import time
 import math
 import keyboard
 import os
+import pandas as pd
 from datetime import datetime
 import sqlite3 as sql
-from tkinter import  messagebox
-import pandas as pd
-import tkinter as tk
-import sqlite3 as sql
+from tkinter import messagebox, ttk
 import colorama as color
-from tkinter import ttk
-from customtkinter import *
 from PIL import Image, ImageTk
+from direction import folder, pasta_site
+from ultralytics import YOLO
+from customtkinter import *
 
 from direction import folder, pasta_site
 
@@ -40,9 +38,9 @@ class Camera:
         config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
         config.enable_stream(rs.stream.infrared, 1, 640, 480, rs.format.y8, 30)
         self.pipeline.start(config)
+        print('iniciei')
 
     def get_frames(self):
-        
         frames = self.pipeline.wait_for_frames(timeout_ms=2000)
         color_frame = frames.get_color_frame()
         infrared = frames.get_infrared_frame()
@@ -59,10 +57,12 @@ class Camera:
 
     def release(self):
         self.pipeline.stop()
+        print('finalizei')
 
 class DepthCamera:
 
     def __init__(self):
+        self.pipeline = None #LINHA NOVA
         try:
             self.pipeline = rs.pipeline()
             config = rs.config()
@@ -78,7 +78,7 @@ class DepthCamera:
             self.pipeline.start(config)
         except:
             messagebox.showwarning("AVISO","CONECTA A CAMÊRA")
-            pass
+            
 
     def get_frame(self):      
         frames = self.pipeline.wait_for_frames(timeout_ms=2000) #timeout_ms=2000
@@ -116,7 +116,8 @@ class DepthCamera:
         return self.depth_scale,self.depth_sensor
     
     def release(self):
-        self.pipeline.stop()()
+        if self.pipeline:
+            self.pipeline.stop() #LINHA NOVA
 
 
 dc=DepthCamera() #inicia a camera

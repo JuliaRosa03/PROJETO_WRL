@@ -7,10 +7,6 @@ from PIL import Image, ImageTk
 import subprocess
 
 import FUNCOES_WRL as fun1 #Funções tkinter, Streamlit, etc
-import FUNCOES_CAMERA_WRL as fun2 #Funcções para camêra
-from INSPECAO_1_WRL import aba_cadastro #AQUI
-from CADASTRO_BICO_WRL import aba_cadastro_bico
-from CADASTRO_USINA_WRL import aba_cadastro_usina
 
 from direction import folder
 pasta = folder()
@@ -26,21 +22,20 @@ def tela(inp_menu): # {=======================Configuração de tela============
     inp_menu.title("MENU - Wear Register Lances (WRL)")
     inp_menu.configure(background= '#9BCD9B')
     inp_menu.attributes("-fullscreen", True)
-    # inp_menu.overrideredirect(True)
-    # inp_menu.geometry("1280x700")
-    # inp_menu.resizable(False, False) #se quiser impedir que amplie ou diminua a tela, altere para False
-    # # inp_menu.maxsize(width=1920, height=1080) #limite máximo da tela
-    # inp_menu.minsize(width=700, height=450) #limite minimo da tela
     
 def ABA_CADASTRO_BICO(inp_menu):
+    from CADASTRO_BICO_WRL import aba_cadastro_bico
     janela_cadastrar_bico = aba_cadastro_bico(inp_menu)
     janela_cadastrar_bico.deiconify()
 
 def INICIAR_INSPECAO(inp_menu):
+    from INSPECAO_1_WRL import aba_cadastro
+    import FUNCOES_CAMERA_WRL as fun2 #Funcções para camêra
     janela_cadastro = aba_cadastro(inp_menu)
     janela_cadastro.deiconify()
-445
+
 def ABA_CADASTRO_USINA(inp_menu):
+    from CADASTRO_USINA_WRL import aba_cadastro_usina
     janela_cadastrar_bico = aba_cadastro_usina(inp_menu)
     janela_cadastrar_bico.deiconify()
     
