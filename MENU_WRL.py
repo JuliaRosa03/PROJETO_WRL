@@ -6,7 +6,8 @@ from customtkinter import *
 from PIL import Image, ImageTk
 import subprocess
 
-import FUNCOES_WRL as fun
+import FUNCOES_WRL as fun1 #Funções tkinter, Streamlit, etc
+import FUNCOES_CAMERA_WRL as fun2 #Funcções para camêra
 from INSPECAO_1_WRL import aba_cadastro #AQUI
 from CADASTRO_BICO_WRL import aba_cadastro_bico
 from CADASTRO_USINA_WRL import aba_cadastro_usina
@@ -50,12 +51,12 @@ def abrir_streamlit():
 def frames_da_tela(inp_menu):
     global frame_1
 
-    frame_1 = fun.CRIAR_FRAME(inp_menu, '#B4FF9A', '#668B8B')
+    frame_1 = fun1.CRIAR_FRAME(inp_menu, '#B4FF9A', '#668B8B')
     frame_1.place(relx=0.01, rely=0.02,relwidth=0.98, relheight=0.96)
 
 def componentes_frame1(inp_menu):
     # {=======================Título=========================}
-    titulo = fun.CRIAR_LABEL(frame_1, "Wear Register\nLances             ", '#B4FF9A', "#005200", 'calibri', '40', 'bold')
+    titulo = fun1.CRIAR_LABEL(frame_1, "Wear Register\nLances             ", '#B4FF9A', "#005200", 'calibri', '40', 'bold')
     titulo.place(relx=0.23, rely=0.13)
     
     # {=======================Imagem IFES=========================}
@@ -69,18 +70,18 @@ def componentes_frame1(inp_menu):
     fotoimg1_pg1.place(relx=0.13, rely=0.23, anchor=CENTER)
 
     # {=======================Botões de Cadastro=========================}
-    bt_cadastro_lanca = fun.CRIAR_BOTAO(frame_1,'Cadastrar Bico','#258D19', '#005200',3,'32','bold',"hand2",lambda:ABA_CADASTRO_BICO(inp_menu))
+    bt_cadastro_lanca = fun1.CRIAR_BOTAO(frame_1,'Cadastrar Bico','#258D19', '#005200',3,'32','bold',"hand2",lambda:ABA_CADASTRO_BICO(inp_menu))
     bt_cadastro_lanca.place(relx=0.55, rely=0.46, relwidth=0.4, relheight=0.2)
 
-    bt_cadastro_funcionario = fun.CRIAR_BOTAO(frame_1,'Cadastrar Usina','#4EA93B','#005200',3,'32','bold',"hand2",lambda:ABA_CADASTRO_USINA(inp_menu))
+    bt_cadastro_funcionario = fun1.CRIAR_BOTAO(frame_1,'Cadastrar Usina','#4EA93B','#005200',3,'32','bold',"hand2",lambda:ABA_CADASTRO_USINA(inp_menu))
     bt_cadastro_funcionario.place(relx=0.55, rely=0.71, relwidth=0.4, relheight=0.2)
 
     # {=======================Botões de Visualização=========================}
-    bt_visualizar_site = fun.CRIAR_BOTAO(frame_1,'SITE WRL','#4EA93B','#005200',4,'32','bold',"hand2", lambda:abrir_streamlit())
+    bt_visualizar_site = fun1.CRIAR_BOTAO(frame_1,'SITE WRL','#4EA93B','#005200',4,'32','bold',"hand2", lambda:abrir_streamlit())
     bt_visualizar_site.place(relx=0.55, rely=0.21, relwidth=0.4, relheight=0.2)
     
     # {=======================Botão Iniciar Inspeção=========================}
-    bt_iniciar_camera = fun.CRIAR_BOTAO(frame_1,'Iniciar Inspeção','#71C55B','#005200',4,'32','bold',"circle", lambda:INICIAR_INSPECAO(inp_menu))
+    bt_iniciar_camera = fun1.CRIAR_BOTAO(frame_1,'Iniciar Inspeção','#71C55B','#005200',4,'32','bold',"circle", lambda:INICIAR_INSPECAO(inp_menu))
     bt_iniciar_camera.place(relx=0.07, rely=0.46, relwidth=0.4, relheight=0.45)
     
     # {=======================FECHAR ABA=========================}
