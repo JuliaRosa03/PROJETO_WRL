@@ -1,7 +1,10 @@
-""" option = 1 -> notebook DATEN
-    option = 2 -> PC lab 913S"""
+""" Caso use uma opção inexistente, por favor adicine-a aqui
 
-option = 3
+    option = 1 -> notebook DATEN
+    option = 2 -> PC lab 913S
+    option = 3 -> notebook Julia"""
+
+option = 1
 
 def direction():
     if option ==1:
@@ -21,4 +24,14 @@ def folder():
     if option ==3:
         caminho = r'C:\Users\julia\OneDrive\Documentos\IFES\PROJETO_WRL'
 
+    return caminho
+
+def pasta_site():
+    if option ==1:
+        caminho = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL\SITE'
+    if option ==2:
+        caminho = r''
+    if option ==3:
+        caminho = r'C:\Users\julia\OneDrive\Documentos\IFES\PROJETO_WRL\SITE'
+    
     return caminho

@@ -2,47 +2,47 @@ from tkinter import ttk, CENTER, messagebox
 from customtkinter import *
 import tkinter as tk
 import colorama as color
-import FUNCOES_WRL as fun
+import FUNCOES_WRL as fun1
 
 from direction import direction
 caminho = direction()
 
 def USINAS():
-    conn, cursor = fun.CONECTA_BD(caminho)
+    conn, cursor = fun1.CONECTA_BD(caminho)
     comando = f"SELECT Grupo FROM DADOS_EMPRESAS "
     cursor.execute(comando)
     dados_banco = cursor.fetchall()
-    fun.DESCONECTA_BD(conn)
+    fun1.DESCONECTA_BD(conn)
     
     dados_filtrados = list(set(item[0] for item in dados_banco))
     return dados_filtrados
 
 def USINA_SITE(inp_usina):
-    conn, cursor = fun.CONECTA_BD(caminho)
+    conn, cursor = fun1.CONECTA_BD(caminho)
     comando = f"SELECT Site FROM DADOS_EMPRESAS WHERE Grupo = '{inp_usina}'"
     cursor.execute(comando)
     dados_banco = cursor.fetchall()
-    fun.DESCONECTA_BD(conn)
+    fun1.DESCONECTA_BD(conn)
     
     dados_filtrados = list(set(item[0] for item in dados_banco))
     return dados_filtrados
 
 def SITE():
-    conn, cursor = fun.CONECTA_BD(caminho)
+    conn, cursor = fun1.CONECTA_BD(caminho)
     comando = f"SELECT Site FROM DADOS_EMPRESAS "
     cursor.execute(comando)
     dados_banco = cursor.fetchall()
-    fun.DESCONECTA_BD(conn)
+    fun1.DESCONECTA_BD(conn)
     
     dados_filtrados = list(set(item[0] for item in dados_banco))
     return dados_filtrados
 
 def tabela(): # {=========Informações da tabela(FRAME 2)=========}
-    conn, cursor = fun.CONECTA_BD(caminho)
+    conn, cursor = fun1.CONECTA_BD(caminho)
     comando = f"SELECT * FROM DADOS_EMPRESAS "
     cursor.execute(comando)
     dados_tabela =cursor.fetchall()
-    fun.DESCONECTA_BD(conn)
+    fun1.DESCONECTA_BD(conn)
 
     return dados_tabela
 
@@ -103,11 +103,11 @@ def frames_da_tela(inp_janela):
 def componentes_frame1(inp_frame,inp_janela, inp_menu):
     #OBS: por filtros pro ID, tipo e BOF( para não confundir os locais),mas para isso preciso de parametrosoferecidos pelo cliente
     # {=======================Título=========================}
-    titulo = fun.CRIAR_LABEL(inp_frame, "Cadastrar Bico", '#B4FF9A', "#005200", 'arial', '25', 'bold')
+    titulo = fun1.CRIAR_LABEL(inp_frame, "Cadastrar Bico", '#B4FF9A', "#005200", 'arial', '25', 'bold')
     titulo.place(relx=0.3, rely=0.05) 
 
     # {=======================USINA=========================}
-    label_usina = fun.CRIAR_LABEL(inp_frame, "Usina: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
+    label_usina = fun1.CRIAR_LABEL(inp_frame, "Usina: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
     label_usina.place(relx=0.03, rely=0.2)
 
     Var_Usina = tk.StringVar(inp_frame)
@@ -117,7 +117,7 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
     input_Usina.place(relx=0.2, rely=0.2, relwidth=0.75, relheight=0.07)
 
     # {=======================SITE=========================}
-    label_site = fun.CRIAR_LABEL(inp_frame, "Site: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
+    label_site = fun1.CRIAR_LABEL(inp_frame, "Site: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
     label_site.place(relx=0.03, rely=0.35)
 
     Var_site = tk.StringVar(inp_frame)
@@ -137,14 +137,14 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
     input_site.place(relx=0.15, rely=0.35, relwidth=0.8, relheight=0.07)
 
     # {=======================FUROS=========================}
-    label_furos = fun.CRIAR_LABEL(inp_frame, "Furos: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold' )
+    label_furos = fun1.CRIAR_LABEL(inp_frame, "Furos: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold' )
     label_furos.place(relx=0.03, rely=0.5)
 
     input_furos = tk.Entry(inp_frame, validate= "key",font=("Arial", 18), validatecommand= validador(inp_frame))
     input_furos.place(relx=0.2, rely=0.5, relwidth=0.26, relheight=0.07)
     
     # {=======================TIPO=========================}
-    label_tipo = fun.CRIAR_LABEL(inp_frame, "Tipo: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
+    label_tipo = fun1.CRIAR_LABEL(inp_frame, "Tipo: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
     label_tipo.place(relx=0.49, rely=0.5)
 
     input_tipo = tk.Entry(inp_frame,font=("Arial", 18))
@@ -152,14 +152,14 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
     add_placeholder(input_tipo, "externa/interna")
     
     # {=======================BOF=========================}
-    label_BOF = fun.CRIAR_LABEL(inp_frame, "BOF: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold' )
+    label_BOF = fun1.CRIAR_LABEL(inp_frame, "BOF: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold' )
     label_BOF.place(relx=0.03, rely=0.65)
 
     input_BOF = tk.Entry(inp_frame, validate= "key",font=("Arial", 18), validatecommand= validador(inp_frame))
     input_BOF.place(relx=0.2, rely=0.65, relwidth=0.26, relheight=0.07)
     
     # {=======================ID=========================}
-    label_ID = fun.CRIAR_LABEL(inp_frame, "ID: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
+    label_ID = fun1.CRIAR_LABEL(inp_frame, "ID: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
     label_ID.place(relx=0.49, rely=0.65)
 
     input_ID = tk.Entry(inp_frame, validate= "key",font=("Arial", 18), validatecommand= validador(inp_frame))
@@ -167,13 +167,13 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
     
     # {=======================Botão Voltar, Continuar e excluir=========================}
     #OBS: por imagens nos botões
-    bt_voltar = fun.CRIAR_BOTAO(inp_frame, "VOLTAR",'#258D19', 'white',3,'15','',"hand2",lambda: voltar( inp_menu, inp_janela))
+    bt_voltar = fun1.CRIAR_BOTAO(inp_frame, "VOLTAR",'#258D19', 'white',3,'15','',"hand2",lambda: voltar( inp_menu, inp_janela))
     bt_voltar.place(relx=0.05, rely=0.89, relwidth=0.2, relheight=0.08)
     
-    bt_continuar = fun.CRIAR_BOTAO(inp_frame, "DELETAR", '#258D19', 'white',3,'15','',"hand2",lambda: deletar(inp_menu, inp_janela))
+    bt_continuar = fun1.CRIAR_BOTAO(inp_frame, "DELETAR", '#258D19', 'white',3,'15','',"hand2",lambda: deletar(inp_menu, inp_janela))
     bt_continuar.place(relx=0.4, rely=0.89, relwidth=0.2, relheight=0.08)
 
-    bt_continuar = fun.CRIAR_BOTAO(inp_frame, "SALVAR",'#258D19', 'white',3,'15','',"hand2",lambda: salvar(inp_menu, inp_janela))
+    bt_continuar = fun1.CRIAR_BOTAO(inp_frame, "SALVAR",'#258D19', 'white',3,'15','',"hand2",lambda: salvar(inp_menu, inp_janela))
     bt_continuar.place(relx=0.75, rely=0.89, relwidth=0.2, relheight=0.08)
     
     
@@ -223,14 +223,14 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
             return
         
         # Inserir dados no banco de dados
-        conn, cursor = fun.CONECTA_BD(caminho)
+        conn, cursor = fun1.CONECTA_BD(caminho)
         conn.commit()
         comando = f"INSERT INTO DADOS_EMPRESAS VALUES (?, ?, ?, ?, ?, ?, ?)"
         registros = (dados_obtidos[0], dados_obtidos[1], dados_obtidos[2], dados_obtidos[3], dados_obtidos[4],  dados_obtidos[5], dados_obtidos[6])
         cursor.execute(comando, registros)
         conn.commit()
         print("\n\n", color.Fore.CYAN + "DADOS SALVOS - ABA_CADASTRO_BICO" + color.Style.RESET_ALL)
-        fun.DESCONECTA_BD(conn)
+        fun1.DESCONECTA_BD(conn)
 
         aba_1.deiconify()  # Exiba a janela da aba 1
         aba_2.destroy()
@@ -264,12 +264,12 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
             resposta = messagebox.askokcancel("askokcancel", f"Tem certeza que deseja\n excluir os dados deste ID?")
             if resposta:
                 print(f"Deletando {dados_obtidos}")
-                conn, cursor = fun.CONECTA_BD(caminho)
+                conn, cursor = fun1.CONECTA_BD(caminho)
                 comando = f"DELETE FROM DADOS_EMPRESAS WHERE ID = ? "
                 cursor.execute(comando, (input_ID.get(),))
                 conn.commit()
                 print("\n\n", color.Fore.RED + "DADOS DELETADOS - ABA_CADASTRO_BICO" + color.Style.RESET_ALL)
-                fun.DESCONECTA_BD(conn)
+                fun1.DESCONECTA_BD(conn)
 
                 messagebox.showinfo("showinfo", "Dados deletados")
         else:
@@ -281,7 +281,7 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
     
 def componentes_frame2(inp_frame):
     # {=======================Título=========================}
-    titulo = fun.CRIAR_LABEL(inp_frame, "Bicos Registrados", '#B4FF9A', "#005200", 'arial', '25', 'bold')
+    titulo = fun1.CRIAR_LABEL(inp_frame, "Bicos Registrados", '#B4FF9A', "#005200", 'arial', '25', 'bold')
     titulo.place(relx =0.3, rely=0.05) 
     
     Tabela = ttk.Treeview(inp_frame, height=10,column=("col1", "col2", "col3", "col4", "col5","col6","col7" ),style="mystyle.Treeview")

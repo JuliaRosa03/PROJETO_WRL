@@ -5,7 +5,8 @@ import colorama as color
 import customtkinter
 from PIL import Image, ImageTk
 import pyrealsense2 as rs
-import FUNCOES_WRL as fun
+import FUNCOES_WRL as fun1
+import FUNCOES_CAMERA_WRL as fun2 #Funcções para camêra
 
 from direction import folder
 pasta = folder()
@@ -16,12 +17,12 @@ def selecao(inp_ID, inp_tipo): # {=========Leitura Grupo, SIte, BOF e ID(FRAME 1
     inp_ID = int(inp_ID)
     ID = inp_ID
     
-    conn, cursor = fun.CONECTA_BD( fr"{pasta}\REGISTROS_WRL.db")
+    conn, cursor = fun1.CONECTA_BD( fr"{pasta}\REGISTROS_WRL.db")
     comando = f"SELECT * FROM DADOS_EMPRESAS WHERE ID = {inp_ID} AND TIPO = '{inp_tipo}' "
     cursor.execute(comando)
     dados = cursor.fetchall()
     #print('dados', dados)
-    fun.DESCONECTA_BD(conn)
+    fun1.DESCONECTA_BD(conn)
     
     grupo_completo = list(dados[0])
     dados = [item for sublist in dados for item in sublist]
@@ -34,11 +35,11 @@ def selecao(inp_ID, inp_tipo): # {=========Leitura Grupo, SIte, BOF e ID(FRAME 1
 def tabela(int_arquivo): # {=========Informações da tabela(FRAME 2)=========}
     global registro_foto
     
-    conn, cursor = fun.CONECTA_BD( fr"{pasta}\REGISTROS_WRL.db")
+    conn, cursor = fun1.CONECTA_BD( fr"{pasta}\REGISTROS_WRL.db")
     comando = f"SELECT * FROM B6 WHERE ARQUIVO = '{int_arquivo}' "
     cursor.execute(comando)
     dados2 = cursor.fetchone()
-    fun.DESCONECTA_BD(conn)
+    fun1.DESCONECTA_BD(conn)
     
     registro_foto = int_arquivo
     return dados2
@@ -94,11 +95,11 @@ def componentes_frame1(inp_ID, inp_tipo, int_arquivo,inp_menu, janela_cadastro1,
     vida = dados[6]
     
     # {=======================Título=========================}
-    titulo1_pg1 = fun.CRIAR_LABEL(frame_1, "Dados do Bico",'#B4EEB4',"#2F4F4F",'arial', '25', 'bold')
+    titulo1_pg1 = fun1.CRIAR_LABEL(frame_1, "Dados do Bico",'#B4EEB4',"#2F4F4F",'arial', '25', 'bold')
     titulo1_pg1.place(relx=0.32, rely=0.03)
     
     # {=======================Grupo=========================}
-    grupo_pg1 = fun.CRIAR_LABEL(frame_1,"Grupo:",'#B4EEB4',"#1C1C1C",'verdana', '20','bold')
+    grupo_pg1 = fun1.CRIAR_LABEL(frame_1,"Grupo:",'#B4EEB4',"#1C1C1C",'verdana', '20','bold')
     grupo_pg1.place(relx=0.05, rely=0.15)
 
     grupo_pg1 = tk.Label(frame_1,
@@ -109,7 +110,7 @@ def componentes_frame1(inp_ID, inp_tipo, int_arquivo,inp_menu, janela_cadastro1,
     grupo_pg1.place(relx=0.2, rely=0.15)
 
     # {=======================Site=========================}
-    site_pg1 = fun.CRIAR_LABEL(frame_1,"Site:",'#B4EEB4',"#1C1C1C",'verdana', '20','bold')
+    site_pg1 = fun1.CRIAR_LABEL(frame_1,"Site:",'#B4EEB4',"#1C1C1C",'verdana', '20','bold')
     site_pg1.place(relx=0.05, rely=0.25)
 
     site_pg1 = tk.Label(frame_1,
@@ -120,7 +121,7 @@ def componentes_frame1(inp_ID, inp_tipo, int_arquivo,inp_menu, janela_cadastro1,
     site_pg1.place(relx=0.15, rely=0.25)
 
     # {=======================BOF=========================}
-    BOF_pg1 = fun.CRIAR_LABEL(frame_1,"BOF:",'#B4EEB4',"#1C1C1C",'verdana', '20','bold')
+    BOF_pg1 = fun1.CRIAR_LABEL(frame_1,"BOF:",'#B4EEB4',"#1C1C1C",'verdana', '20','bold')
     BOF_pg1.place(relx=0.05, rely=0.35)
 
     site_pg1 = tk.Label(frame_1,
@@ -131,7 +132,7 @@ def componentes_frame1(inp_ID, inp_tipo, int_arquivo,inp_menu, janela_cadastro1,
     site_pg1.place(relx=0.15, rely=0.35)
     
     # {=======================ID=========================}
-    ID_pg1 = fun.CRIAR_LABEL(frame_1,"ID:",'#B4EEB4',"#1C1C1C",'verdana', '20','bold')
+    ID_pg1 = fun1.CRIAR_LABEL(frame_1,"ID:",'#B4EEB4',"#1C1C1C",'verdana', '20','bold')
     ID_pg1.place(relx=0.05, rely=0.45)
 
     ID_informado_pg1 = tk.Label(frame_1,
@@ -147,7 +148,7 @@ def componentes_frame1(inp_ID, inp_tipo, int_arquivo,inp_menu, janela_cadastro1,
     hora_foto = dados2[10] 
     medidas_foto = dados2[11:] 
 
-    Data_pg1 = fun.CRIAR_LABEL(frame_1,"Data:",'#B4EEB4',"#1C1C1C",'verdana', '20','bold')
+    Data_pg1 = fun1.CRIAR_LABEL(frame_1,"Data:",'#B4EEB4',"#1C1C1C",'verdana', '20','bold')
     Data_pg1.place(relx=0.05, rely=0.6)
 
     Data_informado_pg1 = tk.Label(frame_1,
@@ -158,7 +159,7 @@ def componentes_frame1(inp_ID, inp_tipo, int_arquivo,inp_menu, janela_cadastro1,
     Data_informado_pg1.place(relx=0.17, rely=0.6)
     
     # {=======================Hora=========================}
-    Hora_pg1 = fun.CRIAR_LABEL(frame_1,"Hora:",'#B4EEB4',"#1C1C1C",'verdana', '20','bold')
+    Hora_pg1 = fun1.CRIAR_LABEL(frame_1,"Hora:",'#B4EEB4',"#1C1C1C",'verdana', '20','bold')
     Hora_pg1.place(relx=0.05, rely=0.7)
 
     Hora_informado_pg1 = tk.Label(frame_1,
@@ -169,7 +170,7 @@ def componentes_frame1(inp_ID, inp_tipo, int_arquivo,inp_menu, janela_cadastro1,
     Hora_informado_pg1.place(relx=0.17, rely=0.7)
 
     # {=======================Vida=========================}
-    Vida_pg1 = fun.CRIAR_LABEL(frame_1,"Vida:",'#B4EEB4',"#1C1C1C",'verdana', '20','bold')
+    Vida_pg1 = fun1.CRIAR_LABEL(frame_1,"Vida:",'#B4EEB4',"#1C1C1C",'verdana', '20','bold')
     Vida_pg1.place(relx=0.05, rely=0.8)
 
     Vida_informado_pg1 = tk.Label(frame_1,

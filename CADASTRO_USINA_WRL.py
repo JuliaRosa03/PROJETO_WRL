@@ -2,7 +2,7 @@ from tkinter import ttk, CENTER, messagebox
 from customtkinter import *
 import tkinter as tk
 import colorama as color
-import FUNCOES_WRL as fun
+import FUNCOES_WRL as fun1
 
 from direction import direction
 caminho = direction()
@@ -62,14 +62,14 @@ def ENTRY_STRING(inp_text):
 def componentes_frame1(inp_frame,inp_janela, inp_menu):
     
     # {=======================Título=========================}
-    titulo = fun.CRIAR_LABEL(inp_frame, "Cadastrar Usina", '#B4FF9A', "#005200", 'arial', '25', 'bold')
+    titulo = fun1.CRIAR_LABEL(inp_frame, "Cadastrar Usina", '#B4FF9A', "#005200", 'arial', '25', 'bold')
     titulo.place(relx=0.15, rely=0.05) 
     
-    titulo = fun.CRIAR_LABEL(inp_frame, "Primeiro Registro\nda nova Usina", '#B4FF9A', "#005200", 'arial', '25', 'bold')
+    titulo = fun1.CRIAR_LABEL(inp_frame, "Primeiro Registro\nda nova Usina", '#B4FF9A', "#005200", 'arial', '25', 'bold')
     titulo.place(relx =0.65, rely=0.05)
 
     # {=======================USINA - NOME=========================}
-    label_usina_nome = fun.CRIAR_LABEL(inp_frame, "Usina: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
+    label_usina_nome = fun1.CRIAR_LABEL(inp_frame, "Usina: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
     label_usina_nome.place(relx=0.03, rely=0.6)
 
     input_usina_nome = tk.Entry(inp_frame, validate= "key",font=("Arial", 18),  validatecommand="key")
@@ -79,7 +79,7 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
     estados_brasileiros = [ "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", 
                             "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO" ]
     
-    label_usina_estado = fun.CRIAR_LABEL(inp_frame, "Estado: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
+    label_usina_estado = fun1.CRIAR_LABEL(inp_frame, "Estado: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
     label_usina_estado.place(relx=0.03, rely=0.45)
     
     estado_var = StringVar()
@@ -96,7 +96,7 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
     input_usina_estado.config(validatecommand = vcmd)
     
     # {=======================USINA - PAÍS=========================}
-    label_usina_pais = fun.CRIAR_LABEL(inp_frame, "País: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
+    label_usina_pais = fun1.CRIAR_LABEL(inp_frame, "País: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
     label_usina_pais.place(relx=0.03, rely=0.3)
 
     input_usina_pais = tk.Entry(inp_frame, validate= "key",font=("Arial", 18),  validatecommand="key")
@@ -105,25 +105,25 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
     input_usina_pais.config(validatecommand = vcmd2)
     
     # {=======================SITE=========================}
-    label_site = fun.CRIAR_LABEL(inp_frame, "Site: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
+    label_site = fun1.CRIAR_LABEL(inp_frame, "Site: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
     label_site.place(relx=0.03, rely=0.75)
 
     input_site = tk.Entry(inp_frame, validate= "key",font=("Arial", 18),  validatecommand="key")
     input_site.place(relx=0.11, rely=0.75, relwidth=0.35, relheight=0.07)
 
     # {=======================Divisória=========================}
-    label_divisor = fun.CRIAR_LABEL(inp_frame, "", '#9BCD9B', "#1C1C1C", 'arial', '20', 'bold')
+    label_divisor = fun1.CRIAR_LABEL(inp_frame, "", '#9BCD9B', "#1C1C1C", 'arial', '20', 'bold')
     label_divisor.place(relx=0.5, rely=0.1, relwidth=0.005, relheight=0.85)
     
     # {=======================FUROS=========================}
-    label_furos = fun.CRIAR_LABEL(inp_frame, "Furos: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold' )
+    label_furos = fun1.CRIAR_LABEL(inp_frame, "Furos: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold' )
     label_furos.place(relx=0.53, rely=0.3)
 
     input_furos = tk.Entry(inp_frame, validate= "key",font=("Arial", 18),  validatecommand= validador(inp_frame))
     input_furos.place(relx=0.63, rely=0.3, relwidth=0.26, relheight=0.07)
     
     # {=======================TIPO=========================}
-    label_tipo = fun.CRIAR_LABEL(inp_frame, "Tipo: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
+    label_tipo = fun1.CRIAR_LABEL(inp_frame, "Tipo: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
     label_tipo.place(relx=0.53, rely=0.45)
 
     input_tipo = tk.Entry(inp_frame,font=("Arial", 18))
@@ -131,14 +131,14 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
     add_placeholder(input_tipo, "externa/interna")
     
     # {=======================BOF=========================}
-    label_BOF = fun.CRIAR_LABEL(inp_frame, "BOF: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold' )
+    label_BOF = fun1.CRIAR_LABEL(inp_frame, "BOF: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold' )
     label_BOF.place(relx=0.53, rely=0.6)
 
     input_BOF = tk.Entry(inp_frame, validate= "key",font=("Arial", 18),  validatecommand= validador(inp_frame))
     input_BOF.place(relx=0.63, rely=0.6, relwidth=0.26, relheight=0.07)
     
     # {=======================ID=========================}
-    label_ID = fun.CRIAR_LABEL(inp_frame, "ID: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
+    label_ID = fun1.CRIAR_LABEL(inp_frame, "ID: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
     label_ID.place(relx=0.53, rely=0.75)
 
     input_ID = tk.Entry(inp_frame, validate= "key",font=("Arial", 18),  validatecommand= validador(inp_frame))
@@ -146,13 +146,13 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
     
     # {=======================Botão Voltar, Continuar e excluir=========================}
     #OBS: por imagens nos botões
-    bt_voltar = fun.CRIAR_BOTAO(inp_frame, "VOLTAR",'#258D19', 'white',3,'15','',"hand2",lambda: voltar( inp_menu, inp_janela))
+    bt_voltar = fun1.CRIAR_BOTAO(inp_frame, "VOLTAR",'#258D19', 'white',3,'15','',"hand2",lambda: voltar( inp_menu, inp_janela))
     bt_voltar.place(relx=0.05, rely=0.89, relwidth=0.2, relheight=0.08)
     
-    # bt_continuar = fun.CRIAR_BOTAO(inp_frame, "DELETAR", '#258D19', 'white',3,'15','',"hand2")#,lambda: deletar(inp_menu, inp_janela)
+    # bt_continuar = fun1.CRIAR_BOTAO(inp_frame, "DELETAR", '#258D19', 'white',3,'15','',"hand2")#,lambda: deletar(inp_menu, inp_janela)
     # bt_continuar.place(relx=0.4, rely=0.89, relwidth=0.2, relheight=0.08)
 
-    bt_continuar = fun.CRIAR_BOTAO(inp_frame, "SALVAR",'#258D19', 'white',3,'15','',"hand2")#,lambda: salvar(inp_menu, inp_janela)
+    bt_continuar = fun1.CRIAR_BOTAO(inp_frame, "SALVAR",'#258D19', 'white',3,'15','',"hand2")#,lambda: salvar(inp_menu, inp_janela)
     bt_continuar.place(relx=0.75, rely=0.89, relwidth=0.2, relheight=0.08)
     
     
@@ -202,14 +202,14 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
     #         return
         
     #     # Inserir dados no banco de dados
-    #     conn, cursor = fun.CONECTA_BD(caminho)
+    #     conn, cursor = fun1.CONECTA_BD(caminho)
     #     conn.commit()
     #     comando = f"INSERT INTO DADOS_EMPRESAS VALUES (?, ?, ?, ?, ?, ?, ?)"
     #     registros = (dados_obtidos[0], dados_obtidos[1], dados_obtidos[2], dados_obtidos[3], dados_obtidos[4],  dados_obtidos[5], dados_obtidos[6])
     #     cursor.execute(comando, registros)
     #     conn.commit()
     #     print("\n\n", color.Fore.CYAN + "DADOS SALVOS - ABA_CADASTRO_BICO" + color.Style.RESET_ALL)
-    #     fun.DESCONECTA_BD(conn)
+    #     fun1.DESCONECTA_BD(conn)
 
     #     aba_1.deiconify()  # Exiba a janela da aba 1
     #     aba_2.destroy()
@@ -243,12 +243,12 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
     #         resposta = messagebox.askokcancel("askokcancel", f"Tem certeza que deseja\n excluir os dados deste ID?")
     #         if resposta:
     #             print(f"Deletando {dados_obtidos}")
-    #             conn, cursor = fun.CONECTA_BD(caminho)
+    #             conn, cursor = fun1.CONECTA_BD(caminho)
     #             comando = f"DELETE FROM DADOS_EMPRESAS WHERE ID = ? "
     #             cursor.execute(comando, (input_ID.get(),))
     #             conn.commit()
     #             print("\n\n", color.Fore.RED + "DADOS DELETADOS - ABA_CADASTRO_BICO" + color.Style.RESET_ALL)
-    #             fun.DESCONECTA_BD(conn)
+    #             fun1.DESCONECTA_BD(conn)
 
     #             messagebox.showinfo("showinfo", "Dados deletados")
     #     else:
