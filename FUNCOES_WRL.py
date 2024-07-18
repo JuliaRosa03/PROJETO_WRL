@@ -434,10 +434,10 @@ def salvar_registros(lista, num):
     #para salvar a vida
     # atualiza a coluna apenas dos objetos com atributo específico
     # cursor.execute("UPDATE nome_tabela SET nome_coluna_1 = 'valor_1' WHERE nome_coluna_2 = 'valor_2' ")
-    vida = lista[7] 
+    vida = lista[6] 
     print('vida',vida)
 
-    comando_vida = F"UPDATE DADOS_EMPRESAS SET ULTIMA_VIDA = {vida} WHERE Grupo = {lista[1]} AND ID = {lista[5]}"
+    comando_vida = F"UPDATE DADOS_EMPRESAS SET ULTIMA_VIDA = {vida} WHERE Grupo = {lista[2]} AND ID = {lista[5]}"
     cursor.execute(comando_vida)
     banco.commit()
 
