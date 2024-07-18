@@ -338,12 +338,12 @@ if not selected_tables:
 # {========= Filtros para o gráfico =========}
 if selected_tables and not grupo:
     # # {======================= Gráfico de pizza - Considerando lanças de 4 e 6 furos =========================}
-    # Gráfico para USIMINAS/ES/BRASIL
+    # # {======================= Para USIMINAS/ES/BRASIL =========================}
     conn = sql.connect(fr'{pasta}\SITE\REGISTROS_DESGASTE.db')
-    query = f"SELECT GERAL, COUNT(*) as quantidade FROM {selected_tables[0]} WHERE GRUPO = 'USIMINAS/ES/BRASIL' GROUP BY GERAL"
+    query = "SELECT GERAL, COUNT(*) as quantidade FROM B6 WHERE GRUPO = 'USIMINAS/ES/BRASIL' GROUP BY GERAL"
     df = pd.read_sql_query(query, conn)
     conn.close()
-
+    
     # Verificando os estados
     df = df[df['GERAL'].isin(['Bom', 'Estável', 'Crítico'])]
 
@@ -360,43 +360,172 @@ if selected_tables and not grupo:
     fig1, ax = plt.subplots(figsize=(4, 4))
     ax.pie(df['quantidade'], labels=df['GERAL'], colors=state_colors, autopct='%1.1f%%', startangle=90)
     ax.axis('equal')  
-    ax.set_title('Situação geral das lanças')
+    ax.set_title('GRUPO USIMINAS/ES/BRASIL')
+    # Remover fundo
+    fig1.patch.set_visible(False)  # Remove o fundo da figura
+    ax.axis('off')  # Remove o eixo
 
-    # Gráfico para MINERADORA/BH/BRASIL
+    # # # {======================= Para MINERADORA/BH/BRASIL =========================}
     conn = sql.connect(fr'{pasta}\SITE\REGISTROS_DESGASTE.db')
-    query = f"SELECT GERAL, COUNT(*) as quantidade FROM {selected_tables[0]} WHERE GRUPO = 'MINERADORA/BH/BRASIL' GROUP BY GERAL"
+    query = "SELECT GERAL, COUNT(*) as quantidade FROM B6 WHERE GRUPO = 'MINERADORA/BH/BRASIL' GROUP BY GERAL"
     df = pd.read_sql_query(query, conn)
     conn.close()
 
     # Verificando os estados
     df = df[df['GERAL'].isin(['Bom', 'Estável', 'Crítico'])]
-
-    # Definindo as cores para cada estado
-    colors = {
-        'Bom': '#88DF76',
-        'Estável': '#D4884A',
-        'Crítico': '#CF5B47'}
-
     # Mapeando as cores para os estados
     state_colors = [colors[state] for state in df['GERAL']]
 
-    # Criando o gráfico de pizza
+   # Criando o gráfico de pizza
     fig2, ax = plt.subplots(figsize=(4, 4))
     ax.pie(df['quantidade'], labels=df['GERAL'], colors=state_colors, autopct='%1.1f%%', startangle=90)
     ax.axis('equal')  
-    ax.set_title('Situação geral das lanças')
+    ax.set_title('GRUPO MINERADORA/BH/BRASIL')
+    # Remover fundo
+    fig2.patch.set_visible(False)  # Remove o fundo da figura
+    ax.axis('off')  # Remove o eixo
 
-    # Exibindo o gráfico de pizza
-    col1, col2 = st.columns(2)
-    with col1:
-        st.markdown("""<h2 style='font-size:30px;'>Grupo USIMINAS/ES/BRASIL</h2>""", unsafe_allow_html=True)
+    # # {======================= Tabelas =========================}
+    # # {======================= ID X ESTADO =========================}
+    # USIMINAS/ES/BRASIL
+    conn = sql.connect(fr'{pasta}\SITE\REGISTROS_DESGASTE.db')
+    cursor = conn.cursor()
+    # Extraindo dados ID e ESTADO do banco 
+    comando = "SELECT ID, GERAL FROM B6 WHERE GRUPO = 'USIMINAS/ES/BRASIL'"
+    cursor.execute(comando)
+    # Obter os resultados
+    resultados = cursor.fetchall()
+    conn.close()
+
+    tabela1_US = pd.DataFrame(resultados, columns=["ID", "ESTADO GERAL DAS LANÇAS"])
+    # Removendo duplicatas com base na coluna 'ID'
+    tabela1_US = tabela1_US.drop_duplicates(subset='ID')
+    # Ordenando em ordem crescente pelo 'ID'
+    tabela1_US = tabela1_US.sort_values(by='ID')
+
+     # MINERADORA/BH/BRASIL
+    conn = sql.connect(fr'{pasta}\SITE\REGISTROS_DESGASTE.db')
+    cursor = conn.cursor()
+    # Extraindo dados ID e ESTADO do banco 
+    comando = "SELECT ID, GERAL FROM B6 WHERE GRUPO = 'MINERADORA/BH/BRASIL'"
+    cursor.execute(comando)
+    # Obter os resultados
+    resultados = cursor.fetchall()
+    conn.close()
+
+    tabela1_MN = pd.DataFrame(resultados, columns=["ID", "ESTADO GERAL DAS LANÇAS"])
+    # Removendo duplicatas com base na coluna 'ID'
+    tabela1_MN = tabela1_MN.drop_duplicates(subset='ID')
+    # Ordenando em ordem crescente pelo 'ID'
+    tabela1_MN = tabela1_MN.sort_values(by='ID')
+
+    # # {======================= ID X MANUTENÇÃO =========================}
+    # USIMINAS/ES/BRASIL
+    conn = sql.connect(fr'{pasta}\REGISTROS_WRL.db')
+    cursor = conn.cursor()
+    # Extraindo dados ID, VIDA e DATA do banco
+    comando = "SELECT ID, VIDA, DATA FROM B6 WHERE GRUPO = 'USIMINAS/ES/BRASIL'"
+    cursor.execute(comando)
+    # Obter os resultados
+    resultados = cursor.fetchall()
+    conn.close()
+    # Criando um DataFrame
+    tabela = pd.DataFrame(resultados, columns=["ID", "VIDA", "DATA DA ÚLTIMA MANUTENÇÃO"])
+    # Encontrando o índice da maior VIDA para cada ID
+    idx = tabela.groupby('ID')['VIDA'].idxmax()
+    # Selecionando as linhas com a maior VIDA para cada ID
+    tabela2_US = tabela.loc[idx, ['ID', 'DATA DA ÚLTIMA MANUTENÇÃO']]
+    # Ordenando em ordem crescente pelo 'ID'
+    tabela2_US = tabela2_US.sort_values(by='ID')
+
+    # MINERADORA/BH/BRASIL
+    conn = sql.connect(fr'{pasta}\REGISTROS_WRL.db')
+    cursor = conn.cursor()
+    # Extraindo dados ID, VIDA e DATA do banco
+    comando = "SELECT ID, VIDA, DATA FROM B6 WHERE GRUPO = 'MINERADORA/BH/BRASIL'"
+    cursor.execute(comando)
+    # Obter os resultados
+    resultados = cursor.fetchall()
+    conn.close()
+    # Criando um DataFrame
+    tabelaMN = pd.DataFrame(resultados, columns=["ID", "VIDA", "DATA DA ÚLTIMA MANUTENÇÃO"])
+    # Encontrando o índice da maior VIDA para cada ID
+    idx = tabelaMN.groupby('ID')['VIDA'].idxmax()
+    # Selecionando as linhas com a maior VIDA para cada ID
+    tabela2_MN = tabelaMN.loc[idx, ['ID', 'DATA DA ÚLTIMA MANUTENÇÃO']]
+    # Ordenando em ordem crescente pelo 'ID'
+    tabela2_MN = tabela2_MN.sort_values(by='ID')
+
+    # Função para aplicar estilos - Tabela USIMINAS
+    def highlight_cols(s):
+        return ['background-color: #d9d9d9']*len(s)
+
+    # Aplicando estilos
+    tabela1_US = tabela1_US.style.set_table_styles(
+        [{'selector': 'th', 'props': [('font-size', '16px')]}]
+    ).set_properties(**{
+        'text-align': 'center',
+        'width': '500px'
+    }).apply(highlight_cols, axis=1)
+
+    tabela2_US = tabela2_US.style.set_table_styles(
+        [{'selector': 'th', 'props': [('font-size', '16px')]}]
+    ).set_properties(**{
+        'text-align': 'center',
+        'width': '150px'
+    }).apply(highlight_cols, axis=1)
+
+    # Aplicando estilos - Tabela MINERADORA
+    tabela1_MN = tabela1_MN.style.set_table_styles(
+        [{'selector': 'th', 'props': [('font-size', '16px')]}]
+    ).set_properties(**{
+        'text-align': 'center',
+        'width': '500px'
+    }).apply(highlight_cols, axis=1)
+
+    tabela2_MN = tabela2_MN.style.set_table_styles(
+        [{'selector': 'th', 'props': [('font-size', '16px')]}]
+    ).set_properties(**{
+        'text-align': 'center',
+        'width': '150px'
+    }).apply(highlight_cols, axis=1)
+    
+    # Exibindo os gráfico e tabelas
+    col1_US, col2_US, col3_US = st.columns(3)
+    with col1_US:
+        st.markdown(f"""<h2 style='font-size:18px; text-align:center;'>SITUAÇÃO GERAL DAS LANÇAS - {selected_tables[0]} </h2>""", unsafe_allow_html=True)
+        st.markdown("<div style='display:flex; justify-content:center;'>", unsafe_allow_html=True)
         st.pyplot(fig1)
-    with col2:
-        st.markdown("""<h2 style='font-size:30px;'>Grupo MINERADORA/BH/BRASIL</h2>""", unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
+    with col2_US:
+        st.markdown("""<h2 style='font-size:18px; text-align:center;'>a) Estado das lanças</h2>""", unsafe_allow_html=True)
+        st.markdown("<div style='display:flex; justify-content:center;'>", unsafe_allow_html=True)
+        st.dataframe(tabela1_US,hide_index=True)
+        
+    with col3_US:
+        st.markdown("""<h2 style='font-size:18px; text-align:center;'>b) Últimos registros</h2>""", unsafe_allow_html=True)
+        st.markdown("<div style='display:flex; justify-content:center;'>", unsafe_allow_html=True)
+        st.dataframe(tabela2_US,hide_index=True)
+    st.divider()
+
+    # Exibindo os gráfico e tabelas
+    col1_MN, col2_MN, col3_MN = st.columns(3)
+    with col1_MN:
+        st.markdown("""<h2 style='font-size:18px; text-align:center;'>SITUAÇÃO GERAL DAS LANÇAS</h2>""", unsafe_allow_html=True)
+        st.markdown("<div style='display:flex; justify-content:center;'>", unsafe_allow_html=True)
         st.pyplot(fig2)
+        st.markdown("</div>", unsafe_allow_html=True)
+    with col2_MN:
+        st.markdown("""<h2 style='font-size:18px; text-align:center;'>a) Estado das lanças</h2>""", unsafe_allow_html=True)
+        st.markdown("<div style='display:flex; justify-content:center;'>", unsafe_allow_html=True)
+        st.dataframe(tabela1_MN,hide_index=True)
+    with col3_MN:
+        st.markdown("""<h2 style='font-size:18px; text-align:center;'>b) Últimos registros</h2>""", unsafe_allow_html=True)
+        st.markdown("<div style='display:flex; justify-content:center;'>", unsafe_allow_html=True)
+        st.dataframe(tabela2_MN,hide_index=True)
 
 if selected_tables and grupo:
-    # Gráfico para USIMINAS/ES/BRASIL
+    # Gráfico 
     conn = sql.connect(fr'{pasta}\SITE\REGISTROS_DESGASTE.db')
     query = f"SELECT GERAL, COUNT(*) as quantidade FROM {selected_tables[0]} WHERE GRUPO = '{grupo[0]}' GROUP BY GERAL"
     df = pd.read_sql_query(query, conn)
@@ -415,17 +544,85 @@ if selected_tables and grupo:
     state_colors = [colors[state] for state in df['GERAL']]
 
     # Criando o gráfico de pizza
-    fig, ax = plt.subplots(figsize=(4, 4))
+    fig3, ax = plt.subplots(figsize=(4, 4))
     ax.pie(df['quantidade'], labels=df['GERAL'], colors=state_colors, autopct='%1.1f%%', startangle=90)
     ax.axis('equal')  
-    ax.set_title('Situação geral das lanças')
+    ax.set_title(f'{grupo[0]}')
+    # Remover fundo
+    fig3.patch.set_visible(False)  # Remove o fundo da figura
+    ax.axis('off')  # Remove o eixo
 
-    col1, col2 = st.columns(2)
+    # # {======================= Tabelas =========================}
+    # Função para aplicar estilos 
+    def highlight_cols(s):
+        return ['background-color: #d9d9d9']*len(s)
+
+    # # {======================= ID X ESTADO =========================}
+    conn = sql.connect(fr'{pasta}\SITE\REGISTROS_DESGASTE.db')
+    cursor = conn.cursor()
+    # Extraindo dados ID e ESTADO do banco 
+    comando = f"SELECT ID, GERAL FROM {selected_tables[0]} WHERE GRUPO = '{grupo[0]}'"
+    cursor.execute(comando)
+    # Obter os resultados
+    resultados = cursor.fetchall()
+    conn.close()
+
+    tabela1 = pd.DataFrame(resultados, columns=["ID", "ESTADO GERAL DAS LANÇAS"])
+    # Removendo duplicatas com base na coluna 'ID'
+    tabela1 = tabela1.drop_duplicates(subset='ID')
+    # Ordenando em ordem crescente pelo 'ID'
+    tabela1 = tabela1.sort_values(by='ID')
+
+    # # {======================= ID X MANUTENÇÃO =========================}
+    conn = sql.connect(fr'{pasta}\REGISTROS_WRL.db')
+    cursor = conn.cursor()
+    # Extraindo dados ID, VIDA e DATA do banco
+    comando = f"SELECT ID, VIDA, DATA FROM {selected_tables[0]} WHERE GRUPO = '{grupo[0]}'"
+    cursor.execute(comando)
+    # Obter os resultados
+    resultados = cursor.fetchall()
+    conn.close()
+    # Criando um DataFrame
+    tabela2 = pd.DataFrame(resultados, columns=["ID", "VIDA", "DATA DA ÚLTIMA MANUTENÇÃO"])
+    # Encontrando o índice da maior VIDA para cada ID
+    idx = tabela2.groupby('ID')['VIDA'].idxmax()
+    # Selecionando as linhas com a maior VIDA para cada ID
+    tabela2 = tabela2.loc[idx, ['ID', 'DATA DA ÚLTIMA MANUTENÇÃO']]
+    # Ordenando em ordem crescente pelo 'ID'
+    tabela2 = tabela2.sort_values(by='ID')
+
+    # Aplicando estilos
+    tabela1 = tabela1.style.set_table_styles(
+        [{'selector': 'th', 'props': [('font-size', '16px')]}]
+    ).set_properties(**{
+        'text-align': 'center',
+        'width': '500px'
+    }).apply(highlight_cols, axis=1)
+
+    tabela2 = tabela2.style.set_table_styles(
+        [{'selector': 'th', 'props': [('font-size', '16px')]}]
+    ).set_properties(**{
+        'text-align': 'center',
+        'width': '150px'
+    }).apply(highlight_cols, axis=1)
+
+    # Exibindo os gráfico e tabelas
+    col1, col2, col3 = st.columns(3)
     with col1:
-        st.markdown("""<h2 style='font-size:30px;'>Grupo USIMINAS/ES/BRASIL</h2>""", unsafe_allow_html=True)
-        st.pyplot(fig)
+        st.markdown(f"""<h2 style='font-size:18px; text-align:center;'>SITUAÇÃO GERAL DAS LANÇAS - {selected_tables[0]} </h2>""", unsafe_allow_html=True)
+        st.markdown("<div style='display:flex; justify-content:center;'>", unsafe_allow_html=True)
+        st.pyplot(fig3)
+        st.markdown("</div>", unsafe_allow_html=True)
     with col2:
-        st.markdown("""<h2 style='font-size:20px;'>tabela com os ids e estados das lanças</h2>""", unsafe_allow_html=True)
+        st.markdown("""<h2 style='font-size:18px; text-align:center;'>a) Estado das lanças</h2>""", unsafe_allow_html=True)
+        st.markdown("<div style='display:flex; justify-content:center;'>", unsafe_allow_html=True)
+        st.dataframe(tabela1,hide_index=True)
+        
+    with col3:
+        st.markdown("""<h2 style='font-size:18px; text-align:center;'>b) Últimos registros</h2>""", unsafe_allow_html=True)
+        st.markdown("<div style='display:flex; justify-content:center;'>", unsafe_allow_html=True)
+        st.dataframe(tabela2,hide_index=True)
+    st.divider()
 
 if id and selected_tables:
     # {=======================Gráfico de pizza=========================}
@@ -453,6 +650,9 @@ if id and selected_tables:
     ax.axis('equal')  
     ax.set_title(f'Situação dos furos da lança {id[0]}')
     fig_id.set_size_inches(2, 2)  # Ajuste o tamanho da figura (largura, altura)
+    # Remover fundo
+    fig_id.patch.set_visible(False)  # Remove o fundo da figura
+    ax.axis('off')  # Remove o eixo
 
     # {=======================Gráfico principal=========================}
 
@@ -510,10 +710,10 @@ if id and selected_tables:
             st.plotly_chart(fig, use_container_width=True)
             st.divider()
 
-            # Segundo gráfico
+            #{=======================Segundo gráfico=========================}
             vida = st.selectbox("Vida:".format(limite), filtered_df_date["VIDA"].unique(), placeholder="Selecione uma opção") 
 
-            # Filtrar linhas onde 'ID' é igual a 1
+            # Filtrar linhas
             filtro_vida = filtered_df[filtered_df['VIDA'] == vida]
 
             if not filtro_vida.empty:
@@ -526,25 +726,57 @@ if id and selected_tables:
             else:
                 st.write("Registro não localizado")
             
-            # Criar tabela
-            data = {
-                'Coluna 1': ['FUNCIONÁRIO:', 'DATA:', 'HORA:', 'TIPO:'],
-                'Coluna 2': [usuario, data, hora, tipo]
-            }
-            table_df = pd.DataFrame(data)
+            # {=======================Gráfico de pizza=========================}
+            # Gráfico para USIMINAS/ES/BRASIL
+            conn = sql.connect(fr'{pasta}\SITE\REGISTROS_DESGASTE.db')
+            query = f"SELECT ESTADO, COUNT(*) as quantidade FROM {selected_tables[0]} WHERE GRUPO = '{grupo[0]}' AND ID = '{id[0]}' AND VIDA = '{vida}' GROUP BY ESTADO"
+            df = pd.read_sql_query(query, conn)
+            conn.close()
 
-            col1, col2 = st.columns([2,2])
+            # Verificando os estados
+            df = df[df['ESTADO'].isin(['Bom', 'Estável', 'Crítico'])]
+
+            # Definindo as cores para cada estado
+            colors = {
+                'Bom': '#88DF76',
+                'Estável': '#D4884A',
+                'Crítico': '#CF5B47'}
+
+            # Mapeando as cores para os estados
+            state_colors = [colors[state] for state in df['ESTADO']]
+
+            # Criando o gráfico de pizza
+            fig_vida, ax = plt.subplots(figsize=(4, 4))
+            ax.pie(df['quantidade'], labels=df['ESTADO'], colors=state_colors, autopct='%1.1f%%', startangle=90)
+            ax.axis('equal')  
+            fig_vida.set_size_inches(2, 2)  # Ajuste o tamanho da figura (largura, altura)
+            # Remover fundo
+            fig_vida.patch.set_visible(False)  # Remove o fundo da figura
+            ax.axis('off')  # Remove o eixo
+
+            # # {======================= ID X DIAMETROS =========================}
+
+
             image_7F = Image.open(fr'{pasta}\FOTOS_SEGMENTADA\{registro}') 
-            
+
+            # Exibindo os gráfico e tabelas
+            col1, col2, col3 = st.columns(3)
             with col1:
+                st.markdown(f"""<h2 style='font-size:18px; text-align:center;'>REGISTRO</h2>""", unsafe_allow_html=True)
                 st.image(image_7F, caption='Segmentação')
-
             with col2:
-                st.pyplot(fig_id)
-
+                st.markdown("""<h2 style='font-size:18px; text-align:center;'>a) DIÂMETROS</h2>""", unsafe_allow_html=True)
+                st.markdown("<div style='display:flex; justify-content:center;'>", unsafe_allow_html=True)
+                st.dataframe(tabela1,hide_index=True)
+            with col3:
+                st.markdown(f"""<h2 style='font-size:18px; text-align:center;'>SITUAÇÃO DOS FUROS - VIDA {vida} </h2>""", unsafe_allow_html=True)
+                st.markdown("<div style='display:flex; justify-content:center;'>", unsafe_allow_html=True)
+                st.pyplot(fig_vida)
+                st.markdown("</div>", unsafe_allow_html=True)
             st.divider()
+            
         else:
-            st.write("Selecione pelfo menos um ID para visualizar os dados.")
+            st.write("Selecione pelo menos um ID para visualizar os dados.")
     
         st.markdown(f"# Gráfico de desgaste - Diâmetros específicos\n # ID: {', '.join(id)}")
         
