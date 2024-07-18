@@ -55,13 +55,13 @@ def componentes_frame1(inp_menu):
     titulo.place(relx=0.23, rely=0.13)
     
     # {=======================Imagem IFES=========================}
-    img1_pg1 = tk.PhotoImage(file = fr'{pasta}\FOTOS_GUIA\ifes.png')
+    img1_pg1 = tk.PhotoImage(file = fr'{pasta}\ICONES_FOTOS\ifes.png')
     img1_pg1 = img1_pg1.subsample(4,4)
 
     fotoimg1_pg1 = tk.Label(frame_1,
-                                    bg= '#B4FF9A',
-                                    bd =0,
-                                    image = img1_pg1)
+                            bg= '#B4FF9A',
+                            bd =0,
+                            image = img1_pg1)
     fotoimg1_pg1.place(relx=0.13, rely=0.23, anchor=CENTER)
 
     # {=======================Botões de Cadastro=========================}
@@ -80,7 +80,7 @@ def componentes_frame1(inp_menu):
     bt_iniciar_camera.place(relx=0.07, rely=0.46, relwidth=0.4, relheight=0.45)
     
     # {=======================FECHAR ABA=========================}
-    img_fechar = PhotoImage(file='out.png')
+    img_fechar = PhotoImage(file='ICONES_FOTOS\out.png')
     
     bt_fechar_aba_menu = tk.Button(frame_1, image=img_fechar, command=inp_menu.destroy,compound=tk.CENTER, bg="red", bd=3)
     bt_fechar_aba_menu.place(relx=0.94, rely=0.02, relwidth=0.04, relheight=0.06)

@@ -446,7 +446,7 @@ def salvar_registros(lista, num):
 def sobrepor_molde(infra_image):
     back_frame = infra_image.copy()
     back_frame = cv2.cvtColor(back_frame, cv2.COLOR_GRAY2RGB)
-    molde = cv2.imread(fr'{pasta}\MOLDE.png')
+    molde = cv2.imread(fr'{pasta}\ICONES_FOTOS\MOLDE.png')
     # Redimensionar a imagem para o tamanho do frame
     molde_resized = cv2.resize(molde, (infra_image.shape[1], infra_image.shape[0]))
     # Definir a região de interesse onde a imagem será sobreposta
