@@ -129,10 +129,10 @@ def aba_camera(inp_janela, dados, inp_menu):
     caixas_detectadas, nomes_classes = fun.extrair_dados(resultados, mascaras, nome_arquivo_BW)
  
     # Extrair coordenadas e centro das caixas delimitadoras
-    # lista_pontos = fun.extrair_coordenadas_centro(caixas_detectadas, nomes_classes)
-    # # Filtrar o ponto central se detectado como furo
-    # lista_pontos = fun.filtrar_ponto_central(lista_pontos, centro)
-    # fun.enumerar_furos(lista_pontos, qtd_furos, cv2.imread(caminhoBW), dados_arquivo[0])
+    lista_pontos = fun.extrair_coordenadas_centro(caixas_detectadas, nomes_classes)
+    # Filtrar o ponto central se detectado como furo
+    lista_pontos = fun.filtrar_ponto_central(lista_pontos, centro)
+    fun.enumerar_furos(lista_pontos, qtd_furos, cv2.imread(caminhoBW), dados_arquivo[0])
     
     for dado in lista_dh:
         dados_arquivo.append(dado)
