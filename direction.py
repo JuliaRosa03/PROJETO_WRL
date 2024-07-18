@@ -35,3 +35,4 @@ def pasta_site():
         caminho = r'C:\Users\julia\OneDrive\Documentos\IFES\PROJETO_WRL\SITE'
     
     return caminho
+

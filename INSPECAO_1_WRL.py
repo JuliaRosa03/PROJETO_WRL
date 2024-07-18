@@ -49,7 +49,7 @@ def comandos_botao_continuar(inp_janela, inp_usina_grupo, inp_site, inp_BOF, inp
 
     ultima_vida_registrada = dados[6]
     
-    if inp_vida.get() <= ultima_vida_registrada:#OBS: deixar de fechar a tela
+    if inp_vida.get() < ultima_vida_registrada:#OBS: deixar de fechar a tela
         messagebox.showwarning("AVISO",f"A vida têm que\nser maior que a\nultima registrada ({ultima_vida_registrada})")
     
     else:
