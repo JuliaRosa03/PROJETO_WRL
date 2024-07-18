@@ -20,7 +20,6 @@ import FUNCOES_WRL as fun1
 import FUNCOES_CAMERA_WRL as fun2 #Funcções para camêra
 from FUNCOES_CAMERA_WRL import Camera
 import numpy as np
-
 from INSPECAO_3_WRL import aba_dados
 from direction import folder
 pasta = folder()

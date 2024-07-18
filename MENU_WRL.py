@@ -55,7 +55,7 @@ def componentes_frame1(inp_menu):
     titulo.place(relx=0.23, rely=0.13)
     
     # {=======================Imagem IFES=========================}
-    img1_pg1 = tk.PhotoImage(file = fr'{pasta}\ifes.png')
+    img1_pg1 = tk.PhotoImage(file = fr'{pasta}\FOTOS_GUIA\ifes.png')
     img1_pg1 = img1_pg1.subsample(4,4)
 
     fotoimg1_pg1 = tk.Label(frame_1,

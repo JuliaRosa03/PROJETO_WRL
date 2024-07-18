@@ -508,7 +508,7 @@ def estado_geral_bico(lista_diametros):
 
 
 def salvar_registros_desgaste(lista_completa, estados, dados_diametros, estado_bico):
-    pasta = pasta_site()
+    #pasta = folder()
     dados_diametros = dados_diametros[1:]
 
     # Lista com dados até a coluna ARQUIVO
