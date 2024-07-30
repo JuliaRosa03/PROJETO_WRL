@@ -40,7 +40,7 @@ def ABA_CADASTRO_USINA(inp_menu):
     janela_cadastrar_bico.deiconify()
     
 def abrir_streamlit():
-    comando = ['streamlit', 'run', 'SITE/SITE_WRL.py']
+    comando = ['streamlit', 'run', 'SITE_WRL.py']
     subprocess.Popen(comando)
     
 def frames_da_tela(inp_menu):

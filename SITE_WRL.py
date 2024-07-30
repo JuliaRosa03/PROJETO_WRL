@@ -12,22 +12,7 @@ import numpy as np
 from direction import folder, pasta_site
 warnings.filterwarnings("ignore")  # ->ignorar os erros que aparecem no site
 
-<<<<<<< HEAD:SITE/SITE_WRL.py
-option = 1
-def folder():
-    if option ==1:
-        caminho = r"C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL"
-    if option ==2:
-        caminho = r'C:\Users\20221CECA0402\Documents\PROJETO_WRL'
-    if option ==3:
-        caminho = r'C:\Users\julia\OneDrive\Documentos\IFES\PROJETO_WRL'
-    return caminho
 pasta = folder()
-=======
-pasta = folder()
-#pasta = r'C:\Users\julia\OneDrive\Documentos\IFES\PROJETO_WRL'
-# pasta = r'C:\Users\labga\OneDrive\Documentos\IC_WRL\PROJETO_WRL'
->>>>>>> ca1197cdacbe584d4f81ddb66301df7a456c543a:SITE_WRL.py
 
 # VERSÃO 17/07/2024
 

@@ -46,4 +46,7 @@ def CRIAR_LABEL(inp_frame, inp_texto, inp_bg, inp_fg, inp_fonte = NONE, inp_tam_
                     font = (inp_fonte, inp_tam_fonte, inp_style))#fonte, tamanho, style
     return label
 
+def BOTAO_VOLTAR(aba_1, aba_2): #sai da aba atual e volta para a anterior
+    aba_1.deiconify()  # Exiba a janela anterior
+    aba_2.destroy()  # Destrua a janela atual
 

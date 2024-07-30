@@ -7,7 +7,7 @@ import FUNCOES_WRL as fun1
 from direction import direction
 caminho = direction()
 
-def ENTRY_INT(inp_text):
+def ENTRY_INT(inp_text): #Limite do número inteiro do "validador"
     if inp_text == "": return True
     try:
         value = int(inp_text)
@@ -15,7 +15,7 @@ def ENTRY_INT(inp_text):
     
     return 0 <= value <= 10000000000 #Qual a vida máxima geralmente?
 
-def validador(input):
+def validador(input): #Só aceita número inteiro
     return input.register(ENTRY_INT), "%P"
 
 def add_placeholder(entry, placeholder):
@@ -28,7 +28,7 @@ def add_placeholder(entry, placeholder):
             entry.delete(0, tk.END)
             entry.config(fg='black')
 
-    def on_focus_out(event):
+    def on_focus_out(event): #OBS: diminuir fonte
         if entry.get() == '':
             entry.insert(0, placeholder)
             entry.config(fg='grey')
@@ -36,10 +36,11 @@ def add_placeholder(entry, placeholder):
     entry.bind("<FocusIn>", on_focus_in)
     entry.bind("<FocusOut>", on_focus_out)
     
-def voltar(aba_1, aba_2):
-    aba_1.deiconify()  # Exiba a janela da aba 1
-    aba_2.destroy()  # Destrua a janela da aba 2
-    
+""" validate= "key",font=("Arial", 18), validatecommand= validador(inp_frame)"""
+
+def ENTRY_STRING(inp_text):
+    return all(char.isalpha() or char.isspace() for char in inp_text) or inp_text == ""
+
 def tela(inp_janela):
     inp_janela.title("CADASTRAR USINA")
     inp_janela.configure(background= '#9BCD9B')
@@ -55,9 +56,6 @@ def frames_da_tela(inp_janela):
                         bg= '#B4FF9A',
                         highlightbackground= '#668B8B')
     frame_1.place(relx=0.01, rely=0.02,relwidth=0.98, relheight=0.96)
-
-def ENTRY_STRING(inp_text):
-    return all(char.isalpha() or char.isspace() for char in inp_text) or inp_text == ""
 
 def componentes_frame1(inp_frame,inp_janela, inp_menu):
     
@@ -83,17 +81,18 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
     label_usina_estado.place(relx=0.03, rely=0.45)
     
     estado_var = StringVar()
-    estado_combobox = ttk.Combobox(inp_frame, textvariable=estado_var, font=("Arial", 18), state="readonly")
+    estado_combobox = ttk.Combobox(inp_frame, textvariable = estado_var, font=("Arial", 18), state="readonly")
     estado_combobox['values'] = estados_brasileiros
-    estado_combobox.place(relx=0.12, rely=0.45, relwidth=0.26, relheight=0.07)
-    estado_combobox.set("Escolha o estado")
-
-    input_usina_estado = tk.Entry(inp_frame, validate= "key",font=("Arial", 18),  validatecommand="key")
-    input_usina_estado.place(relx=0.23, rely=0.45, relwidth=0.26, relheight=0.07)
-    add_placeholder(input_usina_estado, "Sigla")
+    estado_combobox.place(relx=0.12, rely=0.45, relwidth=0.35, relheight=0.07)
     
-    vcmd = (input_usina_estado.register(ENTRY_STRING), '%P')
-    input_usina_estado.config(validatecommand = vcmd)
+    # estado_combobox.set("Escolha o estado")
+
+    # input_usina_estado = tk.Entry(inp_frame, validate= "key",font=("Arial", 18),  validatecommand="key")
+    # input_usina_estado.place(relx=0.23, rely=0.45, relwidth=0.26, relheight=0.07)
+    # add_placeholder(input_usina_estado, "Sigla")
+    
+    # vcmd = (input_usina_estado.register(ENTRY_STRING), '%P')
+    # input_usina_estado.config(validatecommand = vcmd)
     
     # {=======================USINA - PAÍS=========================}
     label_usina_pais = fun1.CRIAR_LABEL(inp_frame, "País: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
@@ -146,7 +145,7 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
     
     # {=======================Botão Voltar, Continuar e excluir=========================}
     #OBS: por imagens nos botões
-    bt_voltar = fun1.CRIAR_BOTAO(inp_frame, "VOLTAR",'#258D19', 'white',3,'15','',"hand2",lambda: voltar( inp_menu, inp_janela))
+    bt_voltar = fun1.CRIAR_BOTAO(inp_frame, "VOLTAR",'#258D19', 'white',3,'15','',"hand2",lambda: fun1.BOTAO_VOLTAR( inp_menu, inp_janela))
     bt_voltar.place(relx=0.05, rely=0.89, relwidth=0.2, relheight=0.08)
     
     # bt_continuar = fun1.CRIAR_BOTAO(inp_frame, "DELETAR", '#258D19', 'white',3,'15','',"hand2")#,lambda: deletar(inp_menu, inp_janela)

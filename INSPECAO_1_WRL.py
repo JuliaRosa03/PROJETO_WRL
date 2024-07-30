@@ -35,9 +35,6 @@ def validador(input):
 def ENTRY_STRING(inp_text):
     return all(char.isalpha() or char.isspace() for char in inp_text) or inp_text == ""
 
-def voltar(aba_1, aba_2):
-    aba_1.deiconify()  # Exiba a proxima janela 
-    aba_2.destroy()  # Destrua a janela atual
     
 def comandos_botao_continuar(inp_janela, inp_usina_grupo, inp_site, inp_BOF, inp_ID, inp_tipo, inp_furos, inp_vida, inp_usuario, inp_menu): 
     
@@ -71,6 +68,15 @@ def comandos_botao_continuar(inp_janela, inp_usina_grupo, inp_site, inp_BOF, inp
 
         if param > 0:
             messagebox.showwarning("AVISO","Preencha todos os espaços")
+
+        if DADOS_INSERIDOS[-1] == ultima_vida_registrada:
+            msg_box = tk.messagebox.askquestion("VIDA EXISTENTE", "Esta já é a ultima vida registrada,\ndeseja continuar mesmo assim?", icon="warning",)
+            print(msg_box)
+
+            if msg_box == "yes":
+                print("\nDADOS_INS:", DADOS_INSERIDOS)
+                janela_cadastro = aba_camera(inp_janela, DADOS_INSERIDOS, inp_menu)
+                janela_cadastro.deiconify()
 
         else:
             print("\nDADOS_INS:", DADOS_INSERIDOS)
@@ -182,7 +188,7 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):# #TOPLEVEL
 
     # {=======================Botão Voltar e Continuar=========================}
     #obs: Por figuras ilustrativas com os botões
-    bt_voltar = fun1.CRIAR_BOTAO(inp_frame, "MENU",'#258D19', 'white',3,'20','',"hand2", lambda: voltar( inp_menu, inp_janela))# #TOPLEVEL
+    bt_voltar = fun1.CRIAR_BOTAO(inp_frame, "MENU",'#258D19', 'white',3,'20','',"hand2", lambda: fun1.BOTAO_VOLTAR( inp_menu, inp_janela))# #TOPLEVEL
     bt_voltar.place(relx=0.05, rely=0.9, relwidth=0.13, relheight=0.06)
 
     bt_continuar = fun1.CRIAR_BOTAO(inp_frame, "PRÓXIMO",'#258D19', 'white',3,'20','',"hand2",lambda: comandos_botao_continuar(inp_janela,input_usina,input_site,input_BOF,input_ID,input_tipo,input_Furos,input_vida,input_usuario,inp_menu))

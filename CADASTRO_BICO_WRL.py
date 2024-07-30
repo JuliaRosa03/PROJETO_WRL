@@ -46,7 +46,7 @@ def tabela(): # {=========Informações da tabela(FRAME 2)=========}
 
     return dados_tabela
 
-def ENTRY_INT(inp_text):
+def ENTRY_INT(inp_text): #Limite do número inteiro do "validador"
     if inp_text == "": return True
     try:
         value = int(inp_text)
@@ -54,7 +54,7 @@ def ENTRY_INT(inp_text):
     
     return 0 <= value <= 10000000000 #Qual a vida máxima geralmente?
 
-def validador(input):
+def validador(input): #Só aceita número inteiro
     return input.register(ENTRY_INT), "%P"
 
 def add_placeholder(entry, placeholder):
@@ -74,10 +74,6 @@ def add_placeholder(entry, placeholder):
 
     entry.bind("<FocusIn>", on_focus_in)
     entry.bind("<FocusOut>", on_focus_out)
-    
-def voltar(aba_1, aba_2):
-    aba_1.deiconify()  # Exiba a janela da aba 1
-    aba_2.destroy()  # Destrua a janela da aba 2
     
 def tela(inp_janela):
     inp_janela.title("CADASTRAR BICO")
@@ -167,7 +163,7 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
     
     # {=======================Botão Voltar, Continuar e excluir=========================}
     #OBS: por imagens nos botões
-    bt_voltar = fun1.CRIAR_BOTAO(inp_frame, "VOLTAR",'#258D19', 'white',3,'15','',"hand2",lambda: voltar( inp_menu, inp_janela))
+    bt_voltar = fun1.CRIAR_BOTAO(inp_frame, "VOLTAR",'#258D19', 'white',3,'15','',"hand2",lambda: fun1.BOTAO_VOLTAR( inp_menu, inp_janela))
     bt_voltar.place(relx=0.05, rely=0.89, relwidth=0.2, relheight=0.08)
     
     bt_continuar = fun1.CRIAR_BOTAO(inp_frame, "DELETAR", '#258D19', 'white',3,'15','',"hand2",lambda: deletar(inp_menu, inp_janela))
@@ -192,27 +188,23 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
         todos_tabela = tabela()
         print('\nDados obtidos: ', dados_obtidos)
         
-        # Verificar se todos os campos foram preenchidos
         flag = True
         for dado in dados_obtidos:
             if dado == '':
                 flag = False
                 break
         
-        if not flag:
+        if not flag: # Verificar se todos os campos foram preenchidos
             messagebox.showwarning("AVISO","Preencha todos os espaços")
             return
 
-        # Verificar se o registro já existe
-        if tuple(dados_obtidos) in todos_tabela:
+        if tuple(dados_obtidos) in todos_tabela: # Verificar se o registro já existe
             messagebox.showwarning("AVISO","Já existe este registro")
             return
 
-        # Verificar se o ID já existe
         flag = False
-        print(todos_tabela)
-        for tupla in todos_tabela:
-            ultimo_algarismo_tupla = str(tupla[-2])  # Obtém o último dígito da tupla
+        for tupla in todos_tabela: # Verificar se o ID já existe
+            ultimo_algarismo_tupla = str(tupla[-2])
             print(ultimo_algarismo_tupla,',',dados_obtidos[5])
             if dados_obtidos[5] == ultimo_algarismo_tupla:
                 flag = True
@@ -222,7 +214,6 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
         if flag:
             return
         
-        # Inserir dados no banco de dados
         conn, cursor = fun1.CONECTA_BD(caminho)
         conn.commit()
         comando = f"INSERT INTO DADOS_EMPRESAS VALUES (?, ?, ?, ?, ?, ?, ?)"
@@ -232,8 +223,7 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
         print("\n\n", color.Fore.CYAN + "DADOS SALVOS - ABA_CADASTRO_BICO" + color.Style.RESET_ALL)
         fun1.DESCONECTA_BD(conn)
 
-        aba_1.deiconify()  # Exiba a janela da aba 1
-        aba_2.destroy()
+        fun1.BOTAO_VOLTAR(aba_1, aba_2)
     
     def deletar(aba_1, aba_2):
         dados_obtidos = []
@@ -276,8 +266,7 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
             messagebox.showwarning("AVISO","Registro não encontrado")
             return
         
-        aba_1.deiconify()  # Exiba a janela da aba 1
-        aba_2.destroy()
+        fun1.BOTAO_VOLTAR(aba_1, aba_2)
     
 def componentes_frame2(inp_frame):
     # {=======================Título=========================}
@@ -312,7 +301,7 @@ def componentes_frame2(inp_frame):
     for dado in tabela():
         Tabela.insert("", tk.END, values=(dado[0], dado[1], dado[2], dado[3], dado[4], dado[5], dado[6]))
         
-    Tabela.place(relx=0.05, rely=0.2, relwidth=0.9, relheight=0.75)
+    Tabela.place(relx=0.05, rely=0.2, relwidth=0.89, relheight=0.75)
     
     scroolLista = tk.Scrollbar(inp_frame, orient='vertical', command=Tabela.yview)
     Tabela.configure(yscrollcommand = scroolLista.set)

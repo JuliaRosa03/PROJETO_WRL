@@ -30,9 +30,6 @@ model = YOLO(fr'{pasta}\pesos\best.pt')
 # Initialize the DepthCamera
 dc = Camera()
 
-def voltar(aba_1, aba_2):
-    aba_1.deiconify()  # Exiba a janela da aba 1
-    aba_2.destroy()  # Destrua a janela da aba 2
 # Define global variables for storing the results
 global nome_arquivo, caminho_fotoBW, caminho_fotoColorida, nome_arquivo_BW, stop
 nome_arquivo = caminho_fotoBW = caminho_fotoColorida = nome_arquivo_BW = None
@@ -55,7 +52,7 @@ def frames_da_tela(inp_janela):
     return frame_um, frame_dois
 
 def componentes_frame1(inp_frame,inp_janela, inp_menu):
-    bt_voltar = fun1.CRIAR_BOTAO(inp_frame, "Voltar",'#258D19', 'white',3,'15','',"hand2", lambda: voltar( inp_menu, inp_janela))# #TOPLEVEL
+    bt_voltar = fun1.CRIAR_BOTAO(inp_frame, "Voltar",'#258D19', 'white',3,'15','',"hand2", lambda: fun1.BOTAO_VOLTAR( inp_menu, inp_janela))# #TOPLEVEL
     bt_voltar.place(relx=0.05, rely=0.88, relwidth=0.2, relheight=0.08)
     
     btfoto_pg2 = tk.Button(inp_frame, text='CTRL', relief="ridge", cursor="circle", bd=4, bg='#545454', fg='white', font=("arial", 13))
