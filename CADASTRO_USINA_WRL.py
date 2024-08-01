@@ -41,6 +41,15 @@ def add_placeholder(entry, placeholder):
 def ENTRY_STRING(inp_text):
     return all(char.isalpha() or char.isspace() for char in inp_text) or inp_text == ""
 
+def tabela(): # {=========Informações da tabela(FRAME 2)=========}
+    conn, cursor = fun1.CONECTA_BD(caminho)
+    comando = f"SELECT * FROM DADOS_EMPRESAS "
+    cursor.execute(comando)
+    dados_tabela =cursor.fetchall()
+    fun1.DESCONECTA_BD(conn)
+
+    return dados_tabela
+
 def tela(inp_janela):
     inp_janela.title("CADASTRAR USINA")
     inp_janela.configure(background= '#9BCD9B')
@@ -58,42 +67,13 @@ def frames_da_tela(inp_janela):
     frame_1.place(relx=0.01, rely=0.02,relwidth=0.98, relheight=0.96)
 
 def componentes_frame1(inp_frame,inp_janela, inp_menu):
-    
-    # {=======================Título=========================}
+    # {=======================Títulos=========================}
     titulo = fun1.CRIAR_LABEL(inp_frame, "Cadastrar Usina", '#B4FF9A', "#005200", 'arial', '25', 'bold')
     titulo.place(relx=0.15, rely=0.05) 
     
     titulo = fun1.CRIAR_LABEL(inp_frame, "Primeiro Registro\nda nova Usina", '#B4FF9A', "#005200", 'arial', '25', 'bold')
     titulo.place(relx =0.65, rely=0.05)
 
-    # {=======================USINA - NOME=========================}
-    label_usina_nome = fun1.CRIAR_LABEL(inp_frame, "Usina: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
-    label_usina_nome.place(relx=0.03, rely=0.6)
-
-    input_usina_nome = tk.Entry(inp_frame, validate= "key",font=("Arial", 18),  validatecommand="key")
-    input_usina_nome.place(relx=0.11, rely=0.6, relwidth=0.35, relheight=0.07)
-    
-    # {=======================USINA - ESTADO=========================}
-    estados_brasileiros = [ "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", 
-                            "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO" ]
-    
-    label_usina_estado = fun1.CRIAR_LABEL(inp_frame, "Estado: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
-    label_usina_estado.place(relx=0.03, rely=0.45)
-    
-    estado_var = StringVar()
-    estado_combobox = ttk.Combobox(inp_frame, textvariable = estado_var, font=("Arial", 18), state="readonly")
-    estado_combobox['values'] = estados_brasileiros
-    estado_combobox.place(relx=0.12, rely=0.45, relwidth=0.35, relheight=0.07)
-    
-    # estado_combobox.set("Escolha o estado")
-
-    # input_usina_estado = tk.Entry(inp_frame, validate= "key",font=("Arial", 18),  validatecommand="key")
-    # input_usina_estado.place(relx=0.23, rely=0.45, relwidth=0.26, relheight=0.07)
-    # add_placeholder(input_usina_estado, "Sigla")
-    
-    # vcmd = (input_usina_estado.register(ENTRY_STRING), '%P')
-    # input_usina_estado.config(validatecommand = vcmd)
-    
     # {=======================USINA - PAÍS=========================}
     label_usina_pais = fun1.CRIAR_LABEL(inp_frame, "País: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
     label_usina_pais.place(relx=0.03, rely=0.3)
@@ -102,6 +82,25 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
     input_usina_pais.place(relx=0.12, rely=0.3, relwidth=0.34, relheight=0.07)
     vcmd2 = (input_usina_pais.register(ENTRY_STRING), '%P')
     input_usina_pais.config(validatecommand = vcmd2)
+
+    # {=======================USINA - ESTADO=========================}
+    label_usina_estado = fun1.CRIAR_LABEL(inp_frame, "Estado: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
+    label_usina_estado.place(relx=0.03, rely=0.45)
+
+    estados_brasileiros = [ "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", 
+                            "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO" ]
+    
+    estado_var = StringVar()
+    estado_combobox = ttk.Combobox(inp_frame, textvariable = estado_var, font=("Arial", 18), state="readonly")
+    estado_combobox['values'] = estados_brasileiros
+    estado_combobox.place(relx=0.12, rely=0.45, relwidth=0.35, relheight=0.07)
+    
+    # {=======================USINA - NOME=========================}
+    label_usina_nome = fun1.CRIAR_LABEL(inp_frame, "Usina: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
+    label_usina_nome.place(relx=0.03, rely=0.6)
+
+    input_usina_nome = tk.Entry(inp_frame, validate= "key",font=("Arial", 18),  validatecommand="key")
+    input_usina_nome.place(relx=0.11, rely=0.6, relwidth=0.35, relheight=0.07)
     
     # {=======================SITE=========================}
     label_site = fun1.CRIAR_LABEL(inp_frame, "Site: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
@@ -151,82 +150,83 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
     # bt_continuar = fun1.CRIAR_BOTAO(inp_frame, "DELETAR", '#258D19', 'white',3,'15','',"hand2")#,lambda: deletar(inp_menu, inp_janela)
     # bt_continuar.place(relx=0.4, rely=0.89, relwidth=0.2, relheight=0.08)
 
-    bt_continuar = fun1.CRIAR_BOTAO(inp_frame, "SALVAR",'#258D19', 'white',3,'15','',"hand2")#,lambda: salvar(inp_menu, inp_janela)
+    bt_continuar = fun1.CRIAR_BOTAO(inp_frame, "SALVAR",'#258D19', 'white',3,'15','',"hand2", lambda: salvar(inp_menu, inp_janela))#,
     bt_continuar.place(relx=0.75, rely=0.89, relwidth=0.2, relheight=0.08)
-    
-    
+
     # {======================= Mostrando avisos =========================}
-    # def salvar(aba_1, aba_2):
-    #     dados_obtidos = []
+    def salvar(aba_1, aba_2):
+        # {======================= Dados Obtidos =========================}
+        dados_obtidos = []
         
-    #     dados_obtidos.append(input_furos.get())
-    #     dados_obtidos.append(Var_Usina.get())
-    #     dados_obtidos.append(Var_site.get())
-    #     dados_obtidos.append(input_BOF.get())
-    #     dados_obtidos.append(input_tipo.get())
-    #     dados_obtidos.append(input_ID.get())
-    #     dados_obtidos.append('0') #vida inicial
-        
-    #     todos_tabela = tabela()
-    #     print('\nDados obtidos: ', dados_obtidos)
-        
-    #     # Verificar se todos os campos foram preenchidos
-    #     flag = True
-    #     for dado in dados_obtidos:
-    #         if dado == '':
-    #             flag = False
-    #             break
-        
-    #     if not flag:
-    #         messagebox.showwarning("AVISO","Preencha todos os espaços")
-    #         return
+        input_grupo = input_usina_nome.get().upper() + '/' + estado_combobox.get() + '/' + input_usina_pais.get().upper()
 
-    #     # Verificar se o registro já existe
-    #     if tuple(dados_obtidos) in todos_tabela:
-    #         messagebox.showwarning("AVISO","Já existe este registro")
-    #         return
-
-    #     # Verificar se o ID já existe
-    #     flag = False
-    #     print(todos_tabela)
-    #     for tupla in todos_tabela:
-    #         ultimo_algarismo_tupla = str(tupla[-2])  # Obtém o último dígito da tupla
-    #         print(ultimo_algarismo_tupla,',',dados_obtidos[5])
-    #         if dados_obtidos[5] == ultimo_algarismo_tupla:
-    #             flag = True
-    #             messagebox.showwarning("AVISO","Este ID já existe")
-    #             break
+        dados_obtidos.append(input_furos.get().replace(" ", ""))
+        dados_obtidos.append(input_grupo.replace(" ", ""))
+        dados_obtidos.append(input_site.get().replace(" ", ""))
+        dados_obtidos.append(input_BOF.get().replace(" ", ""))
+        dados_obtidos.append(input_tipo.get().replace(" ", ""))
+        dados_obtidos.append(input_ID.get().replace(" ", ""))
+        dados_obtidos.append('0') #vida inicial
         
-    #     if flag:
-    #         return
-        
-    #     # Inserir dados no banco de dados
-    #     conn, cursor = fun1.CONECTA_BD(caminho)
-    #     conn.commit()
-    #     comando = f"INSERT INTO DADOS_EMPRESAS VALUES (?, ?, ?, ?, ?, ?, ?)"
-    #     registros = (dados_obtidos[0], dados_obtidos[1], dados_obtidos[2], dados_obtidos[3], dados_obtidos[4],  dados_obtidos[5], dados_obtidos[6])
-    #     cursor.execute(comando, registros)
-    #     conn.commit()
-    #     print("\n\n", color.Fore.CYAN + "DADOS SALVOS - ABA_CADASTRO_BICO" + color.Style.RESET_ALL)
-    #     fun1.DESCONECTA_BD(conn)
+        todos_tabela = tabela()
+        print('\nDados obtidos - CADASTRO_USINA: ', dados_obtidos)
 
-    #     aba_1.deiconify()  # Exiba a janela da aba 1
-    #     aba_2.destroy()
+        # Verificar se todos os campos foram preenchidos
+        flag = True
+        for dado in dados_obtidos:
+            if dado == '':
+                flag = False
+                break
+        
+        if not flag:
+            messagebox.showwarning("AVISO","Preencha todos os espaços")
+            return
+
+        # Verificar se o registro já existe
+        if tuple(dados_obtidos) in todos_tabela:
+            messagebox.showwarning("AVISO","Já existe este registro")
+            return
+
+        # Verificar se o ID já existe
+        flag = False
+        for tupla in todos_tabela:
+            ultimo_algarismo_tupla = str(tupla[-2])  # Obtém o último dígito da tupla
+            if dados_obtidos[5] == ultimo_algarismo_tupla:
+                flag = True
+                messagebox.showwarning("AVISO","Este ID já existe")
+                break
+        
+        if flag:
+            return
+        
+        # Inserindo dados no banco de dados
+        conn, cursor = fun1.CONECTA_BD(caminho)
+        conn.commit()
+        comando = f"INSERT INTO DADOS_EMPRESAS VALUES (?, ?, ?, ?, ?, ?, ?)"
+        registros = (dados_obtidos[0], dados_obtidos[1], dados_obtidos[2], dados_obtidos[3], dados_obtidos[4],  dados_obtidos[5], dados_obtidos[6])
+        cursor.execute(comando, registros)
+        conn.commit()
+        print("\n\n", color.Fore.CYAN + "DADOS SALVOS - ABA_CADASTRO_BICO" + color.Style.RESET_ALL)
+        fun1.DESCONECTA_BD(conn)
+
+        fun1.BOTAO_VOLTAR(aba_1, aba_2)
     
     # def deletar(aba_1, aba_2): #OBS: terá o botão delete?
-    #     dados_obtidos = []
-            
-    #     dados_obtidos.append(input_furos.get())
-    #     dados_obtidos.append(Var_Usina.get())
-    #     dados_obtidos.append(Var_site.get())
-    #     dados_obtidos.append(input_BOF.get())
-    #     dados_obtidos.append(input_tipo.get())
-    #     dados_obtidos.append(input_ID.get())
+        # {======================= Dados Obtidos =========================}
+        # dados_obtidos = []
+        
+        # input_grupo = input_usina_nome.get() + '/' + estado_combobox.get() + '/' + input_usina_pais.get()
 
-    #     todos_tabela = tabela()
-    #     todos_tabela = [linha[:-1] for linha in todos_tabela]
-    #     print('\nDados obtidos: ', dados_obtidos)
-
+        # dados_obtidos.append(input_furos.get())
+        # dados_obtidos.append(input_grupo)
+        # dados_obtidos.append(input_site.get())
+        # dados_obtidos.append(input_BOF.get())
+        # dados_obtidos.append(input_tipo.get())
+        # dados_obtidos.append(input_ID.get())
+        # dados_obtidos.append('0') #vida inicial
+        
+        # todos_tabela = tabela()
+        # print('\nDados obtidos - DADASTRO_USINA: ', dados_obtidos)
     #     flag = True
     #     for dado in dados_obtidos:
     #         if dado == '':
@@ -257,8 +257,6 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
     #     aba_1.deiconify()  # Exiba a janela da aba 1
     #     aba_2.destroy()
     
-
-       
 def aba_cadastro_usina(inp_janela):
     janela_atual = tk.Toplevel(inp_janela)
     tela(janela_atual)
