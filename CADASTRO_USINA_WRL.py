@@ -157,28 +157,37 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
     def salvar(aba_1, aba_2):
         # {======================= Dados Obtidos =========================}
         dados_obtidos = []
-        
         input_grupo = input_usina_nome.get().upper() + '/' + estado_combobox.get() + '/' + input_usina_pais.get().upper()
 
         dados_obtidos.append(input_furos.get().replace(" ", ""))
-        dados_obtidos.append(input_grupo.replace(" ", ""))
+        
+        if input_grupo != '//':
+            dados_obtidos.append(input_grupo.replace(" ", ""))
+        else:
+            dados_obtidos.append('')
+        
         dados_obtidos.append(input_site.get().replace(" ", ""))
         dados_obtidos.append(input_BOF.get().replace(" ", ""))
-        dados_obtidos.append(input_tipo.get().replace(" ", ""))
+        
+        if input_tipo.get() != 'externa/interna':
+            dados_obtidos.append(input_tipo.get().replace(" ", ""))
+        else:
+            dados_obtidos.append('')
+        
         dados_obtidos.append(input_ID.get().replace(" ", ""))
         dados_obtidos.append('0') #vida inicial
         
         todos_tabela = tabela()
         print('\nDados obtidos - CADASTRO_USINA: ', dados_obtidos)
 
-        # Verificar se todos os campos foram preenchidos
+        # Verificar se todos os campos de usina foram preenchidos
         flag = True
-        for dado in dados_obtidos:
-            if dado == '':
-                flag = False
-                break
+        
+        if input_usina_nome.get() == '' or estado_combobox.get() == '' or  input_usina_pais.get() == '' or input_site.get()== ''  :
+            flag = False
+
         if not flag:
-            messagebox.showwarning("AVISO","Preencha todos os espaços")
+            messagebox.showwarning("AVISO","Preencha os dados de usina")
             return
 
         # Verificar se o registro já existe
@@ -198,17 +207,28 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
         if flag:
             return
         
-        # Inserindo dados no banco de dados
-        conn, cursor = fun1.CONECTA_BD(caminho)
-        conn.commit()
-        comando = f"INSERT INTO DADOS_EMPRESAS VALUES (?, ?, ?, ?, ?, ?, ?)"
-        registros = (dados_obtidos[0], dados_obtidos[1], dados_obtidos[2], dados_obtidos[3], dados_obtidos[4],  dados_obtidos[5], dados_obtidos[6])
-        cursor.execute(comando, registros)
-        conn.commit()
-        print("\n\n", color.Fore.CYAN + "DADOS SALVOS - ABA_CADASTRO_BICO" + color.Style.RESET_ALL)
-        fun1.DESCONECTA_BD(conn)
+        # Registrar só a usina e não lança
+        if dados_obtidos[0] != '' and dados_obtidos[3] != '' and dados_obtidos[4] != '' and dados_obtidos[5] != '' :
+            flag = True
 
-        fun1.BOTAO_VOLTAR(aba_1, aba_2)
+        else:
+            if dados_obtidos[0] == '' or dados_obtidos[3] == '' or dados_obtidos[4] == '' or dados_obtidos[5] == '' :
+                messagebox.showwarning("AVISO","Preencha todos os dados da lança\nou não preencha nenhum (Furos, Tipo, BOF e ID)")
+                flag = False
+                return
+
+        # Inserindo dados no banco de dados
+        if flag:
+            conn, cursor = fun1.CONECTA_BD(caminho)
+            conn.commit()
+            comando = f"INSERT INTO DADOS_EMPRESAS VALUES (?, ?, ?, ?, ?, ?, ?)"
+            registros = (dados_obtidos[0], dados_obtidos[1], dados_obtidos[2], dados_obtidos[3], dados_obtidos[4],  dados_obtidos[5], dados_obtidos[6])
+            cursor.execute(comando, registros)
+            conn.commit()
+            print("\n\n", color.Fore.CYAN + "DADOS SALVOS - ABA_CADASTRO_BICO" + color.Style.RESET_ALL)
+            fun1.DESCONECTA_BD(conn)
+
+            fun1.BOTAO_VOLTAR(aba_1, aba_2)
     
     # def deletar(aba_1, aba_2): #OBS: terá o botão delete?
         # {======================= Dados Obtidos =========================}
