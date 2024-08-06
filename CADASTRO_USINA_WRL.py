@@ -177,7 +177,6 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
             if dado == '':
                 flag = False
                 break
-        
         if not flag:
             messagebox.showwarning("AVISO","Preencha todos os espaços")
             return

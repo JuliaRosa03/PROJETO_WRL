@@ -22,6 +22,8 @@ from FUNCOES_CAMERA_WRL import Camera
 import numpy as np
 from INSPECAO_3_WRL import aba_dados
 from direction import folder
+
+print("\n\n", color.Fore.GREEN + "Iniciando o código - Tela da câmera" + color.Style.RESET_ALL)
 pasta = folder()
 
 model = YOLO(fr'{pasta}\pesos\best.pt')
@@ -61,7 +63,7 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
 def componentes_frame2(inp_frame, lista_dados_inspecao):
     global nome_arquivo, caminho_fotoBW, caminho_fotoColorida, nome_arquivo_BW, stop
 
-    borda = tk.Label(inp_frame, bg="black")
+    borda = tk.Label(inp_frame, bg="blue")
     borda.place(relx=0, rely=0, relwidth=1, relheight=1)
 
     def exibir_video():
@@ -87,7 +89,8 @@ def componentes_frame2(inp_frame, lista_dados_inspecao):
             if keyboard.is_pressed('ctrl') or keyboard.is_pressed('right control') or keyboard.is_pressed('q'):
                 nome_arquivo, caminho_fotoBW, caminho_fotoColorida, nome_arquivo_BW = fun2.tirar_foto(color_frame, infra_image, id_bico)
                 stop = True
-                
+                dc.release()
+                print('reles')
                 return
 
         if not stop:
@@ -144,12 +147,12 @@ def aba_camera(inp_janela, dados, inp_menu):#OBS: envez de usar 'dados' por o no
     ##########
 
     fun2.salvar_registros(lista_completa, qtd_furos)
-    dc.release()
+
+    print('bbbb', nome_arquivo[0])
 
     janela_cadastro = aba_dados(inp_janela, dados[5], dados[4], nome_arquivo[0],inp_menu,inp_janela )
     janela_cadastro.deiconify()
     
     return janela_tres
 
-print("\n\n", color.Fore.GREEN + "Iniciando o código - Tela da câmera" + color.Style.RESET_ALL)
 print(color.Fore.RED + "Finalizando o código - Tela da câmera" + color.Style.RESET_ALL, "\n")

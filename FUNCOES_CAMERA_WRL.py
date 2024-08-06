@@ -38,7 +38,8 @@ class Camera:
         config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
         config.enable_stream(rs.stream.infrared, 1, 640, 480, rs.format.y8, 30)
         self.pipeline.start(config)
-        print('iniciei')
+        
+        print("\n\n", color.Fore.BLUE + "Camera Inicializada" + color.Style.RESET_ALL)
 
     def get_frames(self):
         frames = self.pipeline.wait_for_frames(timeout_ms=2000)
@@ -57,7 +58,7 @@ class Camera:
 
     def release(self):
         self.pipeline.stop()
-        print('finalizei')
+        print("\n\n", color.Fore.CYAN + "Camera Finalizada" + color.Style.RESET_ALL)
 
 class DepthCamera:
 
