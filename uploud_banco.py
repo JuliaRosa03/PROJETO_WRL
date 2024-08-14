@@ -170,52 +170,63 @@ caminho = direction()
 # root.mainloop()
 
 import tkinter as tk
-from tkinter import ttk
-from ttkthemes import ThemedStyle  # Importa ThemedStyle para usar temas personalizados
+from PIL import Image, ImageTk
 
-# Função para iniciar a progressão
-def start_progress():
-    pb.start()
+def CRIAR_BOTAO(inp_frame, inp_texto, inp_bg, inp_fg, inp_borda=None, inp_tamanho=None, inp_style=None, inp_cursor=None, inp_comando=None, inp_imagem=None, imagem_posicao= None):
+    """Retorna um botão seguindo os parâmetros comentados, com suporte para imagem."""
+    imagem = None
+    # Se houver uma imagem, ela será usada no botão
+    if inp_imagem:
+        try:
+            imagem = Image.open(inp_imagem)
+            imagem = imagem.resize((50, 50))  # Redimensionar a imagem se necessário
+            imagem = ImageTk.PhotoImage(imagem)
+        except Exception as e:
+            print(f"Erro ao carregar a imagem: {e}")
+            imagem = None
 
-# Função para parar a progressão
-def stop_progress():
-    pb.stop()
+    botao = tk.Button(  
+                        inp_frame,  # frame
+                        text=inp_texto,  # texto
+                        bg=inp_bg,  # background
+                        fg=inp_fg,  # foreground
+                        bd=inp_borda,  # borda do botão
+                        font=("calibri", inp_tamanho, inp_style),  # fonte, tamanho, style
+                        cursor=inp_cursor,  # estilo do cursor
+                        command=inp_comando,  # comando
+                        relief='groove',  # estilo de relevo
+                        image=imagem,  # imagem no botão
+                        compound=imagem_posicao  # posição da imagem em relação ao texto
+                     )
+    
+    botao.imagem = imagem  # Referência para evitar que a imagem seja coletada pelo garbage collector
+    
+    return botao
 
-# Configuração da janela principal
+# Exemplo de uso
 root = tk.Tk()
-root.geometry('300x120')
-root.title('Progressbar Demo')
+frame_1 = tk.Frame(root)
+frame_1.pack()
 
-# Cria um estilo temático
-style = ThemedStyle(root)
-style.set_theme('plastik')  # Define o tema 'plastik' (um dos temas disponíveis)
+# Cores de exemplo
+bege = '#F5F5DC'
+verde = '#008000'
 
-# Barra de progresso
-pb = ttk.Progressbar(
-    root,
-    orient='horizontal',
-    mode='indeterminate',
-    length=280,
-    style='Horizontal.TProgressbar'  # Aplica um estilo personalizado para a barra de progresso horizontal
+bt_iniciar_camera = CRIAR_BOTAO(
+    frame_1,
+    'Iniciar Inspeção',
+    bege,
+    verde,
+    4,
+    '20',
+    'bold',
+    "circle",
+    lambda: print("Iniciando inspeção..."),
+    inp_imagem=r'C:\Users\20221CECA0402\Documents\PROJETO_WRL\ICONES_FOTOS\png_cam.png',
+    imagem_posicao='top'  # Coloca a imagem acima do texto
 )
-pb.grid(column=0, row=0, columnspan=2, padx=10, pady=20)
 
-# Botão para iniciar
-start_button = ttk.Button(
-    root,
-    text='Start',
-    command=start_progress,
-    style='AccentButton'  # Aplica um estilo de botão com destaque
-)
-start_button.grid(column=0, row=1, padx=10, pady=10, sticky=tk.E)
-
-# Botão para parar
-stop_button = ttk.Button(
-    root,
-    text='Stop',
-    command=stop_progress,
-    style='DangerButton'  # Aplica um estilo de botão de perigo
-)
-stop_button.grid(column=1, row=1, padx=10, pady=10, sticky=tk.W)
+bt_iniciar_camera.pack(padx=20, pady=20)
 
 root.mainloop()
+

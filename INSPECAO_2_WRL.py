@@ -90,7 +90,6 @@ def componentes_frame2(inp_frame, lista_dados_inspecao):
                 nome_arquivo, caminho_fotoBW, caminho_fotoColorida, nome_arquivo_BW = fun2.tirar_foto(color_frame, infra_image, id_bico)
                 stop = True
                 dc.release()
-                print('reles')
                 return
 
         if not stop:
@@ -101,7 +100,6 @@ def componentes_frame2(inp_frame, lista_dados_inspecao):
 
 def aba_camera(inp_janela, dados, inp_menu):#OBS: envez de usar 'dados' por o nome dsa variavel de forma intuitiva
     global nome_arquivo, caminho_fotoBW, caminho_fotoColorida, nome_arquivo_BW, stop, lista_APP, qtd_furos, Abertura, infra_image, centro
-    print('\nDados aaaa: ',dados)
     lista_dados_inspecao = dados
     janela_tres = tk.Toplevel(inp_janela)
     
@@ -138,7 +136,7 @@ def aba_camera(inp_janela, dados, inp_menu):#OBS: envez de usar 'dados' por o no
         nome_arquivo.append(dado)
 
     lista_completa = fun2.reunir_dados(lista_APP, nome_arquivo, lista_diametros)
-    print('Lista final: ', lista_completa)
+    print('Lista final _ INSPECAO_2_WRL _LINHA 140: ', lista_completa)
     
     ## SITE ##
     estados = fun2.identificar_estados(lista_completa)
@@ -147,8 +145,6 @@ def aba_camera(inp_janela, dados, inp_menu):#OBS: envez de usar 'dados' por o no
     ##########
 
     fun2.salvar_registros(lista_completa, qtd_furos)
-
-    print('bbbb', nome_arquivo[0])
 
     janela_cadastro = aba_dados(inp_janela, dados[5], dados[4], nome_arquivo[0],inp_menu,inp_janela )
     janela_cadastro.deiconify()

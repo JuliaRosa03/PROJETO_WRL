@@ -11,10 +11,10 @@ from direction import folder
 pasta = folder()
 
 #CORES USADAS
-verde = '#416951'
-bege = '#C9B783'
-marrom = '#68584A'
-verde_escuro = '#1F3422'
+verde = '#416951' #Cor botão
+bege = '#C9B783' #Cor botão
+marrom = '#68584A' 
+verde_escuro = '#1F3422' #Titulos
 
 def menu_WRL():
     Janela_menu = tk.Tk()
@@ -67,16 +67,13 @@ def adicionar_detalhes(inp_menu):
     canvas.pack(fill=tk.BOTH, expand=True)
 
     # Triângulo vermelho no canto superior direito
-    canvas.create_polygon(largura, 0, largura, 300, largura-300, 0, fill="red", outline="red")
+    canvas.create_polygon(largura, 0, largura, 300, largura-300, 0, fill="#94031E", outline="#94031E")
 
     # Triângulo verde no canto inferior esquerdo
     canvas.create_polygon(0, altura, 0, altura-300, 300, altura, fill=verde, outline=verde)
 
 
 def componentes_frame1(inp_menu):
-    # {=======================Decoração=======================}
-
-    
     # {=======================Título=========================}
     titulo = fun1.CRIAR_LABEL(frame_1, "Wear\n     Register\n  Lances", 'white', verde_escuro, 'calibri', '42', 'bold')
     titulo.place(relx=0.2, rely=0.08)
@@ -92,24 +89,25 @@ def componentes_frame1(inp_menu):
     fotoimg1_pg1.place(relx=0.15, rely=0.23, anchor=CENTER)
 
     # {=======================Botões de Cadastro=========================}
-    bt_cadastro_lanca = fun1.CRIAR_BOTAO(frame_1,'Cadastrar Bico',verde, bege,3,'32','bold',"hand2",lambda:ABA_CADASTRO_BICO(inp_menu))
+    bt_cadastro_lanca = fun1.CRIAR_BOTAO(frame_1,'Cadastrar Bico',verde, bege,3,'38','bold',"hand2",lambda:ABA_CADASTRO_BICO(inp_menu))
     bt_cadastro_lanca.place(relx=0.55, rely=0.44, relwidth=0.4, relheight=0.2)
 
-    bt_cadastro_funcionario = fun1.CRIAR_BOTAO(frame_1,'Cadastrar Usina',verde,bege,3,'32','bold',"hand2",lambda:ABA_CADASTRO_USINA(inp_menu))
+    bt_cadastro_funcionario = fun1.CRIAR_BOTAO(frame_1,'Cadastrar Usina',verde,bege,3,'38','bold',"hand2",lambda:ABA_CADASTRO_USINA(inp_menu))
     bt_cadastro_funcionario.place(relx=0.55, rely=0.69, relwidth=0.4, relheight=0.2)
 
     # {=======================Botões de Visualização=========================}
-    bt_visualizar_site = fun1.CRIAR_BOTAO(frame_1,'SITE WRL',verde,bege,4,'32','bold',"hand2", lambda:abrir_streamlit())
+    bt_visualizar_site = fun1.CRIAR_BOTAO(frame_1,'SITE WRL',verde,bege,4,'38','bold',"hand2", lambda:abrir_streamlit())
     bt_visualizar_site.place(relx=0.55, rely=0.19, relwidth=0.4, relheight=0.2)
     
     # {=======================Botão Iniciar Inspeção=========================}
-    bt_iniciar_camera = fun1.CRIAR_BOTAO(frame_1,'Iniciar Inspeção',bege,verde,4,'32','bold',"circle", lambda:INICIAR_INSPECAO(inp_menu))
+    icone_camera = r'C:\Users\20221CECA0402\Documents\PROJETO_WRL\ICONES_FOTOS\png_cam.png'
+    bt_iniciar_camera = fun1.CRIAR_BOTAO(frame_1,'Iniciar Inspeção',bege,verde,4,'38','bold',"circle", lambda:INICIAR_INSPECAO(inp_menu),inp_imagem=icone_camera, imagem_posicao='top')
     bt_iniciar_camera.place(relx=0.07, rely=0.44, relwidth=0.4, relheight=0.45)
     
     # {=======================FECHAR ABA=========================}
-    img_fechar = PhotoImage(file='ICONES_FOTOS\out.png')
-    
-    bt_fechar_aba_menu = tk.Button(frame_1, image=img_fechar, command=inp_menu.destroy,compound=tk.CENTER, bg="red", bd=3)
+    img_fechar = PhotoImage(file=r'ICONES_FOTOS\fechar.png')
+     
+    bt_fechar_aba_menu = tk.Button(frame_1, image=img_fechar, command=inp_menu.destroy,compound=tk.CENTER, bg="#DE1804", bd=3)
     bt_fechar_aba_menu.place(relx=0.94, rely=0.02, relwidth=0.04, relheight=0.06)
         
     inp_menu.mainloop()

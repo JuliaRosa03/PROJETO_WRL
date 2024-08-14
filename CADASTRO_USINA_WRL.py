@@ -178,7 +178,7 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
         dados_obtidos.append('0') #vida inicial
         
         todos_tabela = tabela()
-        print('\nDados obtidos - CADASTRO_USINA: ', dados_obtidos)
+        print('\nDados obtidos - CADASTRO_USINA_WRL: ', dados_obtidos)
 
         # Verificar se todos os campos de usina foram preenchidos
         flag = True
@@ -225,7 +225,7 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):
             registros = (dados_obtidos[0], dados_obtidos[1], dados_obtidos[2], dados_obtidos[3], dados_obtidos[4],  dados_obtidos[5], dados_obtidos[6])
             cursor.execute(comando, registros)
             conn.commit()
-            print("\n\n", color.Fore.CYAN + "DADOS SALVOS - ABA_CADASTRO_BICO" + color.Style.RESET_ALL)
+            print("\n\n", color.Fore.CYAN + "DADOS SALVOS - CADASTRO_BICO_WRL" + color.Style.RESET_ALL)
             fun1.DESCONECTA_BD(conn)
 
             fun1.BOTAO_VOLTAR(aba_1, aba_2)

@@ -24,9 +24,18 @@ def CRIAR_FRAME(inp_frame, inp_bg, inp_light = NONE):
                     highlightbackground= inp_light)
     return frame
 
-def CRIAR_BOTAO(inp_frame, inp_texto, inp_bg, inp_fg, inp_borda = NONE,inp_tamanho= NONE, inp_style = NONE, inp_cursor = NONE, inp_comando = NONE):
+def CRIAR_BOTAO(inp_frame, inp_texto, inp_bg, inp_fg, inp_borda = NONE,inp_tamanho= NONE, inp_style = NONE, inp_cursor = NONE, inp_comando = NONE, inp_imagem=None, imagem_posicao='left'):
+    imagem = None
     
-    """Retorna um botão seguindo o parametros comentados"""
+    if inp_imagem:
+        try:
+            imagem = Image.open(inp_imagem)
+            imagem = imagem.resize((100, 100))  # Redimensionar a imagem se necessário
+            imagem = ImageTk.PhotoImage(imagem)
+        except Exception as e:
+            print(f"Erro ao carregar a imagem: {e}")
+            imagem = None
+            
     botao = tk.Button(  inp_frame, # frame
                         text = inp_texto, # texto
                         bg = inp_bg, # background
@@ -35,7 +44,11 @@ def CRIAR_BOTAO(inp_frame, inp_texto, inp_bg, inp_fg, inp_borda = NONE,inp_taman
                         font= ("calibri", inp_tamanho ,inp_style), #fonte, tamanho, style
                         cursor = inp_cursor, # estilo do cursor
                         command = inp_comando,
-                        relief='groove') # comando
+                        relief='groove',
+                        image= imagem,  # imagem no botão
+                        compound=imagem_posicao  # posição da imagem em relação ao texto
+                     )
+    botao.imagem = imagem 
     return botao
     
 def CRIAR_LABEL(inp_frame, inp_texto, inp_bg, inp_fg, inp_fonte = NONE, inp_tam_fonte = NONE, inp_style = NONE):

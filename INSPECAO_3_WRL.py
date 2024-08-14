@@ -21,7 +21,6 @@ def selecao(inp_ID, inp_tipo): # {=========Leitura Grupo, SIte, BOF e ID(FRAME 1
     comando = f"SELECT * FROM DADOS_EMPRESAS WHERE ID = {inp_ID} AND TIPO = '{inp_tipo}' "
     cursor.execute(comando)
     dados = cursor.fetchall()
-    #print('dados', dados)
     fun1.DESCONECTA_BD(conn)
     
     grupo_completo = list(dados[0])
@@ -40,7 +39,6 @@ def tabela(int_arquivo): # {=========Informações da tabela(FRAME 2)=========}
     cursor.execute(comando)
     dados2 = cursor.fetchone()
     fun1.DESCONECTA_BD(conn)
-    print('ccccccccccc', )
     registro_foto = int_arquivo
     return dados2
 
@@ -144,7 +142,6 @@ def componentes_frame1(inp_ID, inp_tipo, int_arquivo,inp_menu, janela_cadastro1,
     
     # {=======================Data=========================}
     dados2 = tabela(int_arquivo)
-    print('dados2',dados2)
     data_foto = dados2[9] 
     hora_foto = dados2[10] 
     medidas_foto = dados2[11:] 
