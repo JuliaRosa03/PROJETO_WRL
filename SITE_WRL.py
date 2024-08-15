@@ -49,6 +49,7 @@ st.markdown('<style>div.block-container{padding-top:1rem;}</> ',unsafe_allow_htm
 
 # {=======================Barra de seleção=========================}
 
+#st.sidebar.header("Bem-vindo!")
 st.sidebar.header("Wear Register Lances")
 
 # {=======================Seleção de Bico=========================}
@@ -753,8 +754,21 @@ if id and selected_tables:
             fig_vida.patch.set_visible(False)  # Remove o fundo da figura
             ax.axis('off')  # Remove o eixo
 
-            # # {======================= ID X DIAMETROS =========================}
+            # # {======================= REGIÃO X DIAMETROS =========================}
+            conn = sql.connect(fr'{pasta}\REGISTROS_DESGASTE.db')
+            cursor = conn.cursor()
+            # Extraindo dados ID e ESTADO do banco 
+            comando = f"SELECT REGIÃO, MEDIDA, ESTADO FROM {selected_tables[0]} WHERE GRUPO = '{grupo[0]}' AND VIDA = '{vida}'"
+            cursor.execute(comando)
+            # Obter os resultados
+            resultados = cursor.fetchall()
+            conn.close()
 
+            tabela2 = pd.DataFrame(resultados, columns=["REGIÃO", "DIÂMETROS", "ESTADO"])
+            # Removendo duplicatas com base na coluna 'ID'
+            tabela2 = tabela2.drop_duplicates(subset='REGIÃO')
+            # Ordenando em ordem crescente pelo 'ID'
+            tabela2 = tabela2.sort_values(by='REGIÃO')
 
             image_7F = Image.open(fr'{pasta}\FOTOS_SEGMENTADA\{registro}') 
 
@@ -766,7 +780,7 @@ if id and selected_tables:
             with col2:
                 st.markdown("""<h2 style='font-size:18px; text-align:center;'>a) DIÂMETROS</h2>""", unsafe_allow_html=True)
                 st.markdown("<div style='display:flex; justify-content:center;'>", unsafe_allow_html=True)
-                st.dataframe(tabela1,hide_index=True)
+                st.dataframe(tabela2,hide_index=True)
             with col3:
                 st.markdown(f"""<h2 style='font-size:18px; text-align:center;'>SITUAÇÃO DOS FUROS - VIDA {vida} </h2>""", unsafe_allow_html=True)
                 st.markdown("<div style='display:flex; justify-content:center;'>", unsafe_allow_html=True)
