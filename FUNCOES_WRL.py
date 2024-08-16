@@ -46,7 +46,7 @@ def CRIAR_BOTAO(inp_frame, inp_texto, inp_bg, inp_fg, inp_borda = NONE,inp_taman
                         command = inp_comando,
                         relief='groove',
                         image= imagem,  # imagem no botão
-                        compound=imagem_posicao  # posição da imagem em relação ao texto
+                        compound = imagem_posicao  # posição da imagem em relação ao texto
                      )
     botao.imagem = imagem 
     return botao
@@ -60,6 +60,7 @@ def CRIAR_LABEL(inp_frame, inp_texto, inp_bg, inp_fg, inp_fonte = NONE, inp_tam_
     return label
 
 def BOTAO_VOLTAR(aba_1, aba_2): #sai da aba atual e volta para a anterior
-    aba_1.deiconify()  # Exiba a janela anterior
+    aba_1.withdraw()
     aba_2.destroy()  # Destrua a janela atual
+    aba_1.deiconify()  # Exiba a janela anterior
 

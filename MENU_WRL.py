@@ -100,8 +100,8 @@ def componentes_frame1(inp_menu):
     bt_visualizar_site.place(relx=0.55, rely=0.19, relwidth=0.4, relheight=0.2)
     
     # {=======================Botão Iniciar Inspeção=========================}
-    icone_camera = r'C:\Users\20221CECA0402\Documents\PROJETO_WRL\ICONES_FOTOS\png_cam.png'
-    bt_iniciar_camera = fun1.CRIAR_BOTAO(frame_1,'Iniciar Inspeção',bege,verde,4,'38','bold',"circle", lambda:INICIAR_INSPECAO(inp_menu),inp_imagem=icone_camera, imagem_posicao='top')
+    icone_camera = r'ICONES_FOTOS\png_cam.png'
+    bt_iniciar_camera = fun1.CRIAR_BOTAO(frame_1,'Iniciar Inspeção',bege,verde,4,'38','bold',"circle", lambda:INICIAR_INSPECAO(inp_menu),inp_imagem=icone_camera, imagem_posicao='bottom')
     bt_iniciar_camera.place(relx=0.07, rely=0.44, relwidth=0.4, relheight=0.45)
     
     # {=======================FECHAR ABA=========================}

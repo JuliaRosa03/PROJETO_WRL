@@ -4,7 +4,7 @@
     option = 2 -> PC lab 913S
     option = 3 -> notebook Julia"""
 
-option = 3
+option = 1
 
 def direction():
     if option ==1:

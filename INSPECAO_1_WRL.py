@@ -1,6 +1,6 @@
 from tkinter import ttk
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import messagebox, Canvas
 import colorama as color
 import sqlite3 as sql
 import FUNCOES_WRL as fun1
@@ -35,7 +35,6 @@ def validador(input):
 def ENTRY_STRING(inp_text):
     return all(char.isalpha() or char.isspace() for char in inp_text) or inp_text == ""
 
-    
 def comandos_botao_continuar(inp_janela, inp_usina_grupo, inp_site, inp_BOF, inp_ID, inp_tipo, inp_furos, inp_vida, inp_usuario, inp_menu): 
     
     conn, cursor = fun1.CONECTA_BD(caminho)
@@ -105,79 +104,103 @@ def OnClick(event, listaCli, usina, site, BOF, ID, Furos, Tipo):
         Furos.insert(tk.END, col1)
         Tipo.insert(tk.END, col5)
                         
+#CORES USADAS
+verde = '#416951' #Cor botão
+bege = '#C9B783' #Cor botão
+marrom = '#68584A' 
+verde_escuro = '#1F3422' #Titulos
+fundo_branco = 'white' #fundo das letras em frames brancos
+
+def adicionar_detalhes(inp_menu):
+    largura = inp_menu.winfo_screenwidth()
+    altura = inp_menu.winfo_screenheight()
+
+    # Cria um Frame para o Canvas, que ficará no fundo
+    canvas_frame = tk.Frame(inp_menu, width=largura, height=altura, bg=fundo_branco)
+    canvas_frame.place(relx=0, rely=0, relwidth=1, relheight=1)
+
+    canvas = Canvas(canvas_frame, width=largura, height=altura, highlightthickness=0)
+    canvas.pack(fill=tk.BOTH, expand=True)
+
+    # Triângulo vermelho no canto superior direito
+    canvas.create_polygon(largura, 0, largura, 300, largura-300, 0, fill="#94031E", outline="#94031E")
+
+    # Triângulo verde no canto inferior esquerdo
+    canvas.create_polygon(0, altura, 0, altura-300, 300, altura, fill=verde, outline=verde)
+
 def tela(inp_janela):
     inp_janela.title("INICIAR INSPECÇÃO")
-    inp_janela.configure(background= '#9BCD9B')
+    inp_janela.configure(background= fundo_branco)
     inp_janela.attributes("-fullscreen", True)
     
 def frames_da_tela(inp_janela): 
         global frame_1
         
-        frame_1 = tk.Frame(inp_janela, bg= '#B4FF9A', highlightbackground= '#668B8B')
+        frame_1 = tk.Frame(inp_janela, bg= fundo_branco, highlightbackground= '#668B8B')
         frame_1.place(relx=0.01, rely=0.02,relwidth=0.98, relheight=0.96)
         
         return frame_1
 
 def componentes_frame1(inp_frame,inp_janela, inp_menu):# #TOPLEVEL
     # {=======================Título=========================}
-    titulo = fun1.CRIAR_LABEL(inp_frame, "Selecionar Bico", '#B4FF9A', "#005200", 'arial', '35', 'bold')
+    titulo = fun1.CRIAR_LABEL(inp_frame, "Selecionar Bico", fundo_branco, verde_escuro, 'arial', '35', 'bold')
     titulo.place(relx=0.5, rely=0.05,anchor='center') 
     
     # {=======================USINA=========================}
-    label_usina = fun1.CRIAR_LABEL(inp_frame, "Usina/Grupo: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
+    label_usina = fun1.CRIAR_LABEL(inp_frame, "Usina/Grupo: ", fundo_branco, marrom, 'arial', '20', 'bold')
     label_usina.place(relx=0.05, rely=0.15)
 
     input_usina = tk.Entry(inp_frame, validate= "key",font=("Arial", 20)) # validatecommand="key"
     input_usina.place(relx=0.05, rely=0.2, relwidth=0.3, relheight=0.06)
 
     # {=======================SITE=========================}
-    label_site = fun1.CRIAR_LABEL(inp_frame, "Site: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
+    label_site = fun1.CRIAR_LABEL(inp_frame, "Site: ", fundo_branco, marrom, 'arial', '20', 'bold')
     label_site.place(relx=0.05, rely=0.3)
 
     input_site = tk.Entry(inp_frame, validate= "key",font=("Arial", 20))
     input_site.place(relx=0.05, rely=0.35, relwidth=0.3, relheight=0.06)
 
     # {======================= BOF =========================}
-    label_BOF = fun1.CRIAR_LABEL(inp_frame, "BOF: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
+    label_BOF = fun1.CRIAR_LABEL(inp_frame, "BOF: ", fundo_branco, marrom, 'arial', '20', 'bold')
     label_BOF.place(relx=0.05, rely=0.45)
 
     input_BOF = tk.Entry(inp_frame, validate= "key",font=("Arial", 20))
     input_BOF.place(relx=0.05, rely=0.5, relwidth=0.3, relheight=0.06)
     
     # {======================= ID =========================}
-    label_ID = fun1.CRIAR_LABEL(inp_frame, "ID: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
+    label_ID = fun1.CRIAR_LABEL(inp_frame, "ID: ", fundo_branco, marrom, 'arial', '20', 'bold')
     label_ID.place(relx=0.05, rely=0.6)
 
     input_ID = tk.Entry(inp_frame, validate= "key",font=("Arial", 20))
     input_ID.place(relx=0.05, rely=0.65, relwidth=0.13, relheight=0.06)
     
     # {======================= FUROS =========================}
-    label_Furos = fun1.CRIAR_LABEL(inp_frame, "Furos: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
+    label_Furos = fun1.CRIAR_LABEL(inp_frame, "Furos: ", fundo_branco, marrom, 'arial', '20', 'bold')
     label_Furos.place(relx=0.22, rely=0.6)
 
     input_Furos = tk.Entry(inp_frame, validate= "key",font=("Arial", 20), validatecommand= validador(inp_frame))
     input_Furos.place(relx=0.22, rely=0.65, relwidth=0.13, relheight=0.06)
 
     # {======================= TIPO =========================}
-    label_tipo = fun1.CRIAR_LABEL(inp_frame, "Tipo: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
+    label_tipo = fun1.CRIAR_LABEL(inp_frame, "Tipo: ", fundo_branco, marrom, 'arial', '20', 'bold')
     label_tipo.place(relx=0.05, rely=0.75)
 
     input_tipo = tk.Entry(inp_frame, validate= "key",font=("Arial", 20))
     input_tipo.place(relx=0.05, rely=0.8, relwidth=0.13, relheight=0.06)
     
     # {======================= VIDA =========================}
-    label_vida = fun1.CRIAR_LABEL(inp_frame, "Vida: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
+    label_vida = fun1.CRIAR_LABEL(inp_frame, "Vida: ", fundo_branco, marrom, 'arial', '20', 'bold')
     label_vida.place(relx=0.22, rely=0.75)
 
     input_vida = tk.Entry(inp_frame, validate= "key",font=("Arial", 20), validatecommand= validador(inp_frame) )
     input_vida.place(relx=0.22, rely=0.8, relwidth=0.13, relheight=0.06)
 
     # {======================= Divisória =========================}
-    label_divisor = fun1.CRIAR_LABEL(inp_frame, "", '#9BCD9B', "#1C1C1C", 'arial', '20', 'bold')
+    label_divisor = fun1.CRIAR_LABEL(inp_frame, "", bege, marrom, 'arial', '20', 'bold')
     label_divisor.place(relx=0.37, rely=0.15, relwidth=0.005, relheight=0.71)
     
     # {======================= Usuário =========================}
-    label_usuario = fun1.CRIAR_LABEL(inp_frame, "Usuário: ", '#B4FF9A', "#1C1C1C", 'arial', '20', 'bold')
+    label_usuario = fun1.CRIAR_LABEL(inp_frame, "Usuário: ", fundo_branco, marrom, 'arial', '20', 'bold')
     label_usuario.place(relx=0.4, rely=0.75)
 
     input_usuario = tk.Entry(inp_frame, validate= "key",font=("Arial", 20))
@@ -187,25 +210,23 @@ def componentes_frame1(inp_frame,inp_janela, inp_menu):# #TOPLEVEL
     input_usuario.config(validatecommand=vcmd)
 
     # {=======================Botão Voltar e Continuar=========================}
-    #obs: Por figuras ilustrativas com os botões
-    bt_voltar = fun1.CRIAR_BOTAO(inp_frame, "MENU",'#258D19', 'white',3,'20','',"hand2", lambda: fun1.BOTAO_VOLTAR( inp_menu, inp_janela))# #TOPLEVEL
+    bt_voltar = fun1.CRIAR_BOTAO(inp_frame, "MENa",verde, bege,3,'20','bold',"hand2", lambda: fun1.BOTAO_VOLTAR( inp_menu, inp_janela))# #TOPLEVEL
     bt_voltar.place(relx=0.05, rely=0.9, relwidth=0.13, relheight=0.06)
 
-    bt_continuar = fun1.CRIAR_BOTAO(inp_frame, "PRÓXIMO",'#258D19', 'white',3,'20','',"hand2",lambda: comandos_botao_continuar(inp_janela,input_usina,input_site,input_BOF,input_ID,input_tipo,input_Furos,input_vida,input_usuario,inp_menu))
+    bt_continuar = fun1.CRIAR_BOTAO(inp_frame, "PRÓXIMO",verde, bege,3,'20','bold',"hand2",lambda: comandos_botao_continuar(inp_janela,input_usina,input_site,input_BOF,input_ID,input_tipo,input_Furos,input_vida,input_usuario,inp_menu))
     bt_continuar.place(relx=0.82, rely=0.9, relwidth=0.13, relheight=0.06)
     
     # {=======================FECHAR ABA=========================}
     # bt_fechar_aba_menu = tk.Button(inp_frame, text="X", command=inp_janela.destroy, bg="red").place(relx=0.96, rely=0.02, relwidth=0.03, relheight=0.04) #AVISO ->tirar esta linha pro tk.tk
 
     # {=======================Tabela=========================}
-    #OBS: a vida não pode ser menor do que a anterior
-    label_aviso = fun1.CRIAR_LABEL(inp_frame, "Clique sobre na\nlinha desejada", '#9BCD9B', "white", 'calibri', '18', 'bold')
+    label_aviso = fun1.CRIAR_LABEL(inp_frame, "Clique sobre na\nlinha desejada", bege, verde, 'calibri', '18', 'bold')
     label_aviso.place(relx=0.8, rely=0.15)
     
     filtrar_ID = tk.Entry(inp_frame, validate="key", font=("Arial", 20), validatecommand=validador(inp_frame))
     filtrar_ID.place(relx=0.4, rely=0.2, relwidth=0.1, relheight=0.06)
 
-    bt_buscar = fun1.CRIAR_BOTAO(inp_frame, "Buscar ID", '#258D19', 'white', 3, '20', "", "hand2", lambda: buscar_id(filtrar_ID.get()))
+    bt_buscar = fun1.CRIAR_BOTAO(inp_frame, "Buscar ID",  bege,verde, 3, '20', "", "hand2", lambda: buscar_id(filtrar_ID.get()))
     bt_buscar.place(relx=0.5, rely=0.2, relwidth=0.13, relheight=0.06)
 
     def buscar_id(id_filtro):
@@ -280,6 +301,7 @@ def aba_cadastro(inp_janela):
     janela_dois = tk.Toplevel(inp_janela) #TOPLEVEL
     
     tela(janela_dois)
+    adicionar_detalhes(janela_dois)
     frames_da_tela(janela_dois)
     componentes_frame1(frame_1,janela_dois,inp_janela)#  #TOPLEVEL
 

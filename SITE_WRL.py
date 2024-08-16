@@ -139,7 +139,7 @@ st.sidebar.write(data_formatada)
 
 # {=======================Texto na página=========================}
 st.markdown('''<div style="text-align: justify;">
-            <H4>[Texto aqui]
+            <H4>
             </H4></div>
             ''', unsafe_allow_html=True)
 

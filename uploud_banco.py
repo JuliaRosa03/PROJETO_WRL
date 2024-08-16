@@ -170,63 +170,52 @@ caminho = direction()
 # root.mainloop()
 
 import tkinter as tk
-from PIL import Image, ImageTk
+import time
+import cv2  # exemplo de uso de OpenCV, ajuste conforme seu código
+# importação de outros módulos e configurações da câmera
 
-def CRIAR_BOTAO(inp_frame, inp_texto, inp_bg, inp_fg, inp_borda=None, inp_tamanho=None, inp_style=None, inp_cursor=None, inp_comando=None, inp_imagem=None, imagem_posicao= None):
-    """Retorna um botão seguindo os parâmetros comentados, com suporte para imagem."""
-    imagem = None
-    # Se houver uma imagem, ela será usada no botão
-    if inp_imagem:
-        try:
-            imagem = Image.open(inp_imagem)
-            imagem = imagem.resize((50, 50))  # Redimensionar a imagem se necessário
-            imagem = ImageTk.PhotoImage(imagem)
-        except Exception as e:
-            print(f"Erro ao carregar a imagem: {e}")
-            imagem = None
+def initialize_camera():
+    # código para inicializar a câmera
+    # por exemplo:
+    cap = cv2.VideoCapture(0)
+    return cap
 
-    botao = tk.Button(  
-                        inp_frame,  # frame
-                        text=inp_texto,  # texto
-                        bg=inp_bg,  # background
-                        fg=inp_fg,  # foreground
-                        bd=inp_borda,  # borda do botão
-                        font=("calibri", inp_tamanho, inp_style),  # fonte, tamanho, style
-                        cursor=inp_cursor,  # estilo do cursor
-                        command=inp_comando,  # comando
-                        relief='groove',  # estilo de relevo
-                        image=imagem,  # imagem no botão
-                        compound=imagem_posicao  # posição da imagem em relação ao texto
-                     )
-    
-    botao.imagem = imagem  # Referência para evitar que a imagem seja coletada pelo garbage collector
-    
-    return botao
+def close_camera(cap):
+    # código para encerrar a câmera corretamente
+    cap.release()
+    cv2.destroyAllWindows()
 
-# Exemplo de uso
-root = tk.Tk()
-frame_1 = tk.Frame(root)
-frame_1.pack()
+def take_photo(cap):
+    # código para capturar uma foto e processar
+    ret, frame = cap.read()
+    if ret:
+        # processamento da imagem
+        time.sleep(2)  # simulação de processamento
+    return frame
 
-# Cores de exemplo
-bege = '#F5F5DC'
-verde = '#008000'
+def BOTAO_VOLTAR(aba_1, aba_2, camera):
+    close_camera(camera)  # Encerra a câmera corretamente
+    aba_2.destroy()  # Fecha a aba atual
+    aba_1.deiconify()  # Reexibe a aba anterior
 
-bt_iniciar_camera = CRIAR_BOTAO(
-    frame_1,
-    'Iniciar Inspeção',
-    bege,
-    verde,
-    4,
-    '20',
-    'bold',
-    "circle",
-    lambda: print("Iniciando inspeção..."),
-    inp_imagem=r'C:\Users\20221CECA0402\Documents\PROJETO_WRL\ICONES_FOTOS\png_cam.png',
-    imagem_posicao='top'  # Coloca a imagem acima do texto
-)
+def main_menu():
+    root = tk.Tk()
+    root.title("Menu Principal")
 
-bt_iniciar_camera.pack(padx=20, pady=20)
+    def start_photo_process():
+        camera = initialize_camera()
+        root.withdraw()  # Oculta o menu principal
 
-root.mainloop()
+        aba_foto = tk.Toplevel(root)
+        aba_foto.title("Tirar Foto")
+        # outros widgets e configurações
+        botao_voltar = tk.Button(aba_foto, text="Voltar", command=lambda: BOTAO_VOLTAR(root, aba_foto, camera))
+        botao_voltar.pack()
 
+    start_button = tk.Button(root, text="Iniciar Captura", command=start_photo_process)
+    start_button.pack()
+
+    root.mainloop()
+
+if __name__ == "__main__":
+    main_menu()
