@@ -20,6 +20,7 @@ from PIL import Image, ImageTk
 from direction import folder, pasta_site
 from ultralytics import YOLO
 from customtkinter import *
+from config_dados_diametros import *
 
 from direction import folder, pasta_site
 
@@ -445,47 +446,56 @@ def salvar_registros(lista, num):
     cursor.close()
     
 def sobrepor_molde(infra_image):
-    back_frame = infra_image.copy()
-    back_frame = cv2.cvtColor(back_frame, cv2.COLOR_GRAY2RGB)
-    molde = cv2.imread(fr'{pasta}\ICONES_FOTOS\MOLDE.png')
-    # Redimensionar a imagem para o tamanho do frame
-    molde_resized = cv2.resize(molde, (infra_image.shape[1], infra_image.shape[0]))
-    # Definir a região de interesse onde a imagem será sobreposta
-    roi = back_frame[0:molde_resized.shape[0], 0:molde_resized.shape[1]]
-    # Sobrepor a imagem na região de interesse (roi)
-    for c in range(0, 2):
-        roi[:, :, c] = molde_resized[:, :, c] * (molde_resized[:, :, 2] / 255.0) + roi[:, :, c] * (1.0 - molde_resized[:, :, 2] / 255.0)
+    frame = infra_image.copy()
+    # Obtenha as dimensões do frame
+    height, width = frame.shape
+    # Calcule o centro do frame
+    center_x = width // 2
+    center_y = height // 2
+    cv2.circle(frame, (center_x, center_y), 140, (0, 255, 255),5, 1)
+    # back_frame = cv2.cvtColor(back_frame, cv2.COLOR_GRAY2RGB)
+    # molde = cv2.imread(fr'{pasta}\ICONES_FOTOS\MOLDE.png')
+    # # Redimensionar a imagem para o tamanho do frame
+    # molde_resized = cv2.resize(molde, (infra_image.shape[1], infra_image.shape[0]))
+    # # Definir a região de interesse onde a imagem será sobreposta
+    # roi = back_frame[0:molde_resized.shape[0], 0:molde_resized.shape[1]]
+    # # Sobrepor a imagem na região de interesse (roi)
+    # for c in range(0, 2):
+    #     roi[:, :, c] = molde_resized[:, :, c] * (molde_resized[:, :, 2] / 255.0) + roi[:, :, c] * (1.0 - molde_resized[:, :, 2] / 255.0)
     
-    return back_frame
+    return frame
     
 ##  FUNÇÕES DO SITE - APENAS PARA O BICO DE 6 FUROS ##
 def identificar_estados(lista_completa):
     # Lista de diâmetros (EXTERNO até FURO_N)
     diametros = lista_completa[11:]
 
+
     ESTADOS = []
     for diametro in diametros:
         if diametro >= 100:
-            if 400 <= diametro <= 500:
+            if e_min_bom <= diametro <= e_max_bom:
                 ESTADOS.append('Bom')
-            elif 500 < diametro <= 600 or 300 <= diametro < 400:
+            elif e_max_bom < diametro <= e_max_estavel or e_min_extavel <= diametro < e_min_bom:
                 ESTADOS.append('Estável')
-            elif diametro < 300 or diametro > 600:
-                ESTADOS.append('Crítico') 
+            elif diametro < e_min_extavel or diametro > e_max_estavel:
+                ESTADOS.append('Crítico')
             else:
                 print(f'Não foi possível analisar o diâmetro {diametro}')
         else:
 
-            if 40 <= diametro <= 60:
+
+            if f_min_bom <= diametro <= f_max_bom:
                 ESTADOS.append('Bom')
-            elif 60 < diametro <= 70 or 30 <= diametro < 40:
+            elif f_max_bom < diametro <= f_max_estavel or f_min_extavel <= diametro < f_min_bom:
                 ESTADOS.append('Estável')
-            elif diametro < 30 or diametro > 70:
+            elif diametro < f_min_extavel or diametro > f_max_estavel:
                 ESTADOS.append('Crítico')
             else:
                 print(f'Não foi possível analisar o diâmetro {diametro}')
-        
+       
     return ESTADOS
+
 
 def estado_geral_bico(lista_diametros):
     lista = lista_diametros[1:]
